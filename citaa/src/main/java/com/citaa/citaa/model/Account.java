@@ -23,4 +23,5 @@ public class Account {
     String password;
     String role;
     LocalDateTime createAt;
+    String status;
 }
