@@ -39,34 +39,33 @@ public class AuthController {
     CustomerUserDetailService customerUserDetailService;
     @PostMapping("/signup")
     public ResponseEntity<AuthResponse> createUserHandler(@RequestBody User user) throws Exception {
-        System.out.println(user.getAccount().getUsername());
         User isUsernameExist = userRepository.findByUsername(user.getAccount().getUsername());
-        System.out.println(isUsernameExist);
+
         if(isUsernameExist != null){
             throw  new Exception("Username is already used with another account");
         }
-        User createUser = new User();
-        Account account = new Account();
-        account.setPassword(passwordEncoder.encode(user.getAccount().getPassword()));
-        account.setUsername(user.getAccount().getUsername());
-        account.setRole(user.getAccount().getRole());
-        account.setCreateAt(LocalDateTime.now());
 
-        createUser.setEmail(user.getEmail());
-        createUser.setFullName(user.getFullName());
-        createUser.setAccount(account);
-
-        User savedUser = userRepository.save(createUser);
+        User savedUser = userRepository.save(User.builder()
+                        .email(user.getEmail())
+                        .fullName(user.getFullName())
+                        .account(Account.builder()
+                                .password(passwordEncoder.encode(user.getAccount().getPassword()))
+                                .username(user.getAccount().getUsername())
+                                .role(user.getAccount().getRole())
+                                .createAt(LocalDateTime.now())
+                                .build())
+                .build());
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(user.getAccount().getUsername(), user.getAccount().getPassword());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String jwt = jwtProvider.generateToken(authentication);
-        AuthResponse authRespone = new AuthResponse();
-        authRespone.setJwt(jwt);
-        authRespone.setMessage("Register Success");
-        authRespone.setRole(savedUser.getAccount().getRole());
-        return new ResponseEntity<>(authRespone, HttpStatus.CREATED);
+
+        return new ResponseEntity<>(AuthResponse.builder()
+                .jwt(jwt)
+                .message("Register Success")
+                .role(savedUser.getAccount().getRole())
+                .build(), HttpStatus.CREATED);
     }
 
     @PostMapping("/signin")
@@ -80,13 +79,12 @@ public class AuthController {
         String role = authorities.isEmpty()?null:authorities.iterator().next().getAuthority();
 
         String jwt = jwtProvider.generateToken(authentication);
-        AuthResponse authRespone = new AuthResponse();
-        authRespone.setJwt(jwt);
-        authRespone.setMessage("Signin Success");
 
-        authRespone.setRole(role);
-        System.out.println("Role: "+role);
-        return new ResponseEntity<>(authRespone, HttpStatus.OK);
+        return new ResponseEntity<>(AuthResponse.builder()
+                .jwt(jwt)
+                .message("Sign in Success")
+                .role(role)
+                .build(), HttpStatus.OK);
     }
 
     private Authentication authenticate(String username, String password) throws Exception {
