@@ -16,5 +16,4 @@ public class Investor extends User {
     double investmentAmount;
 
 
-
 }

@@ -17,6 +17,7 @@ public class News {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
+    String type;
     String content;
     @ElementCollection
     List<String> urls;

@@ -22,9 +22,8 @@ public class Competition {
     List<String> files;
     @ManyToMany
     List<Reward> rewards;
-    @OneToMany
+    @ManyToMany
     List<User>  judges;
     @ManyToMany
     List<Startup> candidates;
-
 }
