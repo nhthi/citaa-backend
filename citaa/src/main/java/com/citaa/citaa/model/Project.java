@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -18,15 +19,16 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
     String name;
-    Date createAt;
+    LocalDateTime createAt;
     boolean valid;
     double realTotalCapital;
+    String currency;
     String field;
     String description;
     @ManyToOne
-    User startup;
+    Startup startup;
     @ManyToOne
-    User investor;
+    Investor investor;
     @OneToOne
     Evalution evalution;
     @ElementCollection

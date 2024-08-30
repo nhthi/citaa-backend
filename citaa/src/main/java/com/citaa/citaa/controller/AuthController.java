@@ -1,8 +1,10 @@
 package com.citaa.citaa.controller;
 
 import com.citaa.citaa.config.JwtProvider;
-import com.citaa.citaa.model.Account;
-import com.citaa.citaa.model.User;
+import com.citaa.citaa.model.*;
+import com.citaa.citaa.repository.ExpertRepository;
+import com.citaa.citaa.repository.InvestorRepository;
+import com.citaa.citaa.repository.StartupRepository;
 import com.citaa.citaa.repository.UserRepository;
 import com.citaa.citaa.request.LoginRequest;
 import com.citaa.citaa.response.AuthResponse;
@@ -37,6 +39,13 @@ public class AuthController {
     JwtProvider jwtProvider;
     @Autowired
     CustomerUserDetailService customerUserDetailService;
+    @Autowired
+    private StartupRepository startupRepository;
+    @Autowired
+    private ExpertRepository expertRepository;
+    @Autowired
+    private InvestorRepository investorRepository;
+
     @PostMapping("/signup")
     public ResponseEntity<AuthResponse> createUserHandler(@RequestBody User user) throws Exception {
         User isUsernameExist = userRepository.findByUsername(user.getAccount().getUsername());
@@ -44,17 +53,49 @@ public class AuthController {
         if(isUsernameExist != null){
             throw  new Exception("Username is already used with another account");
         }
+        User createUser ;
+        if(user.getAccount().getRole().equals("ROLE_STARTUP") ){
+            createUser = new Startup();
+            createUser = startupRepository.save(Startup.builder()
+                    .email(user.getEmail())
+                    .fullName(user.getFullName())
+                    .account(Account.builder()
+                            .password(passwordEncoder.encode(user.getAccount().getPassword()))
+                            .username(user.getAccount().getUsername())
+                            .role(user.getAccount().getRole())
+                            .createAt(LocalDateTime.now())
+                            .status("disable")
+                            .build())
+                            .studentId("123456")
+                    .build());
+        }else if(user.getAccount().getRole().equals("ROLE_INVESTOR") ){
+            createUser = new Investor();
+            createUser = investorRepository.save(Investor.builder()
+                    .email(user.getEmail())
+                    .fullName(user.getFullName())
+                    .account(Account.builder()
+                            .password(passwordEncoder.encode(user.getAccount().getPassword()))
+                            .username(user.getAccount().getUsername())
+                            .role(user.getAccount().getRole())
+                            .createAt(LocalDateTime.now())
+                            .status("disable")
+                            .build())
+                    .build());
+        }else{
+            createUser = new Expert();
+            createUser = expertRepository.save(Expert.builder()
+                    .email(user.getEmail())
+                    .fullName(user.getFullName())
+                    .account(Account.builder()
+                            .password(passwordEncoder.encode(user.getAccount().getPassword()))
+                            .username(user.getAccount().getUsername())
+                            .role(user.getAccount().getRole())
+                            .createAt(LocalDateTime.now())
+                            .status("disable")
+                            .build())
+                    .build());
+        }
 
-        User savedUser = userRepository.save(User.builder()
-                        .email(user.getEmail())
-                        .fullName(user.getFullName())
-                        .account(Account.builder()
-                                .password(passwordEncoder.encode(user.getAccount().getPassword()))
-                                .username(user.getAccount().getUsername())
-                                .role(user.getAccount().getRole())
-                                .createAt(LocalDateTime.now())
-                                .build())
-                .build());
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(user.getAccount().getUsername(), user.getAccount().getPassword());
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -64,7 +105,7 @@ public class AuthController {
         return new ResponseEntity<>(AuthResponse.builder()
                 .jwt(jwt)
                 .message("Register Success")
-                .role(savedUser.getAccount().getRole())
+                .role(createUser.getAccount().getRole())
                 .build(), HttpStatus.CREATED);
     }
 
