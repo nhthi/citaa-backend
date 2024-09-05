@@ -25,6 +25,7 @@ public class Project {
     String currency;
     String field;
     String description;
+    String introduce;
     @ManyToOne
     Startup startup;
     @ManyToOne
