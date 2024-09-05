@@ -1,10 +1,11 @@
 package com.citaa.citaa.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.sql.Date;
 
 @Entity
 @Data
@@ -12,13 +13,10 @@ import java.sql.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Evalution {
+public class Founder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
-    int points;
-    String content;
-    Date createAt;
-   @ManyToOne
-   User expert;
+    String name;
+    String bio;
 }

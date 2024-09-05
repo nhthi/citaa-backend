@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,18 +23,23 @@ public class Project {
     double realTotalCapital;
     String currency;
     String field;
-    String description;
     String introduce;
+    String startUpIdea;
+    String formationProject;
+    String email;
+    String phone;
     @ManyToOne
     Startup startup;
     @ManyToOne
     Investor investor;
-    @OneToOne
-    Evalution evalution;
+    @OneToMany
+    List<Evaluation> evaluation;
     @ElementCollection
     List<String> files;
     @OneToMany
     List<Comment> comments;
     @OneToMany
     List<React> reacts;
+    @ManyToMany
+    List<Founder> founders;
 }

@@ -1,6 +1,7 @@
 package com.citaa.citaa.request;
 
 
+import com.citaa.citaa.model.Founder;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -15,7 +16,10 @@ public class ProjectCreationRequest {
     String name;
     double realTotalCapital;
     String field;
-    String description;
     List<String> files;
     String currency;
+    String introduce;
+    String startUpIdea;
+    String formationProject;
+    List<Founder> founders;
 }

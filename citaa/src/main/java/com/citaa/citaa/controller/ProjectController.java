@@ -3,6 +3,7 @@ package com.citaa.citaa.controller;
 import com.citaa.citaa.model.Project;
 import com.citaa.citaa.model.Startup;
 import com.citaa.citaa.request.ProjectCreationRequest;
+import com.citaa.citaa.service.EvaluationService;
 import com.citaa.citaa.service.ProjectService;
 import com.citaa.citaa.service.StartupService;
 import lombok.AccessLevel;
@@ -22,6 +23,8 @@ public class ProjectController {
     ProjectService projectService;
     @Autowired
     StartupService startupService;
+    @Autowired
+    EvaluationService evaluationService;
 
     @PostMapping
     public ResponseEntity<Project> createProject(@RequestBody ProjectCreationRequest request, @RequestHeader("Authorization") String jwt) throws Exception {
@@ -34,5 +37,11 @@ public class ProjectController {
     public ResponseEntity<List<Project>> getStartupProjects(@RequestHeader("Authorization") String jwt) throws Exception {
         List<Project> projects = projectService.getProjectsByJwt(jwt);
         return new ResponseEntity<>(projects, HttpStatus.OK);
+    }
+
+    @PutMapping("/valid/{projectId}")
+    public ResponseEntity<String> setValid(@PathVariable int projectId){
+        projectService.setValid(projectId);
+        return new ResponseEntity<>("Set valid successfully!", HttpStatus.OK);
     }
 }
