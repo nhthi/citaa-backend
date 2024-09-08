@@ -1,10 +1,12 @@
 package com.citaa.citaa.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -18,8 +20,10 @@ public class Evaluation {
     int id;
     int points;
     String content;
-    Date createAt;
-    int projectId;
+    LocalDateTime createAt;
+    @ManyToOne
+    @JsonIgnore
+    Project project;
    @ManyToOne
    User expert;
 }
