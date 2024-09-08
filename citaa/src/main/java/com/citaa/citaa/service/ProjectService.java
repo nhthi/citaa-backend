@@ -50,6 +50,8 @@ public class ProjectService {
                         .introduce(request.getIntroduce())
                         .startUpIdea(request.getStartUpIdea())
                         .founders(request.getFounders())
+                        .phone(request.getPhone())
+                        .email(request.getEmail())
                 .build());
     }
 
@@ -68,7 +70,6 @@ public class ProjectService {
             project.setValid(false);
 
         projectRepository.save(project);
-
 
     }
 

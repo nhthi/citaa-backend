@@ -23,8 +23,11 @@ public class Project {
     double realTotalCapital;
     String currency;
     String field;
+    @Lob
     String introduce;
+    @Lob
     String startUpIdea;
+    @Lob
     String formationProject;
     String email;
     String phone;
@@ -33,8 +36,8 @@ public class Project {
     Startup startup;
     @ManyToOne
     Investor investor;
-//    @OneToMany
-//    List<Evaluation> evaluation;
+    @OneToMany
+    List<Evaluation> evaluation;
     @ElementCollection
     List<String> files;
     @OneToMany

@@ -2,6 +2,7 @@ package com.citaa.citaa.request;
 
 
 import com.citaa.citaa.model.Founder;
+import jakarta.persistence.Lob;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -18,8 +19,13 @@ public class ProjectCreationRequest {
     String field;
     List<String> files;
     String currency;
+    @Lob
     String introduce;
+    @Lob
     String startUpIdea;
+    @Lob
     String formationProject;
+    String email;
+    String phone;
     List<Founder> founders;
 }
