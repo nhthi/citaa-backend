@@ -19,7 +19,8 @@ public class Evaluation {
     int points;
     String content;
     Date createAt;
-    int projectId;
-   @ManyToOne
-   User expert;
+    @ManyToOne
+    Project project;
+    @ManyToOne
+    User expert;
 }
