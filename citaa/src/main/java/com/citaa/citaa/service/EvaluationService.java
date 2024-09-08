@@ -43,7 +43,8 @@ public class EvaluationService {
                         .expert(expert)
                         .project(project)
                 .build());
-
+        project.getEvaluation().add(evaluation);
+        projectRepository.save(project);
         projectService.setValid(project.getId());
 
         return  evaluation;
