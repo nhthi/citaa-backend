@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface EvaluationRepository extends JpaRepository<Evaluation, Integer> {
-    @Query("Select e from Evaluation e where e.projectId =:projectId")
+    @Query("Select e from Evaluation e where e.project.id =:projectId")
     public List<Evaluation> findByProjectId(@Param("projectId") int projectId);
 
 }

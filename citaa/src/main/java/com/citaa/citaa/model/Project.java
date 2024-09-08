@@ -32,8 +32,8 @@ public class Project {
     Startup startup;
     @ManyToOne
     Investor investor;
-    @OneToMany
-    List<Evaluation> evaluation;
+//    @OneToMany
+//    List<Evaluation> evaluation;
     @ElementCollection
     List<String> files;
     @OneToMany

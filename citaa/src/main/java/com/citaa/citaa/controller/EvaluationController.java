@@ -1,6 +1,7 @@
 package com.citaa.citaa.controller;
 
 import com.citaa.citaa.model.Evaluation;
+import com.citaa.citaa.request.EvaluationCreationRequest;
 import com.citaa.citaa.service.EvaluationService;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -19,8 +20,8 @@ public class EvaluationController {
     EvaluationService evaluationService;
 
     @PostMapping
-    public ResponseEntity<Evaluation> createEvaluation(@RequestBody Evaluation evaluation){
-        return new ResponseEntity<>(evaluationService.createEvaluation(evaluation), HttpStatus.CREATED);
+    public ResponseEntity<Evaluation> createEvaluation(@RequestBody EvaluationCreationRequest request) throws Exception {
+        return new ResponseEntity<>(evaluationService.createEvaluation(request), HttpStatus.CREATED);
     }
 
 }
