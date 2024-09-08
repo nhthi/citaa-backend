@@ -40,11 +40,11 @@ public class AuthController {
     @Autowired
     CustomerUserDetailService customerUserDetailService;
     @Autowired
-    private StartupRepository startupRepository;
+    StartupRepository startupRepository;
     @Autowired
-    private ExpertRepository expertRepository;
+    ExpertRepository expertRepository;
     @Autowired
-    private InvestorRepository investorRepository;
+    InvestorRepository investorRepository;
 
     @PostMapping("/signup")
     public ResponseEntity<AuthResponse> createUserHandler(@RequestBody User user) throws Exception {

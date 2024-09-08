@@ -44,6 +44,8 @@ public class EvaluationService {
                         .project(project)
                 .build());
 
+
+
         projectService.setValid(project.getId());
 
         return  evaluation;

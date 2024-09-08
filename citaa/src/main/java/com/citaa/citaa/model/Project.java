@@ -28,6 +28,7 @@ public class Project {
     String formationProject;
     String email;
     String phone;
+    double avg = 0;
     @ManyToOne
     Startup startup;
     @ManyToOne
