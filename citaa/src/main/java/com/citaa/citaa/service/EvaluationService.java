@@ -44,12 +44,11 @@ public class EvaluationService {
                         .project(project)
                 .build());
 
-<<<<<<< HEAD
-=======
+
         project.getEvaluation().add(evaluation);
         projectRepository.save(project);
 
->>>>>>> 95588982cbe4364cae48001dd1175d79eea57dfd
+
         projectService.setValid(project.getId());
 
         return  evaluation;
