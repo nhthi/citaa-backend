@@ -34,5 +34,15 @@ public class UserService {
         return user;
     }
 
+    public User findById(int id) throws Exception{
+        User user = userRepository.findById(id)
+                .orElseThrow(()-> new Exception("User not found!"));
+        if(user == null){
+            throw new Exception("User not found");
+        }
+        return user;
+    }
+
+
 
 }
