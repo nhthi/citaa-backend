@@ -5,6 +5,8 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -17,7 +19,9 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
     String content;
-    Date createAt;
+    LocalDateTime createAt;
+    @ElementCollection
+    List<String> files;
     @ManyToOne
     User user;
 }

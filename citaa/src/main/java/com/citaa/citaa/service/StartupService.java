@@ -14,9 +14,6 @@ public class StartupService {
     @Autowired
     private JwtProvider jwtProvider;
 
-
-
-
     public Startup getStartupByJwt(String jwt) throws Exception {
         String username = jwtProvider.getUsernameFromJwtToken(jwt);
         Startup startup = startupRepository.findByUsername(username);

@@ -66,7 +66,6 @@ public class AuthController {
                             .createAt(LocalDateTime.now())
                             .status("disable")
                             .build())
-                            .studentId("123456")
                     .build());
         }else if(user.getAccount().getRole().equals("ROLE_INVESTOR") ){
             createUser = new Investor();

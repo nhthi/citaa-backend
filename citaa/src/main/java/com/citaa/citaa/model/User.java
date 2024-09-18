@@ -26,11 +26,7 @@ public class User {
     @OneToOne(cascade = CascadeType.ALL)
     Account account;
     boolean gender;
-//    String major;
-//    String course;
-//    String college;
-
-
-
-
+    String avatar;
+    String coverPhoto;
+    String bio;
 }

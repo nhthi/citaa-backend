@@ -5,7 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
-
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -16,6 +16,4 @@ public class Investor extends User {
     String companyName;
     int experienceYears;
     double investmentAmount;
-
-
 }

@@ -79,6 +79,10 @@ public class ProjectService {
         return projectRepository.findByStartupId(startup.getId());
     }
 
+    public List<Project> getProjectsByStartupId(int id) throws Exception {
+        return projectRepository.findByStartupId(id);
+    }
+
     public Project getProjectById(int id) throws Exception {
         return projectRepository.findById(id)
                 .orElseThrow(()-> new Exception(("Project not found!")));

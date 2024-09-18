@@ -18,6 +18,7 @@ public class Expert extends User {
     String field;
     String college;
     String education;
+    @ElementCollection
     List<String> certifications;
     int experienceYears;
 }
