@@ -2,6 +2,7 @@ package com.citaa.citaa.controller;
 
 import com.citaa.citaa.model.Founder;
 import com.citaa.citaa.service.FounderService;
+import com.citaa.citaa.service.UserService;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,10 @@ import java.util.List;
 public class FounderController {
     @Autowired
     FounderService founderService;
-
+    @Autowired
+    UserService userService;
     @PostMapping
-    public ResponseEntity<Founder> createFounder(@RequestBody Founder founder){
+    public ResponseEntity<Founder> createFounder(@RequestBody Founder founder) throws Exception {
         return new ResponseEntity<>(founderService.createFounder(founder), HttpStatus.OK);
     }
 

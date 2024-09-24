@@ -5,6 +5,9 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -12,15 +15,16 @@ import java.sql.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
     String content;
-    Date createAt;
+    LocalDateTime createAt;
     String url;
     @ManyToOne
     User user;
-
-
+    @ManyToMany
+    List<User> liked = new ArrayList<>();
 }

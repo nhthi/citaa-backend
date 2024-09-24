@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,6 +23,7 @@ public class Project {
     boolean valid;
     double realTotalCapital;
     String currency;
+
     String field;
     @Lob
     String introduce;
@@ -39,11 +41,12 @@ public class Project {
     @OneToMany
     List<Evaluation> evaluation;
     @ElementCollection
+    @Column(length = 1024)
     List<String> files;
     @OneToMany
     List<Comment> comments;
     @OneToMany
-    List<React> reacts;
+    List<User> reacts = new ArrayList<>();
     @ManyToMany
     List<Founder> founders;
 }

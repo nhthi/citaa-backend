@@ -13,4 +13,12 @@ public interface ProjectRepository extends JpaRepository<Project, Integer> {
 
     @Query("select p from Project p where p.startup.id =:startupId")
     public List<Project> findByStartupId(@Param("startupId") int startupId);
+
+
+
+    @Query("select p from Project p where ((:minCapital is null and :maxCapital is null) or (p.realTotalCapital between :minCapital and :maxCapital))" +
+            "and  (:status = 'all' or p.valid= :valid) ")
+    public List<Project> filterProjects( @Param("minCapital") double minCapital,
+                                        @Param("maxCapital")double maxCapital,
+                                        @Param("status") String status, @Param("valid")boolean valid );
 }

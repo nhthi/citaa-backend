@@ -4,14 +4,21 @@ import ch.qos.logback.core.net.SyslogOutputStream;
 import com.citaa.citaa.model.Evaluation;
 import com.citaa.citaa.model.Project;
 import com.citaa.citaa.model.Startup;
+import com.citaa.citaa.model.User;
 import com.citaa.citaa.repository.EvaluationRepository;
 import com.citaa.citaa.repository.ProjectRepository;
 import com.citaa.citaa.request.ProjectCreationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProjectService {
@@ -21,6 +28,9 @@ public class ProjectService {
     StartupService startupService;
     @Autowired
     EvaluationRepository evaluationRepository;
+    @Autowired
+    UserService userService;
+
 
     public double calculateAveragePoints(int projectId){
         double avg = 0;
@@ -88,7 +98,55 @@ public class ProjectService {
                 .orElseThrow(()-> new Exception(("Project not found!")));
     }
 
+    public Project findProjectById(int id) throws Exception {
+        Optional<Project> project = projectRepository.findById(id);
+        if(project.isEmpty())
+            throw new Exception("Project not found : "+ id);
+        return project.get();
+    }
 
+    public Project likeProject(int projectId, String jwt) throws Exception {
+        Project project = findProjectById(projectId);
+        User user = userService.getProfile(jwt);
+        if(project.getReacts().contains(user)){
+            project.getReacts().remove(user);
+        }else project.getReacts().add(user);
+        return projectRepository.save(project);
+    }
+
+//    public Post saveProject(Integer postId, Integer userId) throws Exception {
+//        Post post = findPostById(postId);
+//        User user = userService.findUserById(userId);
+//        if(post.getLikedPost().contains(user)){
+//            post.getLikedPost().remove(user);
+//        }else post.getLikedPost().add(user);
+//
+//        return postReository.save(post);
+//    }
+
+    public Page<Project> filterProject( List<String> fields,  double minCapital, double maxCapital, String status,int pageNumber, int pageSize) {
+        boolean valid = false;
+        if(status.equals("valid")){
+            valid = true;
+        }
+        List<Project> projects = projectRepository.filterProjects(minCapital, maxCapital, status,valid);
+
+        if (fields!=null && !fields.isEmpty()) {
+            projects = projects.stream().
+                    filter(
+                            project -> fields.stream().anyMatch((field -> field.equalsIgnoreCase(project.getField())))
+                    ).collect(Collectors.toList());
+        }
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+
+        int startIndex = (int) pageable.getOffset();
+        int endIndex = Math.min(startIndex + pageable.getPageSize(), projects.size());
+
+        List<Project> pageContent = projects.subList(startIndex, endIndex);
+        Page<Project> filteredProject = new PageImpl<>(pageContent, pageable, projects.size());
+
+        return filteredProject;
+    }
 
 
 }
