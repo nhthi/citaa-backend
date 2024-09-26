@@ -42,7 +42,9 @@ public class AppConfig {
             public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                 CorsConfiguration cfg = new CorsConfiguration();
                 cfg.setAllowedOrigins(Arrays.asList(
-                        "http://localhost:3000"));
+                        "http://localhost:3000",
+
+                        "https://citaa-frontend.vercel.app"));
                 cfg.setAllowedMethods(Collections.singletonList("*"));
                 cfg.setAllowedHeaders(Collections.singletonList("*"));
                 cfg.setAllowCredentials(true);
