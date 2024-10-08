@@ -20,13 +20,8 @@ public class Evaluation {
     int id;
     int points;
     String content;
-
-
     LocalDateTime createAt;
-    @ManyToOne
-    @JsonIgnore
-    Project project;
+    int projectId;
    @ManyToOne
    User expert;
-
 }

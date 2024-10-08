@@ -66,6 +66,7 @@ public class AuthController {
                             .createAt(LocalDateTime.now())
                             .status("disable")
                             .build())
+                    .fields(user.getFields())
                     .build());
         }else if(user.getAccount().getRole().equals("ROLE_INVESTOR") ){
             createUser = new Investor();
@@ -79,6 +80,7 @@ public class AuthController {
                             .createAt(LocalDateTime.now())
                             .status("disable")
                             .build())
+                    .fields(user.getFields())
                     .build());
         }else{
             createUser = new Expert();
@@ -92,6 +94,7 @@ public class AuthController {
                             .createAt(LocalDateTime.now())
                             .status("disable")
                             .build())
+                    .fields(user.getFields())
                     .build());
         }
 

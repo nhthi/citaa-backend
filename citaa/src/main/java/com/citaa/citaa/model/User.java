@@ -7,6 +7,7 @@ import lombok.experimental.SuperBuilder;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -29,4 +30,6 @@ public class User {
     String avatar;
     String coverPhoto;
     String bio;
+    @ElementCollection
+    List<String> fields;
 }

@@ -148,7 +148,18 @@ public class ProjectService {
         return filteredProject;
     }
 
+    public Page<Project> getProjectByExpertId(int projectId, int pageNumber, int pageSize) throws Exception {
+        List<Project> projects = userService.getProjectByExpertId(projectId);
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
 
+        int startIndex = (int) pageable.getOffset();
+        int endIndex = Math.min(startIndex + pageable.getPageSize(), projects.size());
+
+        List<Project> pageContent = projects.subList(startIndex, endIndex);
+        Page<Project> filteredProject = new PageImpl<>(pageContent, pageable, projects.size());
+
+        return filteredProject;
+    }
 }
 
 

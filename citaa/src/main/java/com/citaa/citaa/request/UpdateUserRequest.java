@@ -28,7 +28,7 @@ public class UpdateUserRequest {
     String cohort;
     String college;
     // investor
-    String field;
+    List<String> fields;
     String riskTolerance;
     String companyName;
     int experienceYears;

@@ -2,15 +2,16 @@ package com.citaa.citaa.service;
 
 import com.citaa.citaa.config.JwtProvider;
 import com.citaa.citaa.model.*;
-import com.citaa.citaa.repository.ExpertRepository;
-import com.citaa.citaa.repository.InvestorRepository;
-import com.citaa.citaa.repository.StartupRepository;
-import com.citaa.citaa.repository.UserRepository;
+import com.citaa.citaa.repository.*;
 import com.citaa.citaa.request.RequestUser;
 import com.citaa.citaa.request.UpdateUserRequest;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,7 +29,8 @@ public class UserService {
     ExpertRepository expertRepository;
     @Autowired
     InvestorRepository investorRepository;
-
+    @Autowired
+    private ProjectRepository projectRepository;
 
     public List<User> getUsers() {
         return userRepository.findAll();
@@ -100,6 +102,10 @@ public class UserService {
         if (req.getCoverPhoto() != null) {
             updateUser.setCoverPhoto(req.getCoverPhoto());
         }
+
+        if (req.getFields() != null) {
+            updateUser.setFields(req.getFields());
+        }
         userRepository.save(updateUser);
 
         switch (updateUser.getAccount().getRole()) {
@@ -124,9 +130,7 @@ public class UserService {
                 if (req.getCollege() != null) {
                     updateExpert.setCollege(req.getCollege());
                 }
-                if (req.getField() != null) {
-                    updateExpert.setField(req.getField());
-                }
+
                 if (req.getEducation() != null) {
                     updateExpert.setEducation(req.getEducation());
                 }
@@ -145,9 +149,7 @@ public class UserService {
                 if (req.getRiskTolerance() != null) {
                     updateInvestor.setRiskTolerance(req.getRiskTolerance());
                 }
-                if (req.getField() != null) {
-                    updateInvestor.setField(req.getField());
-                }
+
                 if (req.getCompanyName() != null) {
                     updateInvestor.setCompanyName(req.getCompanyName());
                 }
@@ -163,5 +165,50 @@ public class UserService {
         }
 
         return updateUser;
+    }
+
+    public Expert addProjectToExpert(int projectId, int expertId) throws Exception {
+        Expert expert = expertRepository.findById(expertId)
+                .orElseThrow(() -> new Exception("Expert not found with id: "+expertId));
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new Exception("Project not found with id: "+projectId));
+        expert.getProjects().add(project);
+        return expertRepository.save(expert);
+    }
+
+    public List<Project> getProjectByExpertId(int expertId) throws Exception {
+        Expert expert = expertRepository.findById(expertId)
+                .orElseThrow(() -> new Exception("Expert not found with id: "+expertId));
+        return expert.getProjects();
+    }
+
+    public Page<Startup> getAllStartups(int pageSize, int pageNumber){
+        List<Startup> startups = startupRepository.findAll();
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        int startIndex = (int) pageable.getOffset();
+        int endIndex = Math.min(startIndex + pageable.getPageSize(), startups.size());
+        List<Startup> pageContent = startups.subList(startIndex, endIndex);
+        Page<Startup> filteredStartup = new PageImpl<>(pageContent, pageable, startups.size());
+        return filteredStartup;
+    }
+
+    public Page<Expert> getAllExpert(int pageSize, int pageNumber){
+        List<Expert> experts = expertRepository.findAll();
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        int startIndex = (int) pageable.getOffset();
+        int endIndex = Math.min(startIndex + pageable.getPageSize(), experts.size());
+        List<Expert> pageContent = experts.subList(startIndex, endIndex);
+        Page<Expert> filteredExpert = new PageImpl<>(pageContent, pageable, experts.size());
+        return filteredExpert;
+    }
+
+    public Page<Investor> getAllInvestor(int pageSize, int pageNumber){
+        List<Investor> investors = investorRepository.findAll();
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        int startIndex = (int) pageable.getOffset();
+        int endIndex = Math.min(startIndex + pageable.getPageSize(), investors.size());
+        List<Investor> pageContent = investors.subList(startIndex, endIndex);
+        Page<Investor> filteredInvestor = new PageImpl<>(pageContent, pageable, investors.size());
+        return filteredInvestor;
     }
 }

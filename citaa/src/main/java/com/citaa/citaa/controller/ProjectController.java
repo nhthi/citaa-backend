@@ -68,6 +68,12 @@ public class ProjectController {
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
+    @GetMapping("/expert/{id}")
+    public ResponseEntity<Page<Project>> getExpertProjectsById( @PathVariable("id") int id,@RequestParam(required = false) int pageNumber, @RequestParam(required = false) int pageSize) throws Exception {
+        Page<Project> projects = projectService.getProjectByExpertId(id, pageNumber, pageSize);
+        return new ResponseEntity<>(projects, HttpStatus.OK);
+    }
+
     @PutMapping("/valid/{projectId}")
     public ResponseEntity<String> setValid(@PathVariable int projectId){
         projectService.setValid(projectId);
@@ -100,4 +106,5 @@ public class ProjectController {
         res.setStatus(true);
         return new ResponseEntity<>(res, HttpStatus.CREATED);
     }
+
 }

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class EvaluationService {
@@ -35,22 +36,22 @@ public class EvaluationService {
         User expert = userRepository.findById(request.getExpertId())
                 .orElseThrow(() -> new Exception(("Expert not found!")));
 
-
         Evaluation evaluation = evaluationRepository.save(Evaluation.builder()
                         .content(request.getContent())
                         .points(request.getPoints())
                         .createAt(LocalDateTime.now())
                         .expert(expert)
-                        .project(project)
+                        .projectId(project.getId())
                 .build());
-
 
         project.getEvaluation().add(evaluation);
         projectRepository.save(project);
-
-
         projectService.setValid(project.getId());
 
         return  evaluation;
+    }
+
+    public List<Evaluation> getEvaluationByExpertId(int expertId){
+        return evaluationRepository.findByExpertId(expertId);
     }
 }
