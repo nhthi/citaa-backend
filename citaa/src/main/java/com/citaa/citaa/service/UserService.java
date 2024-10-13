@@ -5,6 +5,7 @@ import com.citaa.citaa.model.*;
 import com.citaa.citaa.repository.*;
 import com.citaa.citaa.request.RequestUser;
 import com.citaa.citaa.request.UpdateUserRequest;
+import com.citaa.citaa.response.EvaluationManagementResponse;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -31,6 +33,10 @@ public class UserService {
     InvestorRepository investorRepository;
     @Autowired
     private ProjectRepository projectRepository;
+
+    @Autowired
+    private EvaluationRepository evaluationRepository;
+
 
     public List<User> getUsers() {
         return userRepository.findAll();
@@ -210,5 +216,30 @@ public class UserService {
         List<Investor> pageContent = investors.subList(startIndex, endIndex);
         Page<Investor> filteredInvestor = new PageImpl<>(pageContent, pageable, investors.size());
         return filteredInvestor;
+    }
+
+    public List<EvaluationManagementResponse> getEvaluateManagement(int expertId) throws Exception {
+        List<Evaluation> evaluations = evaluationRepository.findByExpertId(expertId);
+        List<EvaluationManagementResponse> evaluationManagementResponses = new ArrayList<>();
+        System.out.println(evaluations.size());
+        for (Evaluation evaluation : evaluations) {
+            Project pro = projectRepository.findById(evaluation.getProjectId()).orElseThrow(()-> new Exception("Project not found with id: "+evaluation.getProjectId()));
+            EvaluationManagementResponse item = new EvaluationManagementResponse();
+            List<String> fields = new ArrayList<>();
+            fields.add(pro.getField());
+            List<String> founderNames = new ArrayList<>();
+            for ( Founder founder: pro.getFounders()){
+                founderNames.add(founder.getName());
+            }
+            evaluationManagementResponses.add(EvaluationManagementResponse.builder()
+                    .fullName(evaluation.getExpert().getFullName())
+                    .year(evaluation.getCreateAt().getYear())
+                    .projectName(pro.getName())
+                    .fields(fields)
+                    .founderNames(founderNames)
+                    .startupName(pro.getStartup().getFullName())
+                    .build());
+        }
+        return evaluationManagementResponses;
     }
 }
