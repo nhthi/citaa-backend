@@ -20,6 +20,7 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
+    @Column(columnDefinition = "TEXT")
     String content;
     LocalDateTime createAt;
     String url;

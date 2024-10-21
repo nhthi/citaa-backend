@@ -81,6 +81,7 @@ public class AuthController {
                             .status("disable")
                             .build())
                     .fields(user.getFields())
+                    .investmentAmount(0.0)
                     .build());
         }else{
             createUser = new Expert();

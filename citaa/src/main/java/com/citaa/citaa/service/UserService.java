@@ -3,7 +3,6 @@ package com.citaa.citaa.service;
 import com.citaa.citaa.config.JwtProvider;
 import com.citaa.citaa.model.*;
 import com.citaa.citaa.repository.*;
-import com.citaa.citaa.request.RequestUser;
 import com.citaa.citaa.request.UpdateUserRequest;
 import com.citaa.citaa.response.EvaluationManagementResponse;
 import lombok.AccessLevel;
@@ -42,7 +41,7 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User getProfile(String jwt) throws Exception {
+    public User findByJwt(String jwt) throws Exception {
         String username = jwtProvider.getUsernameFromJwtToken(jwt);
         User user = userRepository.findByUsername(username);
         if (user == null) {
@@ -241,5 +240,9 @@ public class UserService {
                     .build());
         }
         return evaluationManagementResponses;
+    }
+
+    public List<Investor> getTop5Investor(){
+        return investorRepository.findTop5ByOrderByInvestmentAmountDesc();
     }
 }

@@ -1,6 +1,5 @@
 package com.citaa.citaa.service;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import com.citaa.citaa.model.Evaluation;
 import com.citaa.citaa.model.Project;
 import com.citaa.citaa.model.Startup;
@@ -107,7 +106,7 @@ public class ProjectService {
 
     public Project likeProject(int projectId, String jwt) throws Exception {
         Project project = findProjectById(projectId);
-        User user = userService.getProfile(jwt);
+        User user = userService.findByJwt(jwt);
         if(project.getReacts().contains(user)){
             project.getReacts().remove(user);
         }else project.getReacts().add(user);

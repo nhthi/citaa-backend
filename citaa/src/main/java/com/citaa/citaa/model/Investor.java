@@ -16,5 +16,5 @@ public class Investor extends User {
     String riskTolerance;
     String companyName;
     int experienceYears;
-    double investmentAmount;
+    Double investmentAmount;
 }

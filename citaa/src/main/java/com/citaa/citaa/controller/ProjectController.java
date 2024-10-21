@@ -63,7 +63,7 @@ public class ProjectController {
 
     @GetMapping("/startup/{id}")
     public ResponseEntity<List<Project>> getStartupProjectsById(@RequestHeader("Authorization") String jwt, @PathVariable("id") int id) throws Exception {
-        User user = userService.getProfile(jwt);
+        User user = userService.findByJwt(jwt);
         List<Project> projects = projectService.getProjectsByStartupId(id);
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
@@ -83,14 +83,14 @@ public class ProjectController {
     @PutMapping("like/{projectId}")
     public ResponseEntity<Project> likePostHandler(@PathVariable int projectId,
                                                 @RequestHeader("Authorization")String jwt) throws Exception {
-        User reqUser = userService.getProfile(jwt);
+        User reqUser = userService.findByJwt(jwt);
         Project project = projectService.likeProject(projectId,jwt);
         return new ResponseEntity<Project>(project, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Project> getProjectsById(@RequestHeader("Authorization") String jwt, @PathVariable("id") int id) throws Exception {
-        User user = userService.getProfile(jwt);
+        User user = userService.findByJwt(jwt);
         Project project = projectService.getProjectById(id);
         return new ResponseEntity<>(project, HttpStatus.OK);
     }

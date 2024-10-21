@@ -1,7 +1,7 @@
 package com.citaa.citaa.controller;
 
+import com.citaa.citaa.model.Investor;
 import com.citaa.citaa.model.User;
-import com.citaa.citaa.request.RequestUser;
 import com.citaa.citaa.request.UpdateUserRequest;
 import com.citaa.citaa.response.EvaluationManagementResponse;
 import com.citaa.citaa.service.UserService;
@@ -25,7 +25,7 @@ public class UserController {
 
     @GetMapping("/profile")
     public ResponseEntity<User> getProfile(@RequestHeader("Authorization")String jwt) throws Exception {
-        User user = userService.getProfile(jwt);
+        User user = userService.findByJwt(jwt);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
@@ -44,5 +44,10 @@ public class UserController {
     @GetMapping("/expert/evaluation-management/{expertId}")
     public ResponseEntity<List<EvaluationManagementResponse>> getEvaluationManagement(@PathVariable("expertId") int expertId) throws Exception {
         return new ResponseEntity<>(userService.getEvaluateManagement(expertId),HttpStatus.OK);
+    }
+
+    @GetMapping("/top5-investor")
+    public ResponseEntity<List<Investor>> getTop5Investors() throws Exception {
+        return new ResponseEntity<>(userService.getTop5Investor(),HttpStatus.OK);
     }
 }

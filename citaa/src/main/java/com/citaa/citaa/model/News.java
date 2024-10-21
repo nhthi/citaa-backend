@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,9 +19,12 @@ public class News {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
     String type;
+    String title;
+    @Lob
+    @Column(columnDefinition = "TEXT")
     String content;
-    @ElementCollection
-    List<String> urls;
+    String thumbnail;
+    LocalDateTime createAt;
     @ManyToOne
     User admin;
 }

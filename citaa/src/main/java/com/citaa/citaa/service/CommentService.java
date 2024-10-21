@@ -7,7 +7,6 @@ import com.citaa.citaa.repository.CommentRepository;
 import com.citaa.citaa.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -30,7 +29,7 @@ public class CommentService {
 
     public Comment createComment(Comment comment, int projectId, String jwt) throws Exception {
 
-        User user = userService.getProfile(jwt);
+        User user = userService.findByJwt(jwt);
         Project project = projectService.findProjectById(projectId);
 
         comment.setUser(user);
@@ -45,7 +44,7 @@ public class CommentService {
 
     public Comment likeComment(Integer commentId, String jwt) throws Exception {
         Comment comment = findCommentById(commentId);
-        User user = userService.getProfile(jwt);
+        User user = userService.findByJwt(jwt);
 
         if(!comment.getLiked().contains(user)){
             comment.getLiked().add(user);

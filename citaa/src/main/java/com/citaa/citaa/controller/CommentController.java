@@ -21,7 +21,7 @@ public class CommentController {
     public Comment createComment(@RequestBody Comment comment,
                                  @RequestHeader("Authorization")String jwt,
                                  @PathVariable("projectId") int projectId) throws Exception {
-        User user = userService.getProfile(jwt);
+        User user = userService.findByJwt(jwt);
         Comment createComment = commentService.createComment(comment,projectId,jwt);
         return createComment;
     }
@@ -29,7 +29,7 @@ public class CommentController {
     @PutMapping("/like/{commentId}")
     public Comment likedComment(@RequestHeader("Authorization")String jwt,
                                 @PathVariable("commentId") int commentId) throws Exception {
-        User user = userService.getProfile(jwt);
+        User user = userService.findByJwt(jwt);
         Comment likedComment = commentService.likeComment(commentId,jwt);
         return likedComment;
     }

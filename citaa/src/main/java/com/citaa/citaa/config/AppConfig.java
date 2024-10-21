@@ -28,6 +28,7 @@ public class AppConfig {
                 .authorizeRequests(
                         Authorize -> Authorize
                                 .requestMatchers("/api/admin/**").permitAll()
+                                .requestMatchers("/api/users/**").permitAll()
                                 .anyRequest().permitAll()
                 ).addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
                 .csrf(csrf->csrf.disable())

@@ -26,10 +26,13 @@ public class Project {
 
     String field;
     @Lob
+    @Column(columnDefinition = "TEXT")
     String introduce;
     @Lob
+    @Column(columnDefinition = "TEXT")
     String startUpIdea;
     @Lob
+    @Column(columnDefinition = "TEXT")
     String formationProject;
     String email;
     String phone;
