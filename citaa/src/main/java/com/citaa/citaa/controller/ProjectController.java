@@ -103,7 +103,7 @@ public class ProjectController {
         }
         ApiResponse res = new ApiResponse();
         res.setMessage("Created project successfully");
-        res.setStatus(true);
+        res.setStatus(200);
         return new ResponseEntity<>(res, HttpStatus.CREATED);
     }
 

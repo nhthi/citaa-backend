@@ -1,5 +1,6 @@
 package com.citaa.citaa.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -21,5 +22,6 @@ public class TimelineEvent {
     LocalDateTime eventTime;
     @ManyToOne
     @JoinColumn(name = "competition_id")
+    @JsonIgnore
     Competition competition;
 }

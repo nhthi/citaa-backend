@@ -19,24 +19,30 @@ public class Competition {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
+
     String name;
     String introduce;
     String content;
+
     @ManyToOne
+    @JoinColumn(name = "admin_id") // Thêm JoinColumn để xác định cột khóa ngoại
     User admin;
+
     @ElementCollection
     List<String> files;
+
     @ElementCollection
     List<String> fields = new ArrayList<>();
+
     @ManyToMany
-    List<Reward> rewards = new ArrayList<>();
-    @ManyToMany
-    List<User>  judges = new ArrayList<>();
+    List<User> judges = new ArrayList<>();
+
     @ElementCollection
     @CollectionTable(name = "competition_startup_time", joinColumns = @JoinColumn(name = "competition_id"))
-    @MapKeyJoinColumn(name = "startup_id")
+    @MapKeyColumn(name = "startup_id") // Sử dụng ID của Startup làm khóa
     @Column(name = "applied_at")
-    Map<Startup, LocalDateTime> startupAppliedTimes;
+    Map<Integer, LocalDateTime> startupAppliedTimes;
+
     @ManyToMany
     @JoinTable(
             name = "competition_project",
@@ -44,11 +50,24 @@ public class Competition {
             inverseJoinColumns = @JoinColumn(name = "project_id")
     )
     List<Project> projects;
+
     @OneToMany(mappedBy = "competition", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    List<TimelineEvent> timelineEvents = new ArrayList<>(); // Danh sách các mốc thời gian
+    List<TimelineEvent> timelineEvents = new ArrayList<>();
+
     LocalDateTime createAt;
     LocalDateTime updateAt;
     LocalDateTime startAt;
     LocalDateTime endAt;
 
+    // Phương thức được gọi trước khi lưu entity mới
+    @PrePersist
+    protected void onCreate() {
+        this.createAt = LocalDateTime.now();
+    }
+
+    // Phương thức được gọi trước khi cập nhật entity
+    @PreUpdate
+    protected void onUpdate() {
+        this.updateAt = LocalDateTime.now();
+    }
 }

@@ -27,7 +27,9 @@ public class AppConfig {
                 )
                 .authorizeRequests(
                         Authorize -> Authorize
+                                .requestMatchers("/admin/api/**").permitAll()
                                 .requestMatchers("/api/admin/**").permitAll()
+                                .requestMatchers("/admin/api/competition").permitAll()
                                 .requestMatchers("/api/users/**").permitAll()
                                 .anyRequest().permitAll()
                 ).addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
