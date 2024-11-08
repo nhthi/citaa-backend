@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"  # Map cổng 8080 của container tới cổng 8080 trên host
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/citaa_pro?useSSL=false&serverTimezone=UTC
+      - SPRING_DATASOURCE_USERNAME=citaa_pro
+      - SPRING_DATASOURCE_PASSWORD=citaa_pro
+    depends_on:
+      - db  # Đảm bảo MySQL được khởi động trước khi app chạy
+
+  db:
+    image: mysql:8.0  # Sử dụng MySQL phiên bản 8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: citaa_pro
+      MYSQL_DATABASE: citaa_pro
+      MYSQL_USER: citaa_pro
+      MYSQL_PASSWORD: citaa_pro
+    ports:
+      - "3306:3306"  # Map cổng 3306 của MySQL container tới cổng 3306 trên host
+    volumes:
+      - db-data:/var/lib/mysql  # Lưu trữ dữ liệu MySQL trên volume để tránh mất dữ liệu
+
+volumes:
+  db-data:  # Volume dùng để lưu dữ liệu MySQL
