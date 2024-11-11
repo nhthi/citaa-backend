@@ -31,6 +31,7 @@ public class AppConfig {
                                 .requestMatchers("/api/admin/**").permitAll()
                                 .requestMatchers("/admin/api/competition").permitAll()
                                 .requestMatchers("/api/users/**").permitAll()
+                                .requestMatchers("/api/**").permitAll()
                                 .anyRequest().permitAll()
                 ).addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
                 .csrf(csrf->csrf.disable())

@@ -54,7 +54,6 @@ public class ProjectController {
             @RequestParam(required = false) List<String> fields, @RequestParam(required = false) double minCapital,
             @RequestParam(required = false) double maxCapital, @RequestParam(required = false) String status, @RequestParam(required = false) int pageNumber, @RequestParam(required = false) int pageSize
     ) {
-        System.out.println("status: "+status);
         Page<Project> res = projectService.filterProject(
                 fields,minCapital,maxCapital,status, pageNumber, pageSize
         );
@@ -93,6 +92,13 @@ public class ProjectController {
         User user = userService.findByJwt(jwt);
         Project project = projectService.getProjectById(id);
         return new ResponseEntity<>(project, HttpStatus.OK);
+    }
+
+    @GetMapping("/potential")
+    public ResponseEntity<List<Project>> getProjectPotential() throws Exception {
+        List<Project> projects = projectService.getProjectPotential();
+        int length = projects.size() > 3 ? 3 : projects.size();
+        return new ResponseEntity<>(projectService.getProjectPotential().subList(0,length), HttpStatus.OK);
     }
 
     @PostMapping("/creates")

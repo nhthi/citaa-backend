@@ -97,6 +97,10 @@ public class ProjectService {
                 .orElseThrow(()-> new Exception(("Project not found!")));
     }
 
+    public List<Project> getProjectPotential() throws Exception {
+        return projectRepository.getTopProjectPotential();
+    }
+
     public Project findProjectById(int id) throws Exception {
         Optional<Project> project = projectRepository.findById(id);
         if(project.isEmpty())
@@ -159,6 +163,8 @@ public class ProjectService {
 
         return filteredProject;
     }
+
+
 }
 
 

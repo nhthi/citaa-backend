@@ -21,4 +21,6 @@ public interface ProjectRepository extends JpaRepository<Project, Integer> {
     public List<Project> filterProjects( @Param("minCapital") double minCapital,
                                         @Param("maxCapital")double maxCapital,
                                         @Param("status") String status, @Param("valid")boolean valid );
+    @Query("select p from Project p where p.avg > 0 ")
+    public List<Project> getTopProjectPotential();
 }

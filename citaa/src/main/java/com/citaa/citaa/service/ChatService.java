@@ -20,7 +20,6 @@ public class ChatService {
     public Chat createChat(User reqUser, User user) {
         Chat isExistChat = chatRepository.findChatByUsersId(user,reqUser);
         if(isExistChat != null){
-            System.out.println("chat already exist");
             return isExistChat;
         }
         Chat chat = new Chat();
