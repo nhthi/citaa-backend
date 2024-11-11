@@ -25,6 +25,7 @@ public class Project {
     String currency;
 
     String field;
+    String status="UNVALID";
     @Lob
     @Column(columnDefinition = "TEXT")
     String introduce;

@@ -1,16 +1,14 @@
 package com.citaa.citaa.controller;
 
 import com.citaa.citaa.config.JwtProvider;
-import com.citaa.citaa.model.Expert;
-import com.citaa.citaa.model.Investor;
-import com.citaa.citaa.model.News;
-import com.citaa.citaa.model.Startup;
+import com.citaa.citaa.model.*;
 import com.citaa.citaa.repository.ExpertRepository;
 import com.citaa.citaa.repository.InvestorRepository;
 import com.citaa.citaa.repository.StartupRepository;
 import com.citaa.citaa.repository.UserRepository;
 import com.citaa.citaa.service.CustomerUserDetailService;
 import com.citaa.citaa.service.NewsService;
+import com.citaa.citaa.service.ProjectService;
 import com.citaa.citaa.service.UserService;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -43,7 +41,8 @@ public class AdminController {
     UserService userService;
     @Autowired
     NewsService newsService;
-
+    @Autowired
+    ProjectService projectService;
     @PostMapping("/add-to-expert/{expertId}/{projectId}")
     public ResponseEntity<Expert> addProjectToExpert( @PathVariable int expertId, @PathVariable int projectId) throws Exception {
         return new ResponseEntity<>(userService.addProjectToExpert(projectId,expertId), HttpStatus.CREATED);
@@ -80,5 +79,9 @@ public class AdminController {
     @GetMapping("/news/{newsId}")
     public ResponseEntity<News> getNewsById(@PathVariable("newsId")int id) throws Exception{
         return new ResponseEntity<>(newsService.getNewsById(id), HttpStatus.OK);
+    }
+    @PutMapping("/project/verify/{projectId}")
+    public ResponseEntity<Project> verifyProject(@PathVariable("projectId")int id, @RequestHeader("Authorization") String jwt) throws Exception{
+        return new ResponseEntity<>(projectService.verifyProject(id,jwt), HttpStatus.OK);
     }
 }

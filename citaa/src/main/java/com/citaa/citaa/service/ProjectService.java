@@ -117,6 +117,13 @@ public class ProjectService {
         return projectRepository.save(project);
     }
 
+    public Project verifyProject(int projectId, String jwt) throws Exception {
+        Project project = findProjectById(projectId);
+        User user = userService.findByJwt(jwt);
+        project.setStatus("VALID");
+        return projectRepository.save(project);
+    }
+
 //    public Post saveProject(Integer postId, Integer userId) throws Exception {
 //        Post post = findPostById(postId);
 //        User user = userService.findUserById(userId);
