@@ -171,7 +171,22 @@ public class ProjectService {
         return filteredProject;
     }
 
+    public Page<Project> searchProject(String query, int pageNumber, int pageSize) throws Exception {
+        List<Project> projects = projectRepository.searchProject(query);
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
 
+        int startIndex = (int) pageable.getOffset();
+        int endIndex = Math.min(startIndex + pageable.getPageSize(), projects.size());
+
+        List<Project> pageContent = projects.subList(startIndex, endIndex);
+        Page<Project> filteredProject = new PageImpl<>(pageContent, pageable, projects.size());
+
+        return filteredProject;
+    }
+
+    public long countProject(){
+        return projectRepository.count();
+    }
 }
 
 

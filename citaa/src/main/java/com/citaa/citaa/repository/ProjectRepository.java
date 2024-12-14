@@ -14,8 +14,6 @@ public interface ProjectRepository extends JpaRepository<Project, Integer> {
     @Query("select p from Project p where p.startup.id =:startupId")
     public List<Project> findByStartupId(@Param("startupId") int startupId);
 
-
-
     @Query("select p from Project p where ((:minCapital is null and :maxCapital is null) or (p.realTotalCapital between :minCapital and :maxCapital))" +
             "and  (:status = 'all' or p.valid= :valid) ")
     public List<Project> filterProjects( @Param("minCapital") double minCapital,
@@ -23,4 +21,9 @@ public interface ProjectRepository extends JpaRepository<Project, Integer> {
                                         @Param("status") String status, @Param("valid")boolean valid );
     @Query("select p from Project p where p.avg > 0 ")
     public List<Project> getTopProjectPotential();
+
+    @Query("select p from Project p where p.name like %:query% or " +
+            "p.introduce like %:query% or p.startUpIdea like %:query% or p.field like %:query%" )
+    public List<Project> searchProject(@Param("query") String query);
+
 }

@@ -55,4 +55,9 @@ public class CompetitionController {
         Page<Competition> res = competitionService.filterCompetition(pageNumber,pageSize,year,field,status);
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
+
+    @GetMapping("/public/api/competition/count")
+    public long countCompetition(){
+        return competitionService.countCompetition();
+    }
 }

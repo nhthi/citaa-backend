@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Data
 @Builder
@@ -14,12 +16,13 @@ public class Feedback {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
-    String field;
-    String title;
-    String name;
+    String topic;
+    String heading;
+    String fullName;
     String email;
     String address;
+    @Lob
+    @Column(columnDefinition = "TEXT")
     String content;
-    @ManyToOne
-    User user;
+    LocalDateTime createdAt;
 }

@@ -2,13 +2,16 @@ package com.citaa.citaa.controller;
 
 import com.citaa.citaa.config.JwtProvider;
 import com.citaa.citaa.model.*;
-import com.citaa.citaa.repository.ExpertRepository;
-import com.citaa.citaa.repository.InvestorRepository;
-import com.citaa.citaa.repository.StartupRepository;
-import com.citaa.citaa.repository.UserRepository;
+import com.citaa.citaa.repository.*;
+import com.citaa.citaa.request.ChangePasswordRequest;
 import com.citaa.citaa.request.LoginRequest;
+import com.citaa.citaa.request.ResetPasswordRequest;
+import com.citaa.citaa.response.ApiResponse;
 import com.citaa.citaa.response.AuthResponse;
+import com.citaa.citaa.response.MessageResponse;
 import com.citaa.citaa.service.CustomerUserDetailService;
+import com.citaa.citaa.service.EmailService;
+import com.citaa.citaa.service.UserService;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Random;
 
 @CrossOrigin(origins = "*")
 @RequestMapping("/auth")
@@ -45,6 +49,12 @@ public class AuthController {
     ExpertRepository expertRepository;
     @Autowired
     InvestorRepository investorRepository;
+    @Autowired
+    UserService userService;
+    @Autowired
+    VerifyRepository verifyRepository;
+    @Autowired
+    EmailService emailService;
 
     @PostMapping("/signup")
     public ResponseEntity<AuthResponse> createUserHandler(@RequestBody User user) throws Exception {
@@ -143,4 +153,92 @@ public class AuthController {
     }
 
 
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<MessageResponse> forgotPassword(@RequestParam("email") String email) throws Exception {
+        User user = userService.findUserByEmail(email);
+        String code = generateRandomNumber();
+        Verify verify = verifyRepository.findByEmail(email);
+        if (verify == null) {
+            verify = new Verify();
+            verify.setEmail(email);
+        }
+        verify.setVerifyCode(code);
+        verifyRepository.save(verify);
+        String subject = "Verify Your Email";
+        String htmlContent = "<!DOCTYPE html>"
+                + "<html lang='en'>"
+                + "<head>"
+                + "<meta charset='UTF-8'>"
+                + "<meta name='viewport' content='width=device-width, initial-scale=1.0'>"
+                + "<title>Email Verification</title>"
+                + "<style>"
+                + "body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }"
+                + ".email-container { max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }"
+                + ".header { text-align: center; padding-bottom: 20px; }"
+                + ".header img { width: 100px; border-radius: 50%; }"
+                + ".header h1 { color: #333333; font-size: 24px; margin: 20px 0 10px; }"
+                + ".content { color: #666666; font-size: 16px; line-height: 1.6; }"
+                + ".verification-code { background-color: #007BFF; color: #ffffff; font-size: 22px; font-weight: bold; text-align: center; padding: 15px; border-radius: 5px; margin: 20px 0; letter-spacing: 2px; }"
+                + ".cta-button { display: inline-block; background-color: #28a745; color: #FFFFFF; padding: 5px 20px; text-align: center; text-decoration: none; border-radius: 5px; font-size: 15px; font-weight: bold; transition: background-color 0.3s ease; }"
+                + ".footer { text-align: center; padding-top: 20px; color: #999999; font-size: 14px; }"
+                + ".footer a { color: #007BFF; text-decoration: none; }"
+                + "</style>"
+                + "</head>"
+                + "<body>"
+                + "<div class='email-container'>"
+                + "<div class='header'>"
+                + "<img src='http://res.cloudinary.com/dssku7owl/image/upload/v1723724928/xs5rgk782juzntxm7zfy.png' alt='Company Logo'>"
+                + "<h1>Email Verification</h1>"
+                + "</div>"
+                + "<div class='content'>"
+                + "<p>Hello,</p>"
+                + "<p>Thank you for registering with us! To complete your registration, please verify your email address by using the verification code below:</p>"
+                + "<div class='verification-code'>" + code + "</div>"
+                + "<p>If you did not sign up for this account, please ignore this email or contact our support team.</p>"
+//                + "<a href='http://localhost:3000/account/forgotpassword?open=true' class='cta-button'>Verify Here</a>"
+                + "</div>"
+                + "<div class='footer'>"
+                + "<p>If you have any questions, feel free to <a href='https://example.com/support'>contact us</a>.</p>"
+                + "<p>&copy; 2024 Company Name. All rights reserved.</p>"
+                + "</div>"
+                + "</div>"
+                + "</body>"
+                + "</html>";
+        emailService.sendHtmlEmail(email, subject, htmlContent);
+        MessageResponse messageResponse = new MessageResponse();
+        messageResponse.setMessage("Mã OTP đã được gửi đến email của bạn");
+        return new ResponseEntity<>(messageResponse, HttpStatus.OK);
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<MessageResponse> resetPassword(@RequestBody ResetPasswordRequest req) throws Exception {
+        Verify verify = verifyRepository.findByEmail(req.getEmail());
+        MessageResponse res = new MessageResponse();
+        if (verify != null) {
+            if (verify.getVerifyCode().equals(req.getCode())) {
+                res.setMessage(UpdatePassword(req.getEmail(), req.getNewPassword()));
+                verifyRepository.delete(verify);
+            } else res.setMessage("Mã OTP không chính xác");
+        }
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    public String UpdatePassword(String email, String newPassword) throws Exception {
+        User user = userService.findUserByEmail(email);
+        user.getAccount().setPassword(passwordEncoder.encode(newPassword));
+        return "Đổi mật khẩu thành công";
+    }
+
+    @PutMapping("/change-password")
+    public ApiResponse changePassword(@RequestHeader("Authorization")String jwt, @RequestBody ChangePasswordRequest req) throws Exception {
+        ApiResponse res = new ApiResponse();
+        return userService.changePassword(jwt,req.getCurrentPassword(), req.getNewPassword());
+    }
+
+    public static String generateRandomNumber() {
+        Random random = new Random();
+        int number = 1000 + random.nextInt(9000);
+        return String.valueOf(number);
+    }
 }

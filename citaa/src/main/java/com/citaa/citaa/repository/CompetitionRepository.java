@@ -18,4 +18,5 @@ public interface CompetitionRepository extends JpaRepository<Competition, Intege
             "(:status = 'ended' AND c.endAt < CURRENT_DATE) OR " +
             "(:status = 'upcoming' AND c.startAt > CURRENT_DATE))")
     public List<Competition> filterCompetition(String year, String field, String status );
+
 }

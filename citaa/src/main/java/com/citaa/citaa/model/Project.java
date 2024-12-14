@@ -49,7 +49,7 @@ public class Project {
     List<String> files;
     @OneToMany
     List<Comment> comments;
-    @OneToMany
+    @ManyToMany
     List<User> reacts = new ArrayList<>();
     @ManyToMany
     List<Founder> founders;

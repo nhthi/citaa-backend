@@ -10,11 +10,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class FeedbackCreationRequest {
-    String field;
-    String title;
-    String name;
+    String topic;
+    String heading;
+    String fullName;
     String email;
     String address;
     String content;
-    int userId;
 }

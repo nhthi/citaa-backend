@@ -29,10 +29,6 @@ public class ProjectController {
     @Autowired
     StartupService startupService;
     @Autowired
-    EvaluationService evaluationService;
-    @Autowired
-    JwtProvider jwtProvider;
-    @Autowired
     UserService userService;
 
 
@@ -97,7 +93,7 @@ public class ProjectController {
     @GetMapping("/potential")
     public ResponseEntity<List<Project>> getProjectPotential() throws Exception {
         List<Project> projects = projectService.getProjectPotential();
-        int length = projects.size() > 3 ? 3 : projects.size();
+        int length = projects.size() > 4 ? 4 : projects.size();
         return new ResponseEntity<>(projectService.getProjectPotential().subList(0,length), HttpStatus.OK);
     }
 
@@ -111,6 +107,13 @@ public class ProjectController {
         res.setMessage("Created project successfully");
         res.setStatus(200);
         return new ResponseEntity<>(res, HttpStatus.CREATED);
+    }
+    @GetMapping("/search")
+    public ResponseEntity<Page<Project>> searchProject(@RequestParam int pageSize,
+                                                       @RequestParam int pageNumber,
+    @RequestParam String query) throws Exception {
+        Page<Project> projects = projectService.searchProject(query,pageNumber,pageSize);
+        return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
 }

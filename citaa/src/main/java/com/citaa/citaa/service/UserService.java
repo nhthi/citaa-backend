@@ -4,6 +4,7 @@ import com.citaa.citaa.config.JwtProvider;
 import com.citaa.citaa.model.*;
 import com.citaa.citaa.repository.*;
 import com.citaa.citaa.request.UpdateUserRequest;
+import com.citaa.citaa.response.ApiResponse;
 import com.citaa.citaa.response.EvaluationManagementResponse;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -12,10 +13,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -35,7 +38,8 @@ public class UserService {
 
     @Autowired
     private EvaluationRepository evaluationRepository;
-
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     public List<User> getUsers() {
         return userRepository.findAll();
@@ -242,7 +246,76 @@ public class UserService {
         return evaluationManagementResponses;
     }
 
-    public List<Investor> getTop5Investor(){
-        return investorRepository.findTop5ByOrderByInvestmentAmountDesc();
+    public List<User> getTop5Investor() {
+        return investorRepository.findTop5ByOrderByInvestmentAmountDesc().stream()
+                .map(investor -> (User) investor)
+                .collect(Collectors .toList());
+    }
+
+    public List<User> getTop5Expert() {
+        return expertRepository.findTop5ByOrderByFullNameAsc().stream()
+                .map(expert -> (User) expert)
+                .collect(Collectors.toList());
+    }
+
+    public List<User> getTop5Startup() {
+        return startupRepository.findTop5ByOrderByFullNameDesc().stream()
+                .map(startup -> (User) startup)
+                .collect(Collectors.toList());
+    }
+
+    public List<User> getTopProfile(String role){
+        switch (role){
+            case "Expert":
+                return getTop5Expert();
+            case "Startup":
+                return getTop5Startup();
+            case "Investor":
+                return getTop5Investor();
+        }
+        return null;
+    }
+
+    public ApiResponse changePassword(String jwt, String currentPassword, String newPassword) throws Exception {
+        User user = findByJwt(jwt);
+        ApiResponse res = new ApiResponse();
+
+        if (user == null) {
+            res.setMessage("User not found");
+            res.setStatus(500);
+            return res;
+        };
+
+        if(!passwordEncoder.matches(currentPassword,user.getAccount().getPassword())){
+            res.setMessage("Mật khẩu hiện tại không chính xác");
+            res.setStatus(500);
+            return res;
+        }
+
+        user.getAccount().setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+        res.setMessage("Đổi mật khẩu thành công");
+        res.setStatus(200);
+        return res;
+    }
+
+    public User findUserByEmail(String email) throws Exception {
+        User user = userRepository.findByEmail(email);
+        if(user==null){
+            throw new Exception("User not found with email:  "+email);
+        }
+        return user;
+    }
+
+    public long countExpert(){
+        return expertRepository.count();
+    }
+
+    public long countStartup(){
+        return startupRepository.count();
+    }
+
+    public long countInvestor(){
+        return investorRepository.count();
     }
 }

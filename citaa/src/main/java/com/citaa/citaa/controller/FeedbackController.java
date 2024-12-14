@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/feedback")
+@RequestMapping("/public/api/feedback")
 public class FeedbackController {
     @Autowired
     FeedbackService feedbackService;
+
     @PostMapping
     ResponseEntity<Feedback> createFeedback(@RequestBody FeedbackCreationRequest request) throws Exception {
         return new ResponseEntity<>(feedbackService.createFeedback(request), HttpStatus.CREATED);

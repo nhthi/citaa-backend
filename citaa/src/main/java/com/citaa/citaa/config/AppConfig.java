@@ -27,8 +27,8 @@ public class AppConfig {
                 )
                 .authorizeRequests(
                         Authorize -> Authorize
+                                .requestMatchers("/public/api/**").permitAll()
                                 .requestMatchers("/admin/api/**").permitAll()
-                                .requestMatchers("/api/admin/**").permitAll()
                                 .requestMatchers("/admin/api/competition").permitAll()
                                 .requestMatchers("/api/users/**").permitAll()
                                 .requestMatchers("/api/**").permitAll()

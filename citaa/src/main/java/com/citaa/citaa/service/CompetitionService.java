@@ -184,4 +184,8 @@ public class CompetitionService {
         Page<Competition> filteredCompetition = new PageImpl<>(pageContent, pageable, competitions.size());
         return filteredCompetition;
     }
+
+    public long countCompetition(){
+        return competitionRepository.count();
+    }
 }

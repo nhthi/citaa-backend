@@ -26,18 +26,6 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AdminController {
     @Autowired
-    UserRepository userRepository;
-    @Autowired
-    PasswordEncoder passwordEncoder;
-    @Autowired
-    JwtProvider jwtProvider;
-    @Autowired
-    CustomerUserDetailService customerUserDetailService;
-    @Autowired
-    StartupRepository startupRepository;
-    @Autowired
-    ExpertRepository expertRepository;
-    @Autowired
     UserService userService;
     @Autowired
     NewsService newsService;
@@ -65,21 +53,11 @@ public class AdminController {
         return new ResponseEntity<>(userService.getAllInvestor(pageSize,pageNumber),HttpStatus.OK);
     }
 
-
-    @GetMapping("/news")
-    public ResponseEntity<List<News>> getListNews(){
-        return new ResponseEntity<>(newsService.getListNews(), HttpStatus.OK);
-    }
-
     @PostMapping("/news")
     public ResponseEntity<News> createNews(@RequestBody News request,@RequestHeader("Authorization")String jwt) throws Exception {
         return new ResponseEntity<>(newsService.createNews(request,jwt), HttpStatus.CREATED);
     }
 
-    @GetMapping("/news/{newsId}")
-    public ResponseEntity<News> getNewsById(@PathVariable("newsId")int id) throws Exception{
-        return new ResponseEntity<>(newsService.getNewsById(id), HttpStatus.OK);
-    }
     @PutMapping("/project/verify/{projectId}")
     public ResponseEntity<Project> verifyProject(@PathVariable("projectId")int id, @RequestHeader("Authorization") String jwt) throws Exception{
         return new ResponseEntity<>(projectService.verifyProject(id,jwt), HttpStatus.OK);

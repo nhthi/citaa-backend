@@ -18,11 +18,6 @@ public class UserController {
     @Autowired
     UserService userService;
 
-//    @GetMapping
-//    public ResponseEntity<List<User>> getUsers(){
-//        return new ResponseEntity<>(userService.getUsers(), HttpStatus.OK);
-//    }
-
     @GetMapping("/profile")
     public ResponseEntity<User> getProfile(@RequestHeader("Authorization")String jwt) throws Exception {
         User user = userService.findByJwt(jwt);
@@ -47,7 +42,27 @@ public class UserController {
     }
 
     @GetMapping("/top5-investor")
-    public ResponseEntity<List<Investor>> getTop5Investors() throws Exception {
+    public ResponseEntity<List<User>> getTop5Investors() throws Exception {
         return new ResponseEntity<>(userService.getTop5Investor(),HttpStatus.OK);
+    }
+
+    @GetMapping("/top5-profile")
+    public ResponseEntity<List<User>> getTopProfile(@RequestParam("role") String role) throws Exception {
+        return new ResponseEntity<>(userService.getTopProfile(role),HttpStatus.OK);
+    }
+
+    @GetMapping("/startup/count")
+    public long countStartup(){
+        return userService.countStartup();
+    }
+
+    @GetMapping("/expert/count")
+    public long countExpert(){
+        return userService.countExpert();
+    }
+
+    @GetMapping("/investor/count")
+    public long countInvestor(){
+        return userService.countInvestor();
     }
 }
