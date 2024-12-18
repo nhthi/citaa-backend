@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class EvaluationService {
@@ -36,6 +37,14 @@ public class EvaluationService {
         User expert = userRepository.findById(request.getExpertId())
                 .orElseThrow(() -> new Exception(("Expert not found!")));
 
+        List<Evaluation> evaluations = evaluationRepository.findByExpertId(expert.getId());
+
+        for(Evaluation evaluation : evaluations) {
+            if(evaluation.getProjectId() == project.getId()) {
+                throw new Exception(("This expert has already evaluated this project."));
+            }
+        }
+
         Evaluation evaluation = evaluationRepository.save(Evaluation.builder()
                         .content(request.getContent())
                         .points(request.getPoints())
@@ -53,5 +62,12 @@ public class EvaluationService {
 
     public List<Evaluation> getEvaluationByExpertId(int expertId){
         return evaluationRepository.findByExpertId(expertId);
+    }
+
+    public List<Object[]> getTop3ExpertMostEvaluation() {
+        List<Object[]> results = evaluationRepository.findTopExpertMostProjects();
+        return results.stream()
+                .limit(3)
+                .collect(Collectors.toList());
     }
 }

@@ -3,6 +3,7 @@ package com.citaa.citaa.model;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 
@@ -25,4 +26,9 @@ public class Feedback {
     @Column(columnDefinition = "TEXT")
     String content;
     LocalDateTime createdAt;
+
+    String replyContent;
+    int adminReplyId;
+    String status;
+    LocalDateTime replyAt;
 }

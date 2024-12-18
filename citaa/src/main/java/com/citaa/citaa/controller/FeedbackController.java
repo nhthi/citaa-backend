@@ -21,8 +21,4 @@ public class FeedbackController {
         return new ResponseEntity<>(feedbackService.createFeedback(request), HttpStatus.CREATED);
     }
 
-    @GetMapping
-    ResponseEntity<List<Feedback>> getListFeedback(){
-        return new ResponseEntity<>(feedbackService.getListFeedback(), HttpStatus.OK);
-    }
 }

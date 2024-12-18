@@ -4,6 +4,7 @@ import com.citaa.citaa.model.*;
 import com.citaa.citaa.repository.CompetitionRepository;
 import com.citaa.citaa.repository.TimelineEventRepository;
 import com.citaa.citaa.repository.VoteRepository;
+import com.citaa.citaa.response.AdminCompetitionResponse;
 import com.citaa.citaa.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CompetitionService {
@@ -84,13 +86,13 @@ public class CompetitionService {
         // Tìm Project theo ID
         Project project = projectService.findProjectById(projectId);
 
+
         // Kiểm tra nếu Project tồn tại
         if (project == null) {
             res.setStatus(404);
             res.setMessage("Project not found");
             return res;
         }
-
         // Tìm Competition theo ID
         Competition competition = findCompetitionById(idCompetition);
 
@@ -100,6 +102,13 @@ public class CompetitionService {
             res.setMessage("Competition not found");
             return res;
         }
+
+        if(project.getStartup().getId() != candidate.getId()){
+            res.setStatus(400);
+            res.setMessage("This is not your project");
+            return res;
+        }
+
 
         // Kiểm tra nếu Candidate đã đăng ký vào Competition
         if (competition.getStartupAppliedTimes().containsKey(candidate.getId())) {
@@ -187,5 +196,75 @@ public class CompetitionService {
 
     public long countCompetition(){
         return competitionRepository.count();
+    }
+
+    public Page<Competition> filterAllCompetition( int pageNumber, int pageSize,int year, List<String> fields ) throws Exception {
+        List<Competition> competitions = competitionRepository.filterAllCompetition(year);
+
+        if (fields != null && !fields.isEmpty()) {
+            competitions = competitions.stream()
+                    .filter(competition -> competition.getFields().stream()
+                            .anyMatch(field -> fields.stream()
+                                    .anyMatch(inputField -> inputField.equalsIgnoreCase(field))
+                            )
+                    )
+                    .collect(Collectors.toList());
+        }
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        int startIndex = (int) pageable.getOffset();
+        int endIndex = Math.min(startIndex + pageable.getPageSize(), competitions.size());
+        List<Competition> pageContent = competitions.subList(startIndex, endIndex);
+        Page<Competition> filteredCompetition = new PageImpl<>(pageContent, pageable, competitions.size());
+        return filteredCompetition;
+    }
+
+    public ApiResponse deleteCompetitionById(int id) throws Exception {
+        ApiResponse res = new ApiResponse();
+        Competition competition = findCompetitionById(id);
+        List<Vote> votes = voteRepository.findVoteByCompetitionId(competition.getId());
+        for(Vote vote: votes){
+            voteRepository.delete(vote);
+        }
+        competitionRepository.delete(competition);
+        res.setMessage("Xóa thành công");
+        res.setStatus(200);
+        return res;
+    }
+
+
+    public AdminCompetitionResponse getAdminCompetitionAnalysis() throws Exception {
+        AdminCompetitionResponse res = new AdminCompetitionResponse();
+        int onGoingCompetition = competitionRepository.filterCompetitionByStatus("ongoing").size();
+        int endedCompetition = competitionRepository.filterCompetitionByStatus("ended").size();
+        int upcomingCompetition = competitionRepository.filterCompetitionByStatus("upcoming").size();
+
+        res.setOnGoingCompetition(onGoingCompetition);
+        res.setEndedCompetition(endedCompetition);
+        res.setUpcomingCompetition(upcomingCompetition);
+
+        int agricultureCompetition = competitionRepository.findByField("Agriculture").size();
+        int aquacultureCompetition = competitionRepository.findByField("Aquaculture").size();
+
+        res.setAgricultureCompetition(agricultureCompetition);
+        res.setAquacultureCompetition(aquacultureCompetition);
+
+        List<String> fields = new ArrayList<>();
+//        fields.add("Agriculture");
+//        fields.add("Aquaculture");
+
+        int otherCompetition = competitionRepository.findByNotFields("Agriculture").size();
+
+        Pageable pageable = PageRequest.of(0, 3); // Trang đầu tiên với 3 kết quả
+
+        List<Competition> topJoin = competitionRepository.findTop3ByProjectsCount(pageable);
+        List<Competition> topReward = new ArrayList<>();
+        List<Object[]> topVote = voteRepository.findTopCompetitionsByVoteCount(pageable);
+
+        res.setTopJoin(topJoin);
+        res.setTopReward(topReward);
+        res.setTopVote(topVote);
+
+        return res;
     }
 }

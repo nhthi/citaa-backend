@@ -21,14 +21,11 @@ public class CompetitionController {
     CompetitionService competitionService;
 
 
-    @PostMapping("/admin/api/competition")
-    public ResponseEntity<Competition> createCompetition(@RequestBody Competition competition, @RequestHeader("Authorization")String jwt) throws Exception {
-        return new ResponseEntity<>(competitionService.createCompetition(jwt,competition), HttpStatus.CREATED);
-    }
     @GetMapping("/api/competition/{competition-id}")
     public ResponseEntity<Competition> applyCompetitionResponseEntity(@PathVariable("competition-id") int id) throws Exception {
         return new ResponseEntity<>(competitionService.findCompetitionById(id),HttpStatus.OK);
     }
+
     @PutMapping("/api/competition/apply")
     public ResponseEntity<ApiResponse> applyCompetitionResponseEntity(@RequestBody ApplyCompetitionRequest req, @RequestHeader("Authorization")String jwt) throws Exception {
         return new ResponseEntity<>(competitionService.applyCompetition(jwt,req.getIdCompetition(),req.getIdProject()),HttpStatus.OK);

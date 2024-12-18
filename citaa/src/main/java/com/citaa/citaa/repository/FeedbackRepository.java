@@ -14,4 +14,7 @@ import java.util.List;
 @Repository
 public interface FeedbackRepository extends JpaRepository<Feedback, Integer> {
 
+    @Query("select f from Feedback f where (:year = 0 or year(f.createdAt)=:year) " +
+            "and (:status = '0' or f.status = :status)")
+    public List<Feedback> filterFeedback(int year, String status);
 }

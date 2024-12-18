@@ -26,4 +26,6 @@ public interface ProjectRepository extends JpaRepository<Project, Integer> {
             "p.introduce like %:query% or p.startUpIdea like %:query% or p.field like %:query%" )
     public List<Project> searchProject(@Param("query") String query);
 
+    @Query("SELECT p.startup, COUNT(p) as projectCount FROM Project p GROUP BY p.startup ORDER BY projectCount DESC")
+    List<Object[]> findTopStartupsWithMostProjects();
 }

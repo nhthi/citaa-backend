@@ -32,7 +32,7 @@ public class PublicController {
     }
 
     @GetMapping("/news")
-    public ResponseEntity<Page<News>> filterNews(@RequestParam(defaultValue = "ALL") String field, @RequestParam(defaultValue = "2024") String year,
+    public ResponseEntity<Page<News>> filterNews(@RequestParam(defaultValue = "ALL") String field, @RequestParam(defaultValue = "0") int year,
                                                  @RequestParam int pageSize,
                                                  @RequestParam int pageNumber) throws Exception{
         return new ResponseEntity<>(newsService.filterNews(field,year,pageSize,pageNumber), HttpStatus.OK);

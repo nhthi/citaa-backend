@@ -147,6 +147,8 @@ public class ProjectService {
                             project -> fields.stream().anyMatch((field -> field.equalsIgnoreCase(project.getField())))
                     ).collect(Collectors.toList());
         }
+
+
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
 
         int startIndex = (int) pageable.getOffset();
@@ -187,6 +189,14 @@ public class ProjectService {
     public long countProject(){
         return projectRepository.count();
     }
+
+    public List<Object[]> getTop3StartupsWithMostProjects() {
+        List<Object[]> results = projectRepository.findTopStartupsWithMostProjects();
+        return results.stream()
+                .limit(3)
+                .collect(Collectors.toList());
+    }
+
 }
 
 

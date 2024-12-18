@@ -20,7 +20,6 @@ public class EmailService {
         helper.setTo(to);
         helper.setSubject(subject);
         helper.setText(htmlContent, true); // true để cho biết nội dung là HTML
-
         mailSender.send(message);
     }
 

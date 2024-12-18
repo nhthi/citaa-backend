@@ -25,6 +25,7 @@ public class News {
     String content;
     String thumbnail;
     LocalDateTime createAt;
+    LocalDateTime updateAt;
     @ManyToOne
     User admin;
 }
