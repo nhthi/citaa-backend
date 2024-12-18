@@ -32,9 +32,6 @@
 //        }
 //    }
 //
-//    private static final String CLIENT_ID = "461500289709-t0nocg45dstaf8fqvd5cp3dpgbcicp2j.apps.googleusercontent.com";  // Thay thế bằng Client ID của bạn
-//    private static final String CLIENT_SECRET = "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";  // Thay thế bằng Client Secret của bạn
-//    private static final String TOKENS_DIRECTORY_PATH = "tokens";
 //
 //    // Xác thực và lấy Credential
 //    private static Credential authorize() throws Exception {
