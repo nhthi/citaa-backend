@@ -19,4 +19,5 @@ public class Founder {
     int id;
     String name;
     String bio;
+    String linkCv;
 }

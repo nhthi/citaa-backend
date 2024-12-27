@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class EvaluationCreationRequest {
     int points;
     String content;
+    String comment;
     int expertId;
     int projectId;
 }

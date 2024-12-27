@@ -1,6 +1,7 @@
 package com.citaa.citaa.repository;
 
 import com.citaa.citaa.model.Competition;
+import com.citaa.citaa.model.Project;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -38,5 +39,5 @@ public interface CompetitionRepository extends JpaRepository<Competition, Intege
     @Query("SELECT c FROM Competition c ORDER BY SIZE(c.projects) DESC")
     List<Competition> findTop3ByProjectsCount(Pageable pageable);
 
-
+    List<Competition> findAllByProjectsContaining(Project project);
 }

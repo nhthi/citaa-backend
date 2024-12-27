@@ -170,7 +170,7 @@ public class CompetitionService {
         Vote vote = Vote.builder()
                 .userId(voter.getId())
                 .projectId(project.getId())
-                .competitionId(competition.getId())
+                .competition(competition)
                 .build();
         // Lưu bình chọn vào cơ sở dữ liệu
         voteRepository.save(vote);

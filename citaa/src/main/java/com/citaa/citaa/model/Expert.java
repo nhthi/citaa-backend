@@ -22,7 +22,12 @@ public class Expert extends User {
     @ElementCollection
     List<String> certifications;
     int experienceYears;
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "expert_project",
+            joinColumns = @JoinColumn(name = "expert_id"),
+            inverseJoinColumns = @JoinColumn(name = "project_id")
+    )
     @JsonIgnore
     List<Project> projects = new ArrayList<>();
 }

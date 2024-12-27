@@ -91,7 +91,6 @@ public class AuthController {
                             .status("disable")
                             .build())
                     .fields(user.getFields())
-                    .investmentAmount(0.0)
                     .build());
         }else{
             createUser = new Expert();
@@ -103,7 +102,7 @@ public class AuthController {
                             .username(user.getAccount().getUsername())
                             .role(user.getAccount().getRole())
                             .createAt(LocalDateTime.now())
-                            .status("disable")
+                            .status("enable")
                             .build())
                     .fields(user.getFields())
                     .build());
@@ -136,7 +135,7 @@ public class AuthController {
 
         return new ResponseEntity<>(AuthResponse.builder()
                 .jwt(jwt)
-                .message("Sign in Success")
+                .message("Đăng nhập thành công")
                 .role(role)
                 .build(), HttpStatus.OK);
     }
@@ -144,14 +143,13 @@ public class AuthController {
     private Authentication authenticate(String username, String password) throws Exception {
         UserDetails userDetails = customerUserDetailService.loadUserByUsername(username);
         if(userDetails==null){
-            throw new Exception("Invalid Username ...");
+            throw new Exception("Tên đăng nhập hoặc mật khẩu không đúng");
         }
         if(!passwordEncoder.matches(password,userDetails.getPassword())){
-            throw new Exception("Invalid password ..");
+            throw new Exception("Tên đăng nhập hoặc mật khẩu không đúng");
         }
         return new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
     }
-
 
 
     @PostMapping("/forgot-password")

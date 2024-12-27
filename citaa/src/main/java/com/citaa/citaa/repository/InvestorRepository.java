@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface InvestorRepository extends JpaRepository<Investor, Integer> {
 
-    List<Investor> findTop5ByOrderByInvestmentAmountDesc();
+    List<Investor> findTop5ByOrderByExperienceYearsDesc();
 }
