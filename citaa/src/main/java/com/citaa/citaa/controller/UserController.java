@@ -1,9 +1,11 @@
 package com.citaa.citaa.controller;
 
 import com.citaa.citaa.model.Investor;
+import com.citaa.citaa.model.React;
 import com.citaa.citaa.model.User;
 import com.citaa.citaa.request.UpdateUserRequest;
 import com.citaa.citaa.response.EvaluationManagementResponse;
+import com.citaa.citaa.response.ProfileResponse;
 import com.citaa.citaa.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -64,5 +66,15 @@ public class UserController {
     @GetMapping("/investor/count")
     public long countInvestor(){
         return userService.countInvestor();
+    }
+
+    @GetMapping("/profile/statistical/{userId}")
+    public ResponseEntity<ProfileResponse> getProfileResponse(@PathVariable int userId) throws Exception {
+        return new ResponseEntity<>(userService.getProfileStatistical(userId),HttpStatus.OK);
+    }
+
+    @GetMapping("/react")
+    public ResponseEntity<List<React>> getReactUser(@RequestHeader("Authorization") String jwt) throws Exception {
+        return new ResponseEntity<>(userService.findReactByJwt(jwt),HttpStatus.OK);
     }
 }

@@ -1,5 +1,6 @@
 package com.citaa.citaa.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -33,4 +34,8 @@ public class User {
     @ElementCollection
     List<String> fields;
     String phone;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<React> reacts;
 }

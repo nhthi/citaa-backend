@@ -1,5 +1,6 @@
 package com.citaa.citaa.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -49,8 +50,16 @@ public class Project {
     List<String> files;
     @OneToMany
     List<Comment> comments;
+
+
     @ManyToMany
-    List<User> reacts = new ArrayList<>();
+    List<User> reactList = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<React> reacts = new ArrayList<>();
+
+
     @ManyToMany
     List<Founder> founders;
     String address;

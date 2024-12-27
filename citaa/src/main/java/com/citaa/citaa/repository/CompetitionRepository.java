@@ -40,4 +40,11 @@ public interface CompetitionRepository extends JpaRepository<Competition, Intege
     List<Competition> findTop3ByProjectsCount(Pageable pageable);
 
     List<Competition> findAllByProjectsContaining(Project project);
+
+    @Query("SELECT COUNT(c) FROM Competition c JOIN c.startupAppliedTimes s WHERE KEY(s) = :startupId")
+    Long countCompetitionsByStartupId(int startupId);
+
+
+    @Query("SELECT COUNT(c) FROM Competition c JOIN c.judges j WHERE j.id = :userId")
+    Long countJudgingCompetitionsByExpertId(int userId);
 }

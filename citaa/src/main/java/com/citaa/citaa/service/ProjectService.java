@@ -1,10 +1,7 @@
 package com.citaa.citaa.service;
 
 import com.citaa.citaa.model.*;
-import com.citaa.citaa.repository.CompetitionRepository;
-import com.citaa.citaa.repository.EvaluationRepository;
-import com.citaa.citaa.repository.ProjectRepository;
-import com.citaa.citaa.repository.VoteRepository;
+import com.citaa.citaa.repository.*;
 import com.citaa.citaa.request.ProjectCreationRequest;
 import com.citaa.citaa.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +30,8 @@ public class ProjectService {
     VoteRepository voteRepository;
     @Autowired
     CompetitionRepository competitionRepository;
+    @Autowired
+    ReactRepository reactRepository;
 
     public double calculateAveragePoints(int projectId){
         double avg = 0;
@@ -116,9 +115,27 @@ public class ProjectService {
     public Project likeProject(int projectId, String jwt) throws Exception {
         Project project = findProjectById(projectId);
         User user = userService.findByJwt(jwt);
-        if(project.getReacts().contains(user)){
-            project.getReacts().remove(user);
-        }else project.getReacts().add(user);
+
+        if(project.getReactList().contains(user)){
+            project.getReactList().remove(user);
+        }else project.getReactList().add(user);
+
+        Optional<React> existingReact = project.getReacts().stream()
+                .filter(react -> react.getUser().equals(user))
+                .findFirst();
+
+        if (existingReact.isPresent()) {
+            reactRepository.delete(existingReact.get());
+            project.getReacts().remove(existingReact.get());
+        } else {
+            React react = React.builder()
+                    .user(user)
+                    .project(project)
+                    .createAt(LocalDateTime.now())
+                    .build();
+            project.getReacts().add(react);
+        }
+
         return projectRepository.save(project);
     }
 

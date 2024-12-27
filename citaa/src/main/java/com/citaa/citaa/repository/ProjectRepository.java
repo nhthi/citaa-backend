@@ -32,4 +32,10 @@ public interface ProjectRepository extends JpaRepository<Project, Integer> {
 
     @Query("SELECT p.startup, COUNT(p) as projectCount FROM Project p GROUP BY p.startup ORDER BY projectCount DESC")
     List<Object[]> findTopStartupsWithMostProjects();
+
+    @Query("SELECT COUNT(DISTINCT e.id) FROM Project e WHERE e.startup.id = :startupId")
+    Long countDistinctProjectByStartupId(int startupId);
+
+    @Query("SELECT SUM(c.realTotalCapital) FROM Project c  WHERE c.startup.id = :startupId")
+    Double sumTotalCapital(int startupId);
 }

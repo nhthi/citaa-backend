@@ -16,7 +16,14 @@ public class React {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
-    LocalDateTime createAt;
+
     @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
     User user;
+
+    @ManyToOne
+    @JoinColumn(name = "project_id", nullable = false)
+    Project project;
+
+    LocalDateTime createAt;
 }

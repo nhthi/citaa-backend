@@ -19,4 +19,10 @@ public interface EvaluationRepository extends JpaRepository<Evaluation, Integer>
 
     @Query("SELECT p.expert, COUNT(p) as evalutionCount FROM Evaluation p GROUP BY p.expert ORDER BY evalutionCount DESC")
     List<Object[]> findTopExpertMostProjects();
+
+    @Query("SELECT COUNT(DISTINCT e.projectId) FROM Evaluation e WHERE e.expert.id = :expertId")
+    Long countDistinctProjectByExpert(int expertId);
+
+    @Query("SELECT AVG(e.points) FROM Evaluation e WHERE e.expert.id = :expertId")
+    Double findAveragePointsByExpert(int expertId);
 }

@@ -6,6 +6,7 @@ import com.citaa.citaa.repository.*;
 import com.citaa.citaa.request.UpdateUserRequest;
 import com.citaa.citaa.response.ApiResponse;
 import com.citaa.citaa.response.EvaluationManagementResponse;
+import com.citaa.citaa.response.ProfileResponse;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,11 +36,14 @@ public class UserService {
     InvestorRepository investorRepository;
     @Autowired
     private ProjectRepository projectRepository;
-
     @Autowired
     private EvaluationRepository evaluationRepository;
     @Autowired
     PasswordEncoder passwordEncoder;
+    @Autowired
+    CompetitionRepository competitionRepository;
+    @Autowired
+    ReactRepository reactRepository;
 
     public List<User> getUsers() {
         return userRepository.findAll();
@@ -239,7 +243,6 @@ public class UserService {
     public List<EvaluationManagementResponse> getEvaluateManagement(int expertId) throws Exception {
         List<Evaluation> evaluations = evaluationRepository.findByExpertId(expertId);
         List<EvaluationManagementResponse> evaluationManagementResponses = new ArrayList<>();
-        System.out.println(evaluations.size());
         for (Evaluation evaluation : evaluations) {
             Project pro = projectRepository.findById(evaluation.getProjectId()).orElseThrow(() -> new Exception("Project not found with id: " + evaluation.getProjectId()));
             EvaluationManagementResponse item = new EvaluationManagementResponse();
@@ -251,11 +254,12 @@ public class UserService {
             }
             evaluationManagementResponses.add(EvaluationManagementResponse.builder()
                     .fullName(evaluation.getExpert().getFullName())
-                    .year(evaluation.getCreateAt().getYear())
+                    .createAt(evaluation.getCreateAt())
                     .projectName(pro.getName())
                     .fields(fields)
                     .founderNames(founderNames)
                     .startupName(pro.getStartup().getFullName())
+                    .projectId(evaluation.getProjectId())
                     .build());
         }
         return evaluationManagementResponses;
@@ -339,5 +343,52 @@ public class UserService {
         User user = findById(userId);
         user.getAccount().setStatus(status);
         return userRepository.save(user);
+    }
+
+
+    public long countProjectsByExpert(int expertId) {
+        return evaluationRepository.countDistinctProjectByExpert(expertId);
+    }
+
+    public double averagePointOfExpert(int expertId) {
+        Double averagePoints = evaluationRepository.findAveragePointsByExpert(expertId);
+        return (averagePoints != null) ? averagePoints : 0.0;
+    }
+
+    public long countProjectsByStartup(int startupId) {
+        return projectRepository.countDistinctProjectByStartupId(startupId);
+    }
+
+    public long countCompetitionByStartupId(int startupId){
+        return competitionRepository.countCompetitionsByStartupId(startupId);
+    }
+
+    public double sumTotalCapital(int startupId ){
+        Double sum =  projectRepository.sumTotalCapital(startupId);
+        return (sum != null) ? sum : 0 ;
+    }
+
+    public long countJudgingCompetitionsByExpertId(int expertId) {
+        return competitionRepository.countJudgingCompetitionsByExpertId(expertId);
+    }
+    public ProfileResponse getProfileStatistical(int userId) throws Exception {
+        User user = findById(userId);
+        ProfileResponse res = new ProfileResponse();
+        switch (user.getAccount().getRole()) {
+            case "ROLE_EXPERT":
+                res.setAveragePoints(averagePointOfExpert(user.getId()));
+                res.setCountProjectExpert(countProjectsByExpert(user.getId()));
+                res.setCountDoJudgeExpert(countJudgingCompetitionsByExpertId(userId));
+            case "ROLE_STARTUP":
+                res.setCountProjectStartup(countProjectsByStartup(userId));
+                res.setCountCompetitionStartup(countCompetitionByStartupId(userId));
+                res.setTotalCapitalStartup(sumTotalCapital(userId));
+        }
+        return res;
+    }
+
+    public List<React> findReactByJwt (String jwt) throws Exception {
+        User user = findByJwt(jwt);
+        return reactRepository.findAllByUserId(user.getId());
     }
 }
