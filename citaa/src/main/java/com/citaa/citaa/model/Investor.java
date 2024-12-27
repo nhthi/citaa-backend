@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -16,5 +17,7 @@ public class Investor extends User {
     String riskTolerance;
     String companyName;
     int experienceYears;
-    Double investmentAmount;
+
+    @OneToMany(mappedBy = "investor")
+    List<Investment> investments = new ArrayList<>();
 }

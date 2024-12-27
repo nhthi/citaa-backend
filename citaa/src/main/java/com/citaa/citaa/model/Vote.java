@@ -23,8 +23,8 @@ public class Vote {
     @Column(name = "project_id")
     int projectId; // Chỉ lưu ID của dự án
 
-    @Column(name = "competition_id")
-    int competitionId; // Chỉ lưu ID của cuộc thi
+    @ManyToOne
+    Competition competition;
 
     LocalDateTime createdAt; // Thời gian bình chọn
 

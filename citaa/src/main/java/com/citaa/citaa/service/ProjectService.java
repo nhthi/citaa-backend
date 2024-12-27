@@ -1,12 +1,12 @@
 package com.citaa.citaa.service;
 
-import com.citaa.citaa.model.Evaluation;
-import com.citaa.citaa.model.Project;
-import com.citaa.citaa.model.Startup;
-import com.citaa.citaa.model.User;
+import com.citaa.citaa.model.*;
+import com.citaa.citaa.repository.CompetitionRepository;
 import com.citaa.citaa.repository.EvaluationRepository;
 import com.citaa.citaa.repository.ProjectRepository;
+import com.citaa.citaa.repository.VoteRepository;
 import com.citaa.citaa.request.ProjectCreationRequest;
+import com.citaa.citaa.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -29,7 +29,10 @@ public class ProjectService {
     EvaluationRepository evaluationRepository;
     @Autowired
     UserService userService;
-
+    @Autowired
+    VoteRepository voteRepository;
+    @Autowired
+    CompetitionRepository competitionRepository;
 
     public double calculateAveragePoints(int projectId){
         double avg = 0;
@@ -53,33 +56,35 @@ public class ProjectService {
                         .realTotalCapital(request.getRealTotalCapital())
                         .createAt(LocalDateTime.now())
                         .startup(startup)
-                        .valid(false)
-                        .currency(request.getCurrency())
+                        .potential(false)
                         .formationProject(request.getFormationProject())
                         .introduce(request.getIntroduce())
                         .startUpIdea(request.getStartUpIdea())
                         .founders(request.getFounders())
                         .phone(request.getPhone())
                         .email(request.getEmail())
+                        .address(request.getAddress())
+                        .linkWeb(request.getLinkWeb())
+                        .businessModel(request.getBusinessModel())
+                        .mainTechnology(request.getMainTechnology())
+                        .pitchDeck(request.getPitchDeck())
+                        .businessRegistrationCertificate(request.getBusinessRegistrationCertificate())
+                        .patent(request.getPatent())
+                        .greenSustainableElement(request.getGreenSustainableElement())
                 .build());
     }
 
     public void setValid(int projectId){
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(()-> new RuntimeException("Project not found!"));
-
-
         double avg = calculateAveragePoints(projectId);
-
         project.setAvg(avg);
-
-        if(avg>=50)
-            project.setValid(true);
+        if(avg>=80)
+            project.setPotential(true);
         else
-            project.setValid(false);
+            project.setPotential(false);
 
         projectRepository.save(project);
-
     }
 
 
@@ -124,40 +129,26 @@ public class ProjectService {
         return projectRepository.save(project);
     }
 
-//    public Post saveProject(Integer postId, Integer userId) throws Exception {
-//        Post post = findPostById(postId);
-//        User user = userService.findUserById(userId);
-//        if(post.getLikedPost().contains(user)){
-//            post.getLikedPost().remove(user);
-//        }else post.getLikedPost().add(user);
-//
-//        return postReository.save(post);
-//    }
+    public Page<Project> filterProject(List<String> fields, double minCapital, String status, int pageNumber, int pageSize,int year,int countExpert) {
+        List<Project> projects = projectRepository.filterProjects(minCapital, status,year,countExpert);
 
-    public Page<Project> filterProject( List<String> fields,  double minCapital, double maxCapital, String status,int pageNumber, int pageSize) {
-        boolean valid = false;
-        if(status.equals("valid")){
-            valid = true;
+        if (fields != null && !fields.isEmpty()) {
+            projects = projects.stream()
+                    .filter(project -> fields.stream().anyMatch(field -> field.equalsIgnoreCase(project.getField())))
+                    .collect(Collectors.toList());
         }
-        List<Project> projects = projectRepository.filterProjects(minCapital, maxCapital, status,valid);
-
-        if (fields!=null && !fields.isEmpty()) {
-            projects = projects.stream().
-                    filter(
-                            project -> fields.stream().anyMatch((field -> field.equalsIgnoreCase(project.getField())))
-                    ).collect(Collectors.toList());
-        }
-
 
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-
         int startIndex = (int) pageable.getOffset();
         int endIndex = Math.min(startIndex + pageable.getPageSize(), projects.size());
 
-        List<Project> pageContent = projects.subList(startIndex, endIndex);
-        Page<Project> filteredProject = new PageImpl<>(pageContent, pageable, projects.size());
+        // Kiểm tra startIndex và endIndex hợp lệ
+        if (startIndex > endIndex || startIndex > projects.size()) {
+            return Page.empty(pageable);
+        }
 
-        return filteredProject;
+        List<Project> pageContent = projects.subList(startIndex, endIndex);
+        return new PageImpl<>(pageContent, pageable, projects.size());
     }
 
     public Page<Project> getProjectByExpertId(int projectId, int pageNumber, int pageSize) throws Exception {
@@ -166,10 +157,8 @@ public class ProjectService {
 
         int startIndex = (int) pageable.getOffset();
         int endIndex = Math.min(startIndex + pageable.getPageSize(), projects.size());
-
         List<Project> pageContent = projects.subList(startIndex, endIndex);
         Page<Project> filteredProject = new PageImpl<>(pageContent, pageable, projects.size());
-
         return filteredProject;
     }
 
@@ -195,6 +184,24 @@ public class ProjectService {
         return results.stream()
                 .limit(3)
                 .collect(Collectors.toList());
+    }
+
+    public ApiResponse deleteProjectById(int id) throws Exception {
+        ApiResponse res = new ApiResponse();
+        Project project = getProjectById(id);
+        List<Vote> votes = voteRepository.findVoteByProjectId(project.getId());
+        for(Vote vote: votes){
+            voteRepository.delete(vote);
+        }
+        List<Competition> competitions = competitionRepository.findAllByProjectsContaining(project);
+        for (Competition competition : competitions) {
+            competition.getProjects().remove(project);
+            competitionRepository.save(competition);
+        }
+        projectRepository.delete(project);
+        res.setMessage("Xóa thành công");
+        res.setStatus(200);
+        return res;
     }
 
 }

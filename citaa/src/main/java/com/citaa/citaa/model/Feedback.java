@@ -28,7 +28,8 @@ public class Feedback {
     LocalDateTime createdAt;
 
     String replyContent;
-    int adminReplyId;
+    @OneToOne(cascade = CascadeType.ALL)
+    User adminReply = null;
     String status;
     LocalDateTime replyAt;
 }

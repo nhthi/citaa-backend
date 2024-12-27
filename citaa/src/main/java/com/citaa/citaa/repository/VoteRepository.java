@@ -10,12 +10,15 @@ import java.util.List;
 
 @Repository
 public interface VoteRepository extends JpaRepository<Vote, Integer> {
-    @Query("select v from Vote v where v.competitionId=:competitionId and v.projectId=:projectId")
+    @Query("select v from Vote v where v.competition.id=:competitionId and v.projectId=:projectId")
     public List<Vote> findVoteByCompetitionIdandProjectId(int competitionId, int projectId);
 
-    @Query("select v from Vote v where v.competitionId=:competitionId")
+    @Query("select v from Vote v where v.competition.id=:competitionId")
     public List<Vote> findVoteByCompetitionId(int competitionId);
 
-    @Query("SELECT v.competitionId, COUNT(v) as voteCount FROM Vote v GROUP BY v.competitionId ORDER BY voteCount DESC")
+    @Query("select v from Vote v where v.projectId=:projectId")
+    public List<Vote> findVoteByProjectId(int projectId);
+
+    @Query("SELECT v.competition, COUNT(v) as voteCount FROM Vote v GROUP BY v.competition ORDER BY voteCount DESC")
     List<Object[]> findTopCompetitionsByVoteCount(Pageable pageable);
 }

@@ -43,7 +43,7 @@ public class Competition {
     @Column(name = "applied_at")
     Map<Integer, LocalDateTime> startupAppliedTimes;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REMOVE})
     @JoinTable(
             name = "competition_project",
             joinColumns = @JoinColumn(name = "competition_id"),
@@ -58,6 +58,11 @@ public class Competition {
     LocalDateTime updateAt;
     LocalDateTime startAt;
     LocalDateTime endAt;
+
+    double first = 0;
+    double second=0;
+    double third = 0;
+
 
     // Phương thức được gọi trước khi lưu entity mới
     @PrePersist

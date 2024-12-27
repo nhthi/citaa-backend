@@ -6,7 +6,9 @@ import com.citaa.citaa.repository.ExpertRepository;
 import com.citaa.citaa.repository.InvestorRepository;
 import com.citaa.citaa.repository.StartupRepository;
 import com.citaa.citaa.repository.UserRepository;
+import com.citaa.citaa.request.ExpertProjectRequest;
 import com.citaa.citaa.request.ReplyFeedbackRequest;
+import com.citaa.citaa.request.UpdateStatusUserRequest;
 import com.citaa.citaa.response.AdminCompetitionResponse;
 import com.citaa.citaa.response.ApiResponse;
 import com.citaa.citaa.service.*;
@@ -39,9 +41,9 @@ public class AdminController {
     private EvaluationService evaluationService;
 
 
-    @PostMapping("/add-to-expert/{expertId}/{projectId}")
-    public ResponseEntity<Expert> addProjectToExpert( @PathVariable int expertId, @PathVariable int projectId) throws Exception {
-        return new ResponseEntity<>(userService.addProjectToExpert(projectId,expertId), HttpStatus.CREATED);
+    @PostMapping("/add-to-expert/{projectId}")
+    public ResponseEntity<Project> addProjectToExpert(@PathVariable int projectId, @RequestBody ExpertProjectRequest req) throws Exception {
+        return new ResponseEntity<>(userService.addProjectToExpert(projectId,req.getExpertIds()), HttpStatus.CREATED);
     }
     @GetMapping("/all-startup")
     public ResponseEntity<Page<Startup>> getAllStartup(@RequestParam("pageSize") int pageSize,
@@ -53,6 +55,12 @@ public class AdminController {
     public ResponseEntity<Page<Expert>> getAllExpert(@RequestParam("pageSize") int pageSize,
                                                        @RequestParam("pageNumber") int pageNumber) throws Exception {
         return new ResponseEntity<>(userService.getAllExpert(pageSize,pageNumber),HttpStatus.OK);
+    }
+
+    @GetMapping("/all-admin")
+    public ResponseEntity<Page<User>> getAllAdmin(@RequestParam("pageSize") int pageSize,
+                                                     @RequestParam("pageNumber") int pageNumber) throws Exception {
+        return new ResponseEntity<>(userService.getAllAdmin(pageSize,pageNumber),HttpStatus.OK);
     }
 
     @GetMapping("/all-investor")
@@ -74,8 +82,9 @@ public class AdminController {
     @GetMapping("/news")
     public ResponseEntity<Page<News>> filterNews(@RequestParam List<String> fields, @RequestParam(defaultValue = "0") int year,
                                                  @RequestParam int pageSize,
-                                                 @RequestParam int pageNumber) throws Exception{
-        return new ResponseEntity<>(newsService.filterNewsAdmin(fields,year,pageSize,pageNumber), HttpStatus.OK);
+                                                 @RequestParam int pageNumber,
+                                                 @RequestParam int adminReply) throws Exception{
+        return new ResponseEntity<>(newsService.filterNewsAdmin(fields,year,pageSize,pageNumber,adminReply), HttpStatus.OK);
     }
 
     @DeleteMapping("/news/{id}")
@@ -86,6 +95,11 @@ public class AdminController {
     @DeleteMapping("/competition/{id}")
     public ResponseEntity<ApiResponse> deleteCompetition(@PathVariable int id, @RequestHeader("Authorization") String jwt) throws Exception{
         return new ResponseEntity<>(competitionService.deleteCompetitionById(id),HttpStatus.OK);
+    }
+
+    @DeleteMapping("/project/{id}")
+    public ResponseEntity<ApiResponse> deleteProject(@PathVariable int id, @RequestHeader("Authorization") String jwt) throws Exception{
+        return new ResponseEntity<>(projectService.deleteProjectById(id),HttpStatus.OK);
     }
 
     @DeleteMapping("/feedback/{id}")
@@ -120,9 +134,8 @@ public class AdminController {
     public ResponseEntity<Feedback> replyFeedback(@RequestHeader("Authorization") String jwt,
                                   @PathVariable int feedback_id,
                                   @RequestBody ReplyFeedbackRequest req) throws Exception {
-        int user_id = userService.findByJwt(jwt).getId();
-
-        return new ResponseEntity<>(feedbackService.replyFeedback(user_id,feedback_id,req.getReplyContent()),HttpStatus.OK);
+        User admin = userService.findByJwt(jwt);
+        return new ResponseEntity<>(feedbackService.replyFeedback(admin,feedback_id,req.getReplyContent()),HttpStatus.OK);
     }
 
     @GetMapping("/feedback")
@@ -143,5 +156,11 @@ public class AdminController {
     @GetMapping("/expert/top-3")
     public ResponseEntity<List<Object[]>> getTop3Expert(@RequestHeader("Authorization") String jwt) throws Exception {
         return new ResponseEntity<>(evaluationService.getTop3ExpertMostEvaluation(),HttpStatus.OK);
+    }
+
+    @PutMapping("/user/status")
+    public ResponseEntity<User> updateStatusUser(@RequestHeader("Authorization") String jwt, @RequestBody UpdateStatusUserRequest req) throws Exception {
+        System.out.println(req.getStatus());
+        return new ResponseEntity<>(userService.updateStatus(req.getUserId(),req.getStatus()),HttpStatus.OK);
     }
 }

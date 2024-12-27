@@ -14,11 +14,11 @@ import java.util.List;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProjectCreationRequest {
+
     String name;
     double realTotalCapital;
     String field;
     List<String> files;
-    String currency;
     @Lob
     String introduce;
     @Lob
@@ -28,4 +28,13 @@ public class ProjectCreationRequest {
     String email;
     String phone;
     List<Founder> founders;
+    String address;
+    String linkWeb;
+    String businessModel;
+    String mainTechnology;
+    String pitchDeck;
+    String businessRegistrationCertificate;
+    String patent;
+    @Lob
+    String greenSustainableElement;
 }

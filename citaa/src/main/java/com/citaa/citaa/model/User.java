@@ -32,4 +32,5 @@ public class User {
     String bio;
     @ElementCollection
     List<String> fields;
+    String phone;
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.util.QTypeContributor;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
@@ -19,7 +20,10 @@ public class Evaluation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
     int points;
+    @Lob
+    @Column(columnDefinition = "TEXT")
     String content;
+    String comment;
     LocalDateTime createAt;
     int projectId;
    @ManyToOne

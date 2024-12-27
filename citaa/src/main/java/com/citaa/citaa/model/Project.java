@@ -20,12 +20,12 @@ public class Project {
     int id;
     String name;
     LocalDateTime createAt;
-    boolean valid;
+    boolean potential;
     double realTotalCapital;
     String currency;
 
     String field;
-    String status="UNVALID";
+    String status = "UNVALID";
     @Lob
     @Column(columnDefinition = "TEXT")
     String introduce;
@@ -40,8 +40,8 @@ public class Project {
     double avg = 0;
     @ManyToOne
     Startup startup;
-    @ManyToOne
-    Investor investor;
+    @OneToMany(mappedBy = "project")
+    List<Investment> investments = new ArrayList<>();
     @OneToMany
     List<Evaluation> evaluation;
     @ElementCollection
@@ -53,4 +53,18 @@ public class Project {
     List<User> reacts = new ArrayList<>();
     @ManyToMany
     List<Founder> founders;
+    String address;
+    String linkWeb;
+    String businessModel;
+    String mainTechnology;
+    String pitchDeck;
+    String businessRegistrationCertificate;
+    // bang sáng chế
+    String patent;
+    String greenSustainableElement;
+
+    int countExpert=0;
+
+    @ManyToMany(mappedBy = "projects")
+    List<Expert> experts = new ArrayList<>();
 }

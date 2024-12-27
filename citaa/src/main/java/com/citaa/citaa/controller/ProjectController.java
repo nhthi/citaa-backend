@@ -48,10 +48,12 @@ public class ProjectController {
     @GetMapping("/filter")
     public ResponseEntity<Page<Project>> findProjectByCategoryHandler(
             @RequestParam(required = false) List<String> fields, @RequestParam(required = false) double minCapital,
-            @RequestParam(required = false) double maxCapital, @RequestParam(required = false) String status, @RequestParam(required = false) int pageNumber, @RequestParam(required = false) int pageSize
+             @RequestParam(required = false) String status, @RequestParam(required = false) int pageNumber, @RequestParam(required = false) int pageSize,
+            @RequestParam(defaultValue = "0") int year,
+            @RequestParam(defaultValue = "-1") int countExpert
     ) {
         Page<Project> res = projectService.filterProject(
-                fields,minCapital,maxCapital,status, pageNumber, pageSize
+                fields,minCapital,status, pageNumber, pageSize,year,countExpert
         );
         return new ResponseEntity<>(res, HttpStatus.OK);
     }

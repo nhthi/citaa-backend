@@ -162,9 +162,6 @@ public class UserService {
                 if (req.getCompanyName() != null) {
                     updateInvestor.setCompanyName(req.getCompanyName());
                 }
-                if (req.getInvestmentAmount() != 0) {
-                    updateInvestor.setInvestmentAmount(req.getInvestmentAmount());
-                }
                 if (req.getExperienceYears() != updateInvestor.getExperienceYears()) {
                     updateInvestor.setExperienceYears(req.getExperienceYears());
                 }
@@ -176,22 +173,30 @@ public class UserService {
         return updateUser;
     }
 
-    public Expert addProjectToExpert(int projectId, int expertId) throws Exception {
-        Expert expert = expertRepository.findById(expertId)
-                .orElseThrow(() -> new Exception("Expert not found with id: "+expertId));
+    public Project addProjectToExpert(int projectId, int[] expertIds) throws Exception {
         Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new Exception("Project not found with id: "+projectId));
-        expert.getProjects().add(project);
-        return expertRepository.save(expert);
+                .orElseThrow(() -> new Exception("Project not found with id: " + projectId));
+        for (int expertId : expertIds) {
+            Expert expert = expertRepository.findById(expertId)
+                    .orElseThrow(() -> new Exception("Expert not found with id: " + expertId));
+            if (project.getCountExpert() == 3) {
+                throw new Exception("Đã đủ số lượng chuyên gia");
+            }
+            project.setCountExpert(project.getCountExpert() + 1);
+            project.getExperts().add(expert);
+            expert.getProjects().add(project);
+            expertRepository.save(expert);
+        }
+        return projectRepository.save(project);
     }
 
     public List<Project> getProjectByExpertId(int expertId) throws Exception {
         Expert expert = expertRepository.findById(expertId)
-                .orElseThrow(() -> new Exception("Expert not found with id: "+expertId));
+                .orElseThrow(() -> new Exception("Expert not found with id: " + expertId));
         return expert.getProjects();
     }
 
-    public Page<Startup> getAllStartups(int pageSize, int pageNumber){
+    public Page<Startup> getAllStartups(int pageSize, int pageNumber) {
         List<Startup> startups = startupRepository.findAll();
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         int startIndex = (int) pageable.getOffset();
@@ -201,7 +206,7 @@ public class UserService {
         return filteredStartup;
     }
 
-    public Page<Expert> getAllExpert(int pageSize, int pageNumber){
+    public Page<Expert> getAllExpert(int pageSize, int pageNumber) {
         List<Expert> experts = expertRepository.findAll();
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         int startIndex = (int) pageable.getOffset();
@@ -211,7 +216,7 @@ public class UserService {
         return filteredExpert;
     }
 
-    public Page<Investor> getAllInvestor(int pageSize, int pageNumber){
+    public Page<Investor> getAllInvestor(int pageSize, int pageNumber) {
         List<Investor> investors = investorRepository.findAll();
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         int startIndex = (int) pageable.getOffset();
@@ -221,17 +226,27 @@ public class UserService {
         return filteredInvestor;
     }
 
+    public Page<User> getAllAdmin(int pageSize, int pageNumber) {
+        List<User> admins = userRepository.findAllAdmin();
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        int startIndex = (int) pageable.getOffset();
+        int endIndex = Math.min(startIndex + pageable.getPageSize(), admins.size());
+        List<User> pageContent = admins.subList(startIndex, endIndex);
+        Page<User> filteredStartup = new PageImpl<>(pageContent, pageable, admins.size());
+        return filteredStartup;
+    }
+
     public List<EvaluationManagementResponse> getEvaluateManagement(int expertId) throws Exception {
         List<Evaluation> evaluations = evaluationRepository.findByExpertId(expertId);
         List<EvaluationManagementResponse> evaluationManagementResponses = new ArrayList<>();
         System.out.println(evaluations.size());
         for (Evaluation evaluation : evaluations) {
-            Project pro = projectRepository.findById(evaluation.getProjectId()).orElseThrow(()-> new Exception("Project not found with id: "+evaluation.getProjectId()));
+            Project pro = projectRepository.findById(evaluation.getProjectId()).orElseThrow(() -> new Exception("Project not found with id: " + evaluation.getProjectId()));
             EvaluationManagementResponse item = new EvaluationManagementResponse();
             List<String> fields = new ArrayList<>();
             fields.add(pro.getField());
             List<String> founderNames = new ArrayList<>();
-            for ( Founder founder: pro.getFounders()){
+            for (Founder founder : pro.getFounders()) {
                 founderNames.add(founder.getName());
             }
             evaluationManagementResponses.add(EvaluationManagementResponse.builder()
@@ -247,9 +262,9 @@ public class UserService {
     }
 
     public List<User> getTop5Investor() {
-        return investorRepository.findTop5ByOrderByInvestmentAmountDesc().stream()
+        return investorRepository.findTop5ByOrderByExperienceYearsDesc().stream()
                 .map(investor -> (User) investor)
-                .collect(Collectors .toList());
+                .collect(Collectors.toList());
     }
 
     public List<User> getTop5Expert() {
@@ -264,8 +279,8 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public List<User> getTopProfile(String role){
-        switch (role){
+    public List<User> getTopProfile(String role) {
+        switch (role) {
             case "Expert":
                 return getTop5Expert();
             case "Startup":
@@ -284,9 +299,10 @@ public class UserService {
             res.setMessage("User not found");
             res.setStatus(500);
             return res;
-        };
+        }
+        ;
 
-        if(!passwordEncoder.matches(currentPassword,user.getAccount().getPassword())){
+        if (!passwordEncoder.matches(currentPassword, user.getAccount().getPassword())) {
             res.setMessage("Mật khẩu hiện tại không chính xác");
             res.setStatus(500);
             return res;
@@ -301,21 +317,27 @@ public class UserService {
 
     public User findUserByEmail(String email) throws Exception {
         User user = userRepository.findByEmail(email);
-        if(user==null){
-            throw new Exception("User not found with email:  "+email);
+        if (user == null) {
+            throw new Exception("User not found with email:  " + email);
         }
         return user;
     }
 
-    public long countExpert(){
+    public long countExpert() {
         return expertRepository.count();
     }
 
-    public long countStartup(){
+    public long countStartup() {
         return startupRepository.count();
     }
 
-    public long countInvestor(){
+    public long countInvestor() {
         return investorRepository.count();
+    }
+
+    public User updateStatus(int userId, String status) throws Exception {
+        User user = findById(userId);
+        user.getAccount().setStatus(status);
+        return userRepository.save(user);
     }
 }

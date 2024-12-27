@@ -60,8 +60,8 @@ public class NewsService {
         return filteredNews;
     }
 
-    public Page<News> filterNewsAdmin(List<String> fields, int year, int pageSize,int pageNumber){
-        List<News> newss = newsRepository.filterNewsAdmin(year);
+    public Page<News> filterNewsAdmin(List<String> fields, int year, int pageSize,int pageNumber,int adminReply){
+        List<News> newss = newsRepository.filterNewsAdmin(year,adminReply);
 
         if (fields!=null && !fields.isEmpty()) {
             newss = newss.stream().

@@ -48,6 +48,7 @@ public class EvaluationService {
         Evaluation evaluation = evaluationRepository.save(Evaluation.builder()
                         .content(request.getContent())
                         .points(request.getPoints())
+                        .comment(request.getComment())
                         .createAt(LocalDateTime.now())
                         .expert(expert)
                         .projectId(project.getId())
@@ -56,7 +57,6 @@ public class EvaluationService {
         project.getEvaluation().add(evaluation);
         projectRepository.save(project);
         projectService.setValid(project.getId());
-
         return  evaluation;
     }
 

@@ -27,7 +27,8 @@ public class FeedbackService {
     UserRepository userRepository;
     @Autowired
     EmailService emailService;
-
+    @Autowired
+    UserService userService;
 
     public Feedback createFeedback(FeedbackCreationRequest request) throws Exception {
         return feedbackRepository.save(Feedback.builder()
@@ -54,7 +55,7 @@ public class FeedbackService {
         return otp.get();
     }
 
-    public Feedback replyFeedback(int user_id, int feedback_id, String reply_content) throws Exception {
+    public Feedback replyFeedback(User admin, int feedback_id, String reply_content) throws Exception {
         Feedback feedback = findFeedbackById(feedback_id);
         String email = feedback.getEmail();
         String subject = "Trả lời phản hồi từ Citaa";
@@ -156,9 +157,7 @@ public class FeedbackService {
                        "</body>\n" +
                        "</html>\n";
         emailService.sendHtmlEmail(email, subject, htmlContent);
-
-
-        feedback.setAdminReplyId(user_id);
+        feedback.setAdminReply(admin);
         feedback.setReplyContent(reply_content);
         feedback.setReplyAt(LocalDateTime.now());
         feedback.setStatus("Replied");
