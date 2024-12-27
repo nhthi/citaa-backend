@@ -25,7 +25,7 @@ public class CustomerUserDetailService implements UserDetailsService {
         if(user ==null){
             return null;
         }
-        if(user.getAccount().getStatus().equals("disable")){
+        if(user.getAccount().getStatus().equalsIgnoreCase("disable")){
             try {
                 throw new Exception("Tài khoản của bạn đã bị khóa");
             } catch (Exception e) {
