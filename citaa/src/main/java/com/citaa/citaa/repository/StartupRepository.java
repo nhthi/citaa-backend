@@ -18,4 +18,9 @@ public interface StartupRepository extends JpaRepository<Startup, Integer> {
 
     List<Startup> findTop5ByOrderByFullNameDesc();
 
+    @Query("SELECT COUNT(c) " +
+            "FROM Startup c " +
+            "WHERE (:year = 0 or YEAR(c.account.createAt) = :year) AND (:month = 0 or MONTH(c.account.createAt) = :month)")
+    long countStartupByYearAndMonth(@Param("year") int year, @Param("month") int month);
+
 }

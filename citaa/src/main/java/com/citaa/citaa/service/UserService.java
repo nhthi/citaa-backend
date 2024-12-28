@@ -4,9 +4,7 @@ import com.citaa.citaa.config.JwtProvider;
 import com.citaa.citaa.model.*;
 import com.citaa.citaa.repository.*;
 import com.citaa.citaa.request.UpdateUserRequest;
-import com.citaa.citaa.response.ApiResponse;
-import com.citaa.citaa.response.EvaluationManagementResponse;
-import com.citaa.citaa.response.ProfileResponse;
+import com.citaa.citaa.response.*;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +42,12 @@ public class UserService {
     CompetitionRepository competitionRepository;
     @Autowired
     ReactRepository reactRepository;
+    @Autowired
+    AccountRepository accountRepository;
+    @Autowired
+    CommentRepository commentRepository;
+    @Autowired
+    FeedbackRepository feedbackRepository;
 
     public List<User> getUsers() {
         return userRepository.findAll();
@@ -391,4 +395,63 @@ public class UserService {
         User user = findByJwt(jwt);
         return reactRepository.findAllByUserId(user.getId());
     }
+    
+    
+    public AdminOverview getAdminOverview (String jwt, int year, int month) throws Exception {
+        findByJwt(jwt);
+        AdminOverview res = new AdminOverview();
+        res.setCountComment(commentRepository.countCommentsByMonthAndYear(year,month));
+        res.setCountFeedback(feedbackRepository.countFeedbacksByMonthAndYear(year,month));
+        res.setCountReplyFeedback(feedbackRepository.countReplyFeedbacksByMonthAndYear(year,month));
+        res.setNewAccount(accountRepository.countAccount(year,month));
+        return res;
+    }
+
+
+    public StatisticalResponse getStatisticalResponse (int year, int month){
+        long countExpert = expertRepository.countExpertByYearAndMonth(year,month);
+        long countStartup = startupRepository.countStartupByYearAndMonth(year,month);
+        long countInvestor = investorRepository.countInvestorByYearAndMonth(year,month);
+        long countProject = projectRepository.countProjectByYearAndMonth(year,month);
+        long countCompetition = competitionRepository.countCompetitionByYearAndMonth(year,month);
+        StatisticalResponse response = new StatisticalResponse();
+        response.setCountExpert(countExpert);
+        response.setCountStartup(countStartup);
+        response.setCountInvestor(countInvestor);
+        response.setCountProject(countProject);
+        response.setCountCompetition(countCompetition);
+        return response;
+    }
+
+    public AdminProjectOverview getAdminProjectOverview (String jwt, int year, int month) throws Exception {
+        findByJwt(jwt);
+
+
+        AdminProjectOverview res = new AdminProjectOverview();
+
+        Pageable pageable = PageRequest.of(0, 3);
+
+        long agricultureProject = projectRepository.countProjectByYearAndMonthAndField(year,month,"Agriculture");
+        long aquacultureProject = projectRepository.countProjectByYearAndMonthAndField(year,month,"Aquaculture");
+        long technologyProject = projectRepository.countProjectByYearAndMonthAndField(year,month,"Technology");
+        long otherProject = projectRepository.countProjectByYearAndMonth(year,month) - agricultureProject - aquacultureProject - technologyProject;
+
+        long validProjects = projectRepository.countProjectByYearAndMonthAndStatus(year,month,"VALID");
+        long unvalidProjects = projectRepository.countProjectByYearAndMonthAndStatus(year,month,"UNVALID");;
+
+        List<Project> topPointProjects = projectRepository.findTop3ByAvg(pageable,year,month);
+        List<Project> topReactProjects = projectRepository.findTop3ByReact(pageable,year,month);
+
+        res.setAgricultureProject(agricultureProject);
+        res.setAquacultureProject(aquacultureProject);
+        res.setTechnologyProject(technologyProject);
+        res.setOtherProject(otherProject);
+        res.setValidProjects(validProjects);
+        res.setUnvalidProjects(unvalidProjects);
+        res.setTopPointProjects(topPointProjects);
+        res.setTopReactProjects(topReactProjects);
+
+        return res;
+    }
+
 }

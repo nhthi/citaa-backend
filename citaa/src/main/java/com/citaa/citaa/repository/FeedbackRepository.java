@@ -17,4 +17,14 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Integer> {
     @Query("select f from Feedback f where (:year = 0 or year(f.createdAt)=:year) " +
             "and (:status = '0' or f.status = :status)")
     public List<Feedback> filterFeedback(int year, String status);
+
+    @Query("SELECT COUNT(c) " +
+            "FROM Feedback c " +
+            "WHERE (:year = 0 or YEAR(c.createdAt) = :year) AND (:month = 0 or MONTH(c.createdAt) = :month)")
+    long countFeedbacksByMonthAndYear(@Param("year") int year, @Param("month") int month);
+
+    @Query("SELECT COUNT(c) " +
+            "FROM Feedback c " +
+            "WHERE (:year = 0 or YEAR(c.createdAt) = :year) AND (:month = 0 or MONTH(c.createdAt) = :month) AND c.status = 'Replied' ")
+    long countReplyFeedbacksByMonthAndYear(@Param("year") int year, @Param("month") int month);
 }

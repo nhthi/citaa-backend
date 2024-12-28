@@ -45,18 +45,7 @@ public class PublicController {
     }
 
     @GetMapping("/statistical")
-    public ResponseEntity<StatisticalResponse> getStatistical(){
-        long countExpert = userService.countExpert();
-        long countStartup = userService.countStartup();
-        long countInvestor = userService.countInvestor();
-        long countProject = projectService.countProject();
-        long countCompetition = competitionService.countCompetition();
-        StatisticalResponse response = new StatisticalResponse();
-        response.setCountExpert(countExpert);
-        response.setCountStartup(countStartup);
-        response.setCountInvestor(countInvestor);
-        response.setCountProject(countProject);
-        response.setCountCompetition(countCompetition);
-        return new ResponseEntity<>(response,HttpStatus.OK);
+    public ResponseEntity<StatisticalResponse> getStatistical(@RequestParam(defaultValue = "0") int year, @RequestParam(defaultValue = "0") int month){
+         return new ResponseEntity<>(userService.getStatisticalResponse(year,month),HttpStatus.OK);
     }
 }

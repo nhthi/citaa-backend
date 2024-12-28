@@ -19,6 +19,6 @@ public interface VoteRepository extends JpaRepository<Vote, Integer> {
     @Query("select v from Vote v where v.projectId=:projectId")
     public List<Vote> findVoteByProjectId(int projectId);
 
-    @Query("SELECT v.competition, COUNT(v) as voteCount FROM Vote v GROUP BY v.competition ORDER BY voteCount DESC")
-    List<Object[]> findTopCompetitionsByVoteCount(Pageable pageable);
+    @Query("SELECT v.competition, COUNT(v) as voteCount FROM Vote v where  (:year = 0 or YEAR(v.competition.createAt) = :year) AND (:month = 0 or MONTH(v.competition.createAt) = :month) GROUP BY v.competition ORDER BY voteCount DESC")
+    List<Object[]> findTopCompetitionsByVoteCount(Pageable pageable, int year, int month);
 }

@@ -233,7 +233,7 @@ public class CompetitionService {
     }
 
 
-    public AdminCompetitionResponse getAdminCompetitionAnalysis() throws Exception {
+    public AdminCompetitionResponse getAdminCompetitionAnalysis(int year, int month) throws Exception {
         AdminCompetitionResponse res = new AdminCompetitionResponse();
         int onGoingCompetition = competitionRepository.filterCompetitionByStatus("ongoing").size();
         int endedCompetition = competitionRepository.filterCompetitionByStatus("ended").size();
@@ -243,23 +243,21 @@ public class CompetitionService {
         res.setEndedCompetition(endedCompetition);
         res.setUpcomingCompetition(upcomingCompetition);
 
-        int agricultureCompetition = competitionRepository.findByField("Agriculture").size();
-        int aquacultureCompetition = competitionRepository.findByField("Aquaculture").size();
+        int agricultureCompetition = competitionRepository.findByField("Agriculture",year,month).size();
+        int aquacultureCompetition = competitionRepository.findByField("Aquaculture",year,month).size();
 
         res.setAgricultureCompetition(agricultureCompetition);
         res.setAquacultureCompetition(aquacultureCompetition);
 
         List<String> fields = new ArrayList<>();
-//        fields.add("Agriculture");
-//        fields.add("Aquaculture");
 
         int otherCompetition = competitionRepository.findByNotFields("Agriculture").size();
 
         Pageable pageable = PageRequest.of(0, 3); // Trang đầu tiên với 3 kết quả
 
-        List<Competition> topJoin = competitionRepository.findTop3ByProjectsCount(pageable);
+        List<Competition> topJoin = competitionRepository.findTop3ByProjectsCount(pageable,year,month);
         List<Competition> topReward = new ArrayList<>();
-        List<Object[]> topVote = voteRepository.findTopCompetitionsByVoteCount(pageable);
+        List<Object[]> topVote = voteRepository.findTopCompetitionsByVoteCount(pageable,year,month);
 
         res.setTopJoin(topJoin);
         res.setTopReward(topReward);

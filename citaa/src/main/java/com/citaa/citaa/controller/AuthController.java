@@ -61,8 +61,15 @@ public class AuthController {
         User isUsernameExist = userRepository.findByUsername(user.getAccount().getUsername());
 
         if(isUsernameExist != null){
-            throw  new Exception("Username is already used with another account");
+            throw  new Exception("Tên đăng nhập đã tồn tại");
         }
+
+        User isExistEmail = userRepository.findByEmail(user.getEmail());
+
+        if(isExistEmail != null){
+            throw  new Exception("Email đã được đăng ký bởi tài khoản khác");
+        }
+
         User createUser ;
         if(user.getAccount().getRole().equals("ROLE_STARTUP") ){
             createUser = new Startup();
@@ -123,6 +130,7 @@ public class AuthController {
 
     @PostMapping("/signin")
     public ResponseEntity<AuthResponse> signin(@RequestBody LoginRequest req) throws Exception {
+
         String username = req.getUsername();
         String password = req.getPassword();
 
@@ -148,6 +156,7 @@ public class AuthController {
         if(!passwordEncoder.matches(password,userDetails.getPassword())){
             throw new Exception("Tên đăng nhập hoặc mật khẩu không đúng");
         }
+
         return new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
     }
 

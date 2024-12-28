@@ -196,8 +196,8 @@ public class ProjectService {
         return projectRepository.count();
     }
 
-    public List<Object[]> getTop3StartupsWithMostProjects() {
-        List<Object[]> results = projectRepository.findTopStartupsWithMostProjects();
+    public List<Object[]> getTop3StartupsWithMostProjects(int year,int month) {
+        List<Object[]> results = projectRepository.findTopStartupsWithMostProjects(year,month);
         return results.stream()
                 .limit(3)
                 .collect(Collectors.toList());

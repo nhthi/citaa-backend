@@ -17,8 +17,8 @@ public interface EvaluationRepository extends JpaRepository<Evaluation, Integer>
     @Query("Select e from Evaluation e where e.expert.id =:expertId")
     public List<Evaluation> findByExpertId(@Param("expertId") int expertId);
 
-    @Query("SELECT p.expert, COUNT(p) as evalutionCount FROM Evaluation p GROUP BY p.expert ORDER BY evalutionCount DESC")
-    List<Object[]> findTopExpertMostProjects();
+    @Query("SELECT p.expert, COUNT(p) as evalutionCount FROM Evaluation p where (:year = 0 or YEAR(p.createAt) = :year) AND (:month = 0 or MONTH(p.createAt) = :month) GROUP BY p.expert ORDER BY evalutionCount DESC")
+    List<Object[]> findTopExpertMostProjects(int year, int month);
 
     @Query("SELECT COUNT(DISTINCT e.projectId) FROM Evaluation e WHERE e.expert.id = :expertId")
     Long countDistinctProjectByExpert(int expertId);

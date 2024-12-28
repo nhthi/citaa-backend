@@ -25,12 +25,8 @@ public class CustomerUserDetailService implements UserDetailsService {
         if(user ==null){
             return null;
         }
-        if(user.getAccount().getStatus().equalsIgnoreCase("disable")){
-            try {
-                throw new Exception("Tài khoản của bạn đã bị khóa");
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+        if("disable".equalsIgnoreCase(user.getAccount().getStatus())){
+            throw new RuntimeException("Tài khoản của bạn đã bị khóa");
         }
         String role = user.getAccount().getRole();
         List<GrantedAuthority> authorities = new ArrayList<>();

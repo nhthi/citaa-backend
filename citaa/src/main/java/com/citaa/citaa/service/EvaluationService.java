@@ -64,8 +64,8 @@ public class EvaluationService {
         return evaluationRepository.findByExpertId(expertId);
     }
 
-    public List<Object[]> getTop3ExpertMostEvaluation() {
-        List<Object[]> results = evaluationRepository.findTopExpertMostProjects();
+    public List<Object[]> getTop3ExpertMostEvaluation(int year, int month) {
+        List<Object[]> results = evaluationRepository.findTopExpertMostProjects(year,month);
         return results.stream()
                 .limit(3)
                 .collect(Collectors.toList());
