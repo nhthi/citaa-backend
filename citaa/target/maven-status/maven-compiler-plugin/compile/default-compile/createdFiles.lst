@@ -42,6 +42,7 @@ com\citaa\citaa\model\Project$ProjectBuilder.class
 com\citaa\citaa\repository\FeedbackRepository.class
 com\citaa\citaa\response\EvaluationManagementResponse.class
 com\citaa\citaa\controller\HomeController.class
+com\citaa\citaa\exception\AuthException.class
 com\citaa\citaa\model\Feedback.class
 com\citaa\citaa\request\UpdateStatusUserRequest.class
 com\citaa\citaa\request\LoginRequest$LoginRequestBuilder.class
@@ -140,6 +141,7 @@ com\citaa\citaa\repository\MessageRepository.class
 com\citaa\citaa\repository\NotificationRepository.class
 com\citaa\citaa\request\UpdateStatusUserRequest$UpdateStatusUserRequestBuilder.class
 com\citaa\citaa\controller\CompetitionController.class
+com\citaa\citaa\exception\GlobalExceptionHandler.class
 com\citaa\citaa\model\ViewHistory.class
 com\citaa\citaa\model\Investment.class
 com\citaa\citaa\repository\CompetitionRepository.class

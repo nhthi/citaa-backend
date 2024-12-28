@@ -22,6 +22,8 @@ D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\controller\Pr
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\controller\PublicController.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\controller\RealTimeChat.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\controller\UserController.java
+D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\exception\AuthException.java
+D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\exception\GlobalExceptionHandler.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\model\Account.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\model\AnalyticsData.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\model\Chat.java

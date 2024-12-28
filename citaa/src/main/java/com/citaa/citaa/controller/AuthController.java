@@ -1,6 +1,7 @@
 package com.citaa.citaa.controller;
 
 import com.citaa.citaa.config.JwtProvider;
+import com.citaa.citaa.exception.AuthException;
 import com.citaa.citaa.model.*;
 import com.citaa.citaa.repository.*;
 import com.citaa.citaa.request.ChangePasswordRequest;
@@ -61,13 +62,13 @@ public class AuthController {
         User isUsernameExist = userRepository.findByUsername(user.getAccount().getUsername());
 
         if(isUsernameExist != null){
-            throw  new Exception("Tên đăng nhập đã tồn tại");
+            throw  new AuthException("Tên đăng nhập đã tồn tại");
         }
 
         User isExistEmail = userRepository.findByEmail(user.getEmail());
 
         if(isExistEmail != null){
-            throw  new Exception("Email đã được đăng ký bởi tài khoản khác");
+            throw  new AuthException("Email đã được đăng ký bởi tài khoản khác");
         }
 
         User createUser ;
@@ -151,10 +152,10 @@ public class AuthController {
     private Authentication authenticate(String username, String password) throws Exception {
         UserDetails userDetails = customerUserDetailService.loadUserByUsername(username);
         if(userDetails==null){
-            throw new Exception("Tên đăng nhập hoặc mật khẩu không đúng");
+            throw new AuthException("Tên đăng nhập hoặc mật khẩu không đúng");
         }
         if(!passwordEncoder.matches(password,userDetails.getPassword())){
-            throw new Exception("Tên đăng nhập hoặc mật khẩu không đúng");
+            throw new AuthException("Tên đăng nhập hoặc mật khẩu không đúng");
         }
 
         return new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
