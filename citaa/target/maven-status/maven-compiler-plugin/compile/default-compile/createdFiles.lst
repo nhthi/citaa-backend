@@ -4,6 +4,7 @@ com\citaa\citaa\controller\MessageController.class
 com\citaa\citaa\request\ChangePasswordRequest$ChangePasswordRequestBuilder.class
 com\citaa\citaa\controller\ChatController.class
 com\citaa\citaa\model\Account.class
+com\citaa\citaa\repository\ReactRepository.class
 com\citaa\citaa\model\User$UserBuilderImpl.class
 com\citaa\citaa\response\AdminCompetitionResponse.class
 com\citaa\citaa\model\Startup$StartupBuilder.class
@@ -82,7 +83,9 @@ com\citaa\citaa\model\ViewHistory$ViewHistoryBuilder.class
 com\citaa\citaa\model\Evaluation$EvaluationBuilder.class
 com\citaa\citaa\model\User.class
 com\citaa\citaa\model\Comment$CommentBuilder.class
+com\citaa\citaa\response\AdminOverview.class
 com\citaa\citaa\response\AuthResponse$AuthResponseBuilder.class
+com\citaa\citaa\response\AdminOverview$AdminOverviewBuilder.class
 com\citaa\citaa\config\AppConfig$1.class
 com\citaa\citaa\response\MessageResponse.class
 com\citaa\citaa\model\Project.class
@@ -100,6 +103,7 @@ com\citaa\citaa\repository\InvestmentRepository.class
 com\citaa\citaa\controller\RealTimeChat.class
 com\citaa\citaa\model\Vote.class
 com\citaa\citaa\model\Role.class
+com\citaa\citaa\response\ProfileResponse.class
 com\citaa\citaa\config\WebsocketConfig.class
 com\citaa\citaa\model\News.class
 com\citaa\citaa\model\Startup$StartupBuilderImpl.class
@@ -123,11 +127,14 @@ com\citaa\citaa\repository\NewsRepository.class
 com\citaa\citaa\model\TimelineEvent.class
 com\citaa\citaa\request\RequestUser$RequestUserBuilder.class
 com\citaa\citaa\repository\TimelineEventRepository.class
+com\citaa\citaa\response\ProfileResponse$ProfileResponseBuilder.class
 com\citaa\citaa\response\EvaluationManagementResponse$EvaluationManagementResponseBuilder.class
 com\citaa\citaa\model\Chat$ChatBuilder.class
+com\citaa\citaa\response\AdminProjectOverview$AdminProjectOverviewBuilder.class
 com\citaa\citaa\controller\CommentController.class
 com\citaa\citaa\model\Expert$ExpertBuilderImpl.class
 com\citaa\citaa\model\User$UserBuilder.class
+com\citaa\citaa\response\AdminProjectOverview.class
 com\citaa\citaa\controller\InvestmentController.class
 com\citaa\citaa\repository\MessageRepository.class
 com\citaa\citaa\repository\NotificationRepository.class
