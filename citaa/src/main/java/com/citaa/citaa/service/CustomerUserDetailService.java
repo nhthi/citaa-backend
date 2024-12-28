@@ -1,5 +1,6 @@
 package com.citaa.citaa.service;
 
+import com.citaa.citaa.exception.AuthException;
 import com.citaa.citaa.model.User;
 import com.citaa.citaa.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class CustomerUserDetailService implements UserDetailsService {
             return null;
         }
         if("disable".equalsIgnoreCase(user.getAccount().getStatus())){
-            throw new RuntimeException("Tài khoản của bạn đã bị khóa");
+            throw new AuthException("Tài khoản của bạn đã bị khóa");
         }
         String role = user.getAccount().getRole();
         List<GrantedAuthority> authorities = new ArrayList<>();
