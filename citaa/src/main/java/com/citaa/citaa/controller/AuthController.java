@@ -81,7 +81,7 @@ public class AuthController {
                             .username(user.getAccount().getUsername())
                             .role(user.getAccount().getRole())
                             .createAt(LocalDateTime.now())
-                            .status("disable")
+                            .status("enable")
                             .build())
                     .fields(user.getFields())
                     .build());
@@ -95,7 +95,7 @@ public class AuthController {
                             .username(user.getAccount().getUsername())
                             .role(user.getAccount().getRole())
                             .createAt(LocalDateTime.now())
-                            .status("disable")
+                            .status("enable")
                             .build())
                     .fields(user.getFields())
                     .build());
