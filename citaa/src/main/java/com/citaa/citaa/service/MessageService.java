@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 @Service
@@ -30,7 +31,7 @@ public class MessageService {
         message.setUser(user);
         message.setFiles(req.getFiles());
         message.setContent(req.getContent());
-        message.setCreateAt(LocalDateTime.now());
+        message.setCreateAt(LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh")));
         chat.getMessages().add(message);
 //        chatRepository.save(chat);
         return messageRepository.save(message);
