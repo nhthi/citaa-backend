@@ -62,6 +62,12 @@ public class UserService {
         return user;
     }
 
+    public User findUserChatById(int id) throws Exception {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new Exception("User not found!"));
+        return user;
+    }
+
     public User findById(int id) throws Exception {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new Exception("User not found!"));
@@ -363,18 +369,19 @@ public class UserService {
         return projectRepository.countDistinctProjectByStartupId(startupId);
     }
 
-    public long countCompetitionByStartupId(int startupId){
+    public long countCompetitionByStartupId(int startupId) {
         return competitionRepository.countCompetitionsByStartupId(startupId);
     }
 
-    public double sumTotalCapital(int startupId ){
-        Double sum =  projectRepository.sumTotalCapital(startupId);
-        return (sum != null) ? sum : 0 ;
+    public double sumTotalCapital(int startupId) {
+        Double sum = projectRepository.sumTotalCapital(startupId);
+        return (sum != null) ? sum : 0;
     }
 
     public long countJudgingCompetitionsByExpertId(int expertId) {
         return competitionRepository.countJudgingCompetitionsByExpertId(expertId);
     }
+
     public ProfileResponse getProfileStatistical(int userId) throws Exception {
         User user = findById(userId);
         ProfileResponse res = new ProfileResponse();
@@ -391,29 +398,29 @@ public class UserService {
         return res;
     }
 
-    public List<React> findReactByJwt (String jwt) throws Exception {
+    public List<React> findReactByJwt(String jwt) throws Exception {
         User user = findByJwt(jwt);
         return reactRepository.findAllByUserId(user.getId());
     }
-    
-    
-    public AdminOverview getAdminOverview (String jwt, int year, int month) throws Exception {
+
+
+    public AdminOverview getAdminOverview(String jwt, int year, int month) throws Exception {
         findByJwt(jwt);
         AdminOverview res = new AdminOverview();
-        res.setCountComment(commentRepository.countCommentsByMonthAndYear(year,month));
-        res.setCountFeedback(feedbackRepository.countFeedbacksByMonthAndYear(year,month));
-        res.setCountReplyFeedback(feedbackRepository.countReplyFeedbacksByMonthAndYear(year,month));
-        res.setNewAccount(accountRepository.countAccount(year,month));
+        res.setCountComment(commentRepository.countCommentsByMonthAndYear(year, month));
+        res.setCountFeedback(feedbackRepository.countFeedbacksByMonthAndYear(year, month));
+        res.setCountReplyFeedback(feedbackRepository.countReplyFeedbacksByMonthAndYear(year, month));
+        res.setNewAccount(accountRepository.countAccount(year, month));
         return res;
     }
 
 
-    public StatisticalResponse getStatisticalResponse (int year, int month){
-        long countExpert = expertRepository.countExpertByYearAndMonth(year,month);
-        long countStartup = startupRepository.countStartupByYearAndMonth(year,month);
-        long countInvestor = investorRepository.countInvestorByYearAndMonth(year,month);
-        long countProject = projectRepository.countProjectByYearAndMonth(year,month);
-        long countCompetition = competitionRepository.countCompetitionByYearAndMonth(year,month);
+    public StatisticalResponse getStatisticalResponse(int year, int month) {
+        long countExpert = expertRepository.countExpertByYearAndMonth(year, month);
+        long countStartup = startupRepository.countStartupByYearAndMonth(year, month);
+        long countInvestor = investorRepository.countInvestorByYearAndMonth(year, month);
+        long countProject = projectRepository.countProjectByYearAndMonth(year, month);
+        long countCompetition = competitionRepository.countCompetitionByYearAndMonth(year, month);
         StatisticalResponse response = new StatisticalResponse();
         response.setCountExpert(countExpert);
         response.setCountStartup(countStartup);
@@ -423,7 +430,7 @@ public class UserService {
         return response;
     }
 
-    public AdminProjectOverview getAdminProjectOverview (String jwt, int year, int month) throws Exception {
+    public AdminProjectOverview getAdminProjectOverview(String jwt, int year, int month) throws Exception {
         findByJwt(jwt);
 
 
@@ -431,16 +438,17 @@ public class UserService {
 
         Pageable pageable = PageRequest.of(0, 3);
 
-        long agricultureProject = projectRepository.countProjectByYearAndMonthAndField(year,month,"Agriculture");
-        long aquacultureProject = projectRepository.countProjectByYearAndMonthAndField(year,month,"Aquaculture");
-        long technologyProject = projectRepository.countProjectByYearAndMonthAndField(year,month,"Technology");
-        long otherProject = projectRepository.countProjectByYearAndMonth(year,month) - agricultureProject - aquacultureProject - technologyProject;
+        long agricultureProject = projectRepository.countProjectByYearAndMonthAndField(year, month, "Agriculture");
+        long aquacultureProject = projectRepository.countProjectByYearAndMonthAndField(year, month, "Aquaculture");
+        long technologyProject = projectRepository.countProjectByYearAndMonthAndField(year, month, "Technology");
+        long otherProject = projectRepository.countProjectByYearAndMonth(year, month) - agricultureProject - aquacultureProject - technologyProject;
 
-        long validProjects = projectRepository.countProjectByYearAndMonthAndStatus(year,month,"VALID");
-        long unvalidProjects = projectRepository.countProjectByYearAndMonthAndStatus(year,month,"UNVALID");;
+        long validProjects = projectRepository.countProjectByYearAndMonthAndStatus(year, month, "VALID");
+        long unvalidProjects = projectRepository.countProjectByYearAndMonthAndStatus(year, month, "UNVALID");
+        ;
 
-        List<Project> topPointProjects = projectRepository.findTop3ByAvg(pageable,year,month);
-        List<Project> topReactProjects = projectRepository.findTop3ByReact(pageable,year,month);
+        List<Project> topPointProjects = projectRepository.findTop3ByAvg(pageable, year, month);
+        List<Project> topReactProjects = projectRepository.findTop3ByReact(pageable, year, month);
 
         res.setAgricultureProject(agricultureProject);
         res.setAquacultureProject(aquacultureProject);
