@@ -89,6 +89,7 @@ D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\response\Admi
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\response\AdminProjectOverview.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\response\ApiResponse.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\response\AuthResponse.java
+D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\response\DataAnalyticsResponse.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\response\EvaluationManagementResponse.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\response\MessageResponse.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\response\ProfileResponse.java
@@ -102,11 +103,11 @@ D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\service\Email
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\service\EvaluationService.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\service\FeedbackService.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\service\FounderService.java
-D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\service\GoogleAnalyticsFetcher.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\service\InvestmentService.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\service\MessageService.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\service\NewsService.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\service\NotificationService.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\service\ProjectService.java
+D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\service\QuickstartSample.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\service\StartupService.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\service\UserService.java

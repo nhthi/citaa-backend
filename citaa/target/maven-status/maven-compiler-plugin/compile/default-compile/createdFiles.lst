@@ -7,6 +7,7 @@ com\citaa\citaa\model\Account.class
 com\citaa\citaa\repository\ReactRepository.class
 com\citaa\citaa\model\User$UserBuilderImpl.class
 com\citaa\citaa\response\AdminCompetitionResponse.class
+com\citaa\citaa\service\AnalyticsDataService.class
 com\citaa\citaa\model\Startup$StartupBuilder.class
 com\citaa\citaa\repository\AccountRepository.class
 com\citaa\citaa\service\UserService.class
@@ -62,6 +63,7 @@ com\citaa\citaa\service\EvaluationService.class
 com\citaa\citaa\service\StartupService.class
 com\citaa\citaa\repository\VoteRepository.class
 com\citaa\citaa\repository\AnalyticsDataRepository.class
+com\citaa\citaa\response\DataAnalyticsResponse.class
 com\citaa\citaa\model\Account$AccountBuilder.class
 com\citaa\citaa\repository\InvestorRepository.class
 com\citaa\citaa\response\AuthResponse.class
@@ -131,6 +133,7 @@ com\citaa\citaa\repository\TimelineEventRepository.class
 com\citaa\citaa\response\ProfileResponse$ProfileResponseBuilder.class
 com\citaa\citaa\response\EvaluationManagementResponse$EvaluationManagementResponseBuilder.class
 com\citaa\citaa\model\Chat$ChatBuilder.class
+com\citaa\citaa\response\DataAnalyticsResponse$DataAnalyticsResponseBuilder.class
 com\citaa\citaa\response\AdminProjectOverview$AdminProjectOverviewBuilder.class
 com\citaa\citaa\controller\CommentController.class
 com\citaa\citaa\model\Expert$ExpertBuilderImpl.class
@@ -145,6 +148,7 @@ com\citaa\citaa\exception\GlobalExceptionHandler.class
 com\citaa\citaa\model\ViewHistory.class
 com\citaa\citaa\model\Investment.class
 com\citaa\citaa\repository\CompetitionRepository.class
+com\citaa\citaa\service\QuickstartSample.class
 com\citaa\citaa\request\FeedbackInvestmentRequest.class
 com\citaa\citaa\service\InvestmentService.class
 com\citaa\citaa\service\NotificationService.class
