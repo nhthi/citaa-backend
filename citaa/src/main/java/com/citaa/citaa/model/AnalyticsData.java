@@ -7,6 +7,8 @@ import jakarta.persistence.Id;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
+
 @Entity
 @Data
 @Builder
@@ -18,10 +20,8 @@ public class AnalyticsData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String metricName;
-    private Long value;
-
+    private LocalDate date;
+    private long totalSessions;
     // Getters và setters
 }
 
