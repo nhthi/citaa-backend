@@ -27,6 +27,7 @@ public class Project {
 
     String field;
     String status = "UNVALID";
+    LocalDateTime validAt;
     @Lob
     @Column(columnDefinition = "TEXT")
     String introduce;

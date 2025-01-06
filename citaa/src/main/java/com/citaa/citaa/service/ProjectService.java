@@ -143,6 +143,7 @@ public class ProjectService {
         Project project = findProjectById(projectId);
         User user = userService.findByJwt(jwt);
         project.setStatus("VALID");
+        project.setValidAt(LocalDateTime.now());
         return projectRepository.save(project);
     }
 

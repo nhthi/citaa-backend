@@ -4,6 +4,7 @@ import com.citaa.citaa.model.*;
 import com.citaa.citaa.repository.CompetitionRepository;
 import com.citaa.citaa.repository.TimelineEventRepository;
 import com.citaa.citaa.repository.VoteRepository;
+import com.citaa.citaa.request.CompetitionRequest;
 import com.citaa.citaa.response.AdminCompetitionResponse;
 import com.citaa.citaa.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,14 +33,14 @@ public class CompetitionService {
     @Autowired
     private VoteRepository voteRepository;
 
-    public Competition createCompetition(String jwt, Competition req) throws Exception {
+    public Competition createCompetition(String jwt, CompetitionRequest req) throws Exception {
         User admin = userService.findByJwt(jwt);
 
         // Tạo đối tượng Competition mới
         Competition newCompetition = Competition.builder()
                 .name(req.getName())
                 .introduce(req.getIntroduce())
-                .content(req.getContent())
+                .content(req.getDescription())
                 .files(req.getFiles())
                 .fields(req.getFields())
                 .judges(req.getJudges())
@@ -48,15 +49,27 @@ public class CompetitionService {
                 .startAt(req.getStartAt())
                 .endAt(req.getEndAt())
                 .admin(admin) // Gán admin đã tìm thấy từ jwt
-                .timelineEvents(new ArrayList<>()) // Khởi tạo danh sách timelineEvents
+                .timelineEvents(new ArrayList<>())
+                .first(req.getFirst())
+                .second(req.getSecond())
+                .third(req.getThird())
+                // Khởi tạo danh sách timelineEvents
                 .build();
 
         // Thiết lập mối quan hệ với các TimelineEvent
-        if (req.getTimelineEvents() != null) {
-            for (TimelineEvent event : req.getTimelineEvents()) {
-                event.setCompetition(newCompetition); // Thiết lập Competition cho từng event
-                newCompetition.getTimelineEvents().add(event); // Thêm event vào danh sách của Competition
-            }
+//        if (req.getTimelineEvents() != null) {
+//            for (TimelineEvent event : req.getTimelineEvents()) {
+//                event.setCompetition(newCompetition); // Thiết lập Competition cho từng event
+//                newCompetition.getTimelineEvents().add(event); // Thêm event vào danh sách của Competition
+//            }
+//        }
+        for(int i=0;i< req.getNumberOfStages();i++){
+            TimelineEvent event = new TimelineEvent();
+            event.setEventName(req.getStages().get(i));
+            event.setDescription(req.getDescriptionStages().get(i));
+            event.setEventTime(req.getDateStages().get(i));
+            event.setCompetition(newCompetition);
+            newCompetition.getTimelineEvents().add(event);
         }
 
         // Lưu Competition và các TimelineEvent liên quan
@@ -80,7 +93,7 @@ public class CompetitionService {
         // Kiểm tra nếu User tìm thấy
         if (candidate == null) {
             res.setStatus(404);
-            res.setMessage("Canđiate not found");
+            res.setMessage("Không tìm thấy ứng viên");
             return res;
         }
         // Tìm Project theo ID
@@ -90,7 +103,7 @@ public class CompetitionService {
         // Kiểm tra nếu Project tồn tại
         if (project == null) {
             res.setStatus(404);
-            res.setMessage("Project not found");
+            res.setMessage("Không tìm thấy dự án");
             return res;
         }
         // Tìm Competition theo ID
@@ -99,13 +112,13 @@ public class CompetitionService {
         // Kiểm tra nếu Competition tồn tại
         if (competition == null) {
             res.setStatus(404);
-            res.setMessage("Competition not found");
+            res.setMessage("Không tìm thấy cuộc thi");
             return res;
         }
 
         if(project.getStartup().getId() != candidate.getId()){
             res.setStatus(400);
-            res.setMessage("This is not your project");
+            res.setMessage("Đây không phải dự án của bạn");
             return res;
         }
 
@@ -113,12 +126,12 @@ public class CompetitionService {
         // Kiểm tra nếu Candidate đã đăng ký vào Competition
         if (competition.getStartupAppliedTimes().containsKey(candidate.getId())) {
             res.setStatus(400);
-            res.setMessage("This candidate has already applied to the competition.");
+            res.setMessage("Ứng viên đã tham gia cuộc thi này rồi");
             return res;
         }
         if (competition.getProjects().contains(project)) {
             res.setStatus(400);
-            res.setMessage("This Project has already applied to the competition.");
+            res.setMessage("Dự án này đã được đăng ký với cuộc thi này");
             return res;
         }
         // Ghi nhận thời gian đăng ký của Candidate
@@ -130,7 +143,7 @@ public class CompetitionService {
         // Lưu Competition sau khi cập nhật
         competitionRepository.save(competition);
         res.setStatus(200);
-        res.setMessage("Apply successfully !");
+        res.setMessage("Đăng ký tham gia thành công");
         return res;
     }
 
@@ -232,7 +245,6 @@ public class CompetitionService {
         return res;
     }
 
-
     public AdminCompetitionResponse getAdminCompetitionAnalysis(int year, int month) throws Exception {
         AdminCompetitionResponse res = new AdminCompetitionResponse();
         int onGoingCompetition = competitionRepository.filterCompetitionByStatus("ongoing").size();
@@ -264,5 +276,10 @@ public class CompetitionService {
         res.setTopVote(topVote);
 
         return res;
+    }
+
+    public List<Competition> getCompetitionByJudge(String jwt,String status) throws Exception {
+        User user = userService.findByJwt(jwt);
+        return competitionRepository.filterByJudge(user,status);
     }
 }

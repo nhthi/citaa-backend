@@ -19,7 +19,6 @@ public class QuickstartSample {
 
     @Autowired
     private AnalyticsDataRepository analyticsDataRepository;
-
 //    @Scheduled(cron = "0 7 12 30 * ?")
     @Scheduled(cron = "0 0 1 1 * ?") // Lịch chạy hàng tháng vào lúc 01:00 AM vào ngày đầu tiên của tháng
     public void runScheduledTask() throws Exception {

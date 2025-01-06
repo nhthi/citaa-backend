@@ -1,12 +1,9 @@
 package com.citaa.citaa.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.util.QTypeContributor;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 
 @Entity
@@ -15,10 +12,16 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Evaluation {
+public class EvaluationCompetition {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
+
+    @ManyToOne
+    @JoinColumn(name = "judge_id", nullable = false)
+    User judge; // Giám khảo (User trong hệ thống)
+    int projectId;
+    int competitionId;
     int points;
     @Lob
     @Column(columnDefinition = "TEXT")
@@ -26,8 +29,6 @@ public class Evaluation {
     @Lob
     @Column(columnDefinition = "TEXT")
     String comment;
+
     LocalDateTime createAt;
-    int projectId;
-   @ManyToOne
-   User expert;
 }

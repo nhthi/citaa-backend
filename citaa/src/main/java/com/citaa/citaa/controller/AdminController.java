@@ -6,6 +6,7 @@ import com.citaa.citaa.repository.ExpertRepository;
 import com.citaa.citaa.repository.InvestorRepository;
 import com.citaa.citaa.repository.StartupRepository;
 import com.citaa.citaa.repository.UserRepository;
+import com.citaa.citaa.request.CompetitionRequest;
 import com.citaa.citaa.request.ExpertProjectRequest;
 import com.citaa.citaa.request.ReplyFeedbackRequest;
 import com.citaa.citaa.request.UpdateStatusUserRequest;
@@ -41,7 +42,8 @@ public class AdminController {
     private FeedbackService feedbackService;
     @Autowired
     private EvaluationService evaluationService;
-
+    @Autowired
+    private EvaluationCompetitionService evaluationCompetitionService;
 
     @PostMapping("/add-to-expert/{projectId}")
     public ResponseEntity<Project> addProjectToExpert(@PathVariable int projectId, @RequestBody ExpertProjectRequest req) throws Exception {
@@ -116,7 +118,7 @@ public class AdminController {
     }
 
     @PostMapping("/competition")
-    public ResponseEntity<Competition> createCompetition(@RequestBody Competition competition, @RequestHeader("Authorization") String jwt) throws Exception {
+    public ResponseEntity<Competition> createCompetition(@RequestBody CompetitionRequest competition, @RequestHeader("Authorization") String jwt) throws Exception {
         return new ResponseEntity<>(competitionService.createCompetition(jwt, competition), HttpStatus.CREATED);
     }
 
@@ -176,5 +178,15 @@ public class AdminController {
     @GetMapping("/overview-project")
     public ResponseEntity<AdminProjectOverview> getAdminProjectOverview(@RequestHeader("Authorization") String jwt, @RequestParam(defaultValue = "0") int year, @RequestParam(defaultValue = "0") int month) throws Exception {
         return new ResponseEntity<>(userService.getAdminProjectOverview(jwt, year, month), HttpStatus.OK);
+    }
+
+    @GetMapping("/competition/evaluation/judge/{id}")
+    public ResponseEntity<List<EvaluationCompetition>> getEvaluationCompetitionsByCompetitionAndJudge(@RequestParam int judgeId,@PathVariable int id) throws Exception {
+        return new ResponseEntity<>(evaluationCompetitionService.findByJudgeIdAndCompetitionId(id,judgeId),HttpStatus.OK);
+    }
+
+    @GetMapping("/competition/evaluation/{id}")
+    public ResponseEntity<List<EvaluationCompetition>> getEvaluationCompetitionsByCompetition(@PathVariable int id) throws Exception {
+        return new ResponseEntity<>(evaluationCompetitionService.findByCompetitionId(id),HttpStatus.OK);
     }
 }

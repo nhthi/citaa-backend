@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -19,7 +20,7 @@ public class TimelineEvent {
     int id;
     String eventName;
     String description;
-    LocalDateTime eventTime;
+    LocalDate eventTime;
     @ManyToOne
     @JoinColumn(name = "competition_id")
     @JsonIgnore

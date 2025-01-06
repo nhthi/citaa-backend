@@ -1,11 +1,14 @@
 package com.citaa.citaa.controller;
 
 import com.citaa.citaa.model.Competition;
+import com.citaa.citaa.model.EvaluationCompetition;
 import com.citaa.citaa.model.Vote;
 import com.citaa.citaa.request.ApplyCompetitionRequest;
+import com.citaa.citaa.request.EvaluationCompetitionRequest;
 import com.citaa.citaa.response.ApiResponse;
 import com.citaa.citaa.service.CompetitionService;
 
+import com.citaa.citaa.service.EvaluationCompetitionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -19,7 +22,8 @@ import java.util.List;
 public class CompetitionController {
     @Autowired
     CompetitionService competitionService;
-
+    @Autowired
+    EvaluationCompetitionService evaluationCompetitionService;
 
     @GetMapping("/api/competition/{competition-id}")
     public ResponseEntity<Competition> applyCompetitionResponseEntity(@PathVariable("competition-id") int id) throws Exception {
@@ -57,4 +61,20 @@ public class CompetitionController {
     public long countCompetition(){
         return competitionService.countCompetition();
     }
+
+    @GetMapping("/api/competition/judge")
+    public ResponseEntity<List<Competition>> getCompetitionByJudge(@RequestHeader("Authorization") String jwt,@RequestParam String status) throws Exception {
+        return new ResponseEntity<>(competitionService.getCompetitionByJudge(jwt,status),HttpStatus.OK);
+    }
+
+    @PostMapping("/api/competition/scoring")
+    public ResponseEntity<EvaluationCompetition> createEvaluationCompetition(@RequestBody EvaluationCompetitionRequest request, @RequestHeader("Authorization") String jwt) throws Exception {
+        return new ResponseEntity<>(evaluationCompetitionService.createEvaluationCompetition(request,jwt),HttpStatus.CREATED);
+    }
+
+    @GetMapping("/api/competition/evaluation/{id}")
+    public ResponseEntity<List<EvaluationCompetition>> getEvaluationCompetitionsByCompetitionAndJudge(@RequestHeader("Authorization") String jwt,@PathVariable int id) throws Exception {
+        return new ResponseEntity<>(evaluationCompetitionService.findByJudgeAndCompetitionId(id,jwt),HttpStatus.OK);
+    }
+
 }

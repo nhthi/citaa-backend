@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,8 +57,8 @@ public class Competition {
 
     LocalDateTime createAt;
     LocalDateTime updateAt;
-    LocalDateTime startAt;
-    LocalDateTime endAt;
+    LocalDate startAt;
+    LocalDate endAt;
 
     double first = 0;
     double second=0;
