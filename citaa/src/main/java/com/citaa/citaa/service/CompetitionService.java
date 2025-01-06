@@ -56,13 +56,6 @@ public class CompetitionService {
                 // Khởi tạo danh sách timelineEvents
                 .build();
 
-        // Thiết lập mối quan hệ với các TimelineEvent
-//        if (req.getTimelineEvents() != null) {
-//            for (TimelineEvent event : req.getTimelineEvents()) {
-//                event.setCompetition(newCompetition); // Thiết lập Competition cho từng event
-//                newCompetition.getTimelineEvents().add(event); // Thêm event vào danh sách của Competition
-//            }
-//        }
         for(int i=0;i< req.getNumberOfStages();i++){
             TimelineEvent event = new TimelineEvent();
             event.setEventName(req.getStages().get(i));

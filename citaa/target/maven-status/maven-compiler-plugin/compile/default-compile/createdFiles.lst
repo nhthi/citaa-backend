@@ -31,6 +31,7 @@ com\citaa\citaa\request\InvestmentRequest.class
 com\citaa\citaa\model\React.class
 com\citaa\citaa\repository\FounderRepository.class
 com\citaa\citaa\repository\ProjectRepository.class
+com\citaa\citaa\service\EvaluationCompetitionService.class
 com\citaa\citaa\model\Vote$VoteBuilder.class
 com\citaa\citaa\request\ProjectCreationRequest$ProjectCreationRequestBuilder.class
 com\citaa\citaa\model\Notification.class
@@ -42,10 +43,12 @@ com\citaa\citaa\model\Investor.class
 com\citaa\citaa\model\Project$ProjectBuilder.class
 com\citaa\citaa\repository\FeedbackRepository.class
 com\citaa\citaa\response\EvaluationManagementResponse.class
+com\citaa\citaa\model\EvaluationCompetition.class
 com\citaa\citaa\controller\HomeController.class
 com\citaa\citaa\exception\AuthException.class
 com\citaa\citaa\model\Feedback.class
 com\citaa\citaa\request\UpdateStatusUserRequest.class
+com\citaa\citaa\request\EvaluationCompetitionRequest.class
 com\citaa\citaa\request\LoginRequest$LoginRequestBuilder.class
 com\citaa\citaa\model\Reward$RewardBuilder.class
 com\citaa\citaa\controller\NotificationController.class
@@ -73,6 +76,7 @@ com\citaa\citaa\model\Evaluation.class
 com\citaa\citaa\repository\UserRepository.class
 com\citaa\citaa\service\CompetitionService.class
 com\citaa\citaa\config\AppConfig.class
+com\citaa\citaa\request\CompetitionRequest$CompetitionRequestBuilder.class
 com\citaa\citaa\model\Competition.class
 com\citaa\citaa\service\FounderService.class
 com\citaa\citaa\service\ChatService.class
@@ -83,6 +87,7 @@ com\citaa\citaa\service\NewsService.class
 com\citaa\citaa\response\StatisticalResponse.class
 com\citaa\citaa\request\EvaluationCreationRequest.class
 com\citaa\citaa\model\ViewHistory$ViewHistoryBuilder.class
+com\citaa\citaa\request\CompetitionRequest.class
 com\citaa\citaa\model\Evaluation$EvaluationBuilder.class
 com\citaa\citaa\model\User.class
 com\citaa\citaa\model\Comment$CommentBuilder.class
@@ -127,6 +132,7 @@ com\citaa\citaa\config\JwtProvider.class
 com\citaa\citaa\controller\FounderController.class
 com\citaa\citaa\model\Reward.class
 com\citaa\citaa\repository\NewsRepository.class
+com\citaa\citaa\model\EvaluationCompetition$EvaluationCompetitionBuilder.class
 com\citaa\citaa\model\TimelineEvent.class
 com\citaa\citaa\request\RequestUser$RequestUserBuilder.class
 com\citaa\citaa\repository\TimelineEventRepository.class
@@ -138,7 +144,9 @@ com\citaa\citaa\response\AdminProjectOverview$AdminProjectOverviewBuilder.class
 com\citaa\citaa\controller\CommentController.class
 com\citaa\citaa\model\Expert$ExpertBuilderImpl.class
 com\citaa\citaa\model\User$UserBuilder.class
+com\citaa\citaa\request\EvaluationCompetitionRequest$EvaluationCompetitionRequestBuilder.class
 com\citaa\citaa\response\AdminProjectOverview.class
+com\citaa\citaa\repository\EvaluationCompetitionRepository.class
 com\citaa\citaa\controller\InvestmentController.class
 com\citaa\citaa\repository\MessageRepository.class
 com\citaa\citaa\repository\NotificationRepository.class

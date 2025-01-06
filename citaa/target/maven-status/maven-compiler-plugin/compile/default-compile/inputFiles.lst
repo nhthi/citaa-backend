@@ -6,7 +6,6 @@ D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\config\JwtPro
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\config\JwtTokenValidator.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\config\WebsocketConfig.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\controller\AdminController.java
-D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\controller\AnalyticsController.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\controller\AuthController.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\controller\ChatController.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\controller\CommentController.java
@@ -30,6 +29,7 @@ D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\model\Chat.ja
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\model\Comment.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\model\Competition.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\model\Evaluation.java
+D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\model\EvaluationCompetition.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\model\Expert.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\model\Feedback.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\model\Founder.java
@@ -53,6 +53,7 @@ D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\repository\An
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\repository\ChatRepository.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\repository\CommentRepository.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\repository\CompetitionRepository.java
+D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\repository\EvaluationCompetitionRepository.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\repository\EvaluationRepository.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\repository\ExpertRepository.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\repository\FeedbackRepository.java
@@ -72,6 +73,8 @@ D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\repository\Vo
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\request\ApplyCompetitionRequest.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\request\ChangePasswordRequest.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\request\ChatCreationRequest.java
+D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\request\CompetitionRequest.java
+D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\request\EvaluationCompetitionRequest.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\request\EvaluationCreationRequest.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\request\ExpertProjectRequest.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\request\FeedbackCreationRequest.java
@@ -100,6 +103,7 @@ D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\service\Comme
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\service\CompetitionService.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\service\CustomerUserDetailService.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\service\EmailService.java
+D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\service\EvaluationCompetitionService.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\service\EvaluationService.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\service\FeedbackService.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\service\FounderService.java
