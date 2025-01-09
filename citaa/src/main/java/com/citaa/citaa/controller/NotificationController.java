@@ -28,12 +28,11 @@ public class NotificationController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Notification>> getNotifications(@RequestHeader("Authorization") String jwt) throws Exception {
-        return new ResponseEntity<>(notificationService.getNotificationsByUserId(userService.findByJwt(jwt).getId(),false),HttpStatus.OK);
+    public ResponseEntity<List<Notification>> getNotifications(@RequestHeader("Authorization") String jwt,@RequestParam(defaultValue = "0") String status) throws Exception {
+        return new ResponseEntity<>(notificationService.getNotificationsByUserId(userService.findByJwt(jwt).getId(),status),HttpStatus.OK);
     }
-    @PutMapping("/{notifi-id}")
-    public ResponseEntity<Notification> readNotifications(@RequestHeader("Authorization") String jwt, @PathVariable("notifi-id") int notifiId) throws Exception {
-        return new ResponseEntity<>(notificationService.readNotification(notifiId,userService.findByJwt(jwt).getId()),HttpStatus.OK);
+    @PutMapping("/{notify-id}")
+    public ResponseEntity<Notification> markAsRead(@RequestHeader("Authorization") String jwt, @PathVariable("notify-id") int notifyId) throws Exception {
+        return new ResponseEntity<>(notificationService.markAsRead(notifyId,userService.findByJwt(jwt).getId()),HttpStatus.OK);
     }
-
 }

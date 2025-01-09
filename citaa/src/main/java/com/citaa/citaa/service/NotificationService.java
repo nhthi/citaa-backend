@@ -18,22 +18,23 @@ public class NotificationService {
 
     public Notification createNotification(Notification notification) throws Exception {
         return notificationRepository.save(Notification.builder()
-                .isRead(false)
-                .message(notification.getMessage())
+                .content(notification.getContent())
                 .timestamp(LocalDateTime.now())
                 .recipientId(notification.getRecipientId())
                 .type(notification.getType())
+                .isRead("UNREAD")
+                .link(notification.getLink())
                 .build());
     }
 
-    public List<Notification> getNotificationsByUserId(int userId,boolean isRead) {
-        return notificationRepository.findByUserId(userId,isRead);
+    public List<Notification> getNotificationsByUserId(int userId, String status) {
+        return notificationRepository.findByRecipientIdAndIsRead(userId, status);
     }
 
-    public Notification readNotification(long notificationId,int userId) throws Exception {
+    public Notification markAsRead(long notificationId, int userId) throws Exception {
         Notification noti = notificationRepository.findById(notificationId).orElseThrow(() -> new Exception("Not found notification"));
-        if(noti.getRecipientId() == userId)
-            noti.setRead(true);
+        if (noti.getRecipientId() == userId)
+            noti.setIsRead("READ");
         return notificationRepository.save(noti);
     }
 }

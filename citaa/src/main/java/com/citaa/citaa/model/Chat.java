@@ -21,5 +21,4 @@ public class Chat {
     List<Message> messages = new ArrayList<>();
     @ManyToMany
     List<User> users = new ArrayList<>();
-
 }

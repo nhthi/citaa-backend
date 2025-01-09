@@ -74,20 +74,14 @@ public class UserService {
         switch (user.getAccount().getRole()) {
             case "ROLE_STARTUP" -> {
                 Startup profile = startupRepository.findById(id).get();
-                profile.getAccount().setUsername(null);
-                profile.getAccount().setPassword(null);
                 return profile;
             }
             case "ROLE_EXPERT" -> {
                 Expert profile = expertRepository.findById(id).get();
-                profile.getAccount().setUsername(null);
-                profile.getAccount().setPassword(null);
                 return profile;
             }
             case "ROLE_INVESTOR" -> {
                 Investor profile = investorRepository.findById(id).get();
-                profile.getAccount().setUsername(null);
-                profile.getAccount().setPassword(null);
                 return profile;
             }
         }

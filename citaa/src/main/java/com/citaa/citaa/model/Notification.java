@@ -20,14 +20,17 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String message;
+    private String content;
 
     private int recipientId;  // Id của người nhận thông báo
 
-    private boolean isRead;  // Trạng thái đã đọc hay chưa đọc
+    private String isRead = "UNREAD";  // Trạng thái đã đọc hay chưa đọc
+
+    private LocalDateTime readAt;  // Thời gian gửi thông báo
 
     private LocalDateTime timestamp;  // Thời gian gửi thông báo
 
     private String type;  // Loại thông báo (nếu cần)
 
+    private String link;
 }
