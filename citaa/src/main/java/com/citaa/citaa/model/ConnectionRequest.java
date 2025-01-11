@@ -23,14 +23,13 @@ public class ConnectionRequest {
     @OneToOne(cascade = CascadeType.ALL) // Thêm cascade để tự động lưu ConnectionInfo
     @JoinColumn(name = "connection_info_id")
     ConnectionInfo connectionInfo;
-
+    @Lob
+    @Column(columnDefinition = "TEXT")
     String response;
-
     @ManyToOne
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
-
-    private String status; // PENDING, ACCEPTED, REJECTED
+     private String status; // PENDING, ACCEPTED, REJECTED
 
     private LocalDateTime requestDate;
 

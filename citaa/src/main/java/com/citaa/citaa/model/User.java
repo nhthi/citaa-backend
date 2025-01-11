@@ -23,7 +23,7 @@ public class User {
     String fullName;
     String address;
     Date dob;
-    boolean valid;
+    String valid = "UNVALID";
     String email;
     @OneToOne(cascade = CascadeType.ALL)
     Account account;

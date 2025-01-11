@@ -1,9 +1,6 @@
 package com.citaa.citaa.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -22,8 +19,14 @@ public class ConnectionInfo {
     String email;
     String phone;
     String title;
+    @Lob
+    @Column(columnDefinition = "TEXT")
     String introduction;
+    @Lob
+    @Column(columnDefinition = "TEXT")
     String reason;
+    @Lob
+    @Column(columnDefinition = "TEXT")
     String questions;
     String preferredResponse;
     String responseTime;

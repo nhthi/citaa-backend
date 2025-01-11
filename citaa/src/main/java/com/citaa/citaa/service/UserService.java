@@ -408,7 +408,6 @@ public class UserService {
         return res;
     }
 
-
     public StatisticalResponse getStatisticalResponse(int year, int month) {
         long countExpert = expertRepository.countExpertByYearAndMonth(year, month);
         long countStartup = startupRepository.countStartupByYearAndMonth(year, month);

@@ -28,6 +28,7 @@ public class Project {
     String field;
     String status = "UNVALID";
     LocalDateTime validAt;
+    LocalDateTime updateAt;
     @Lob
     @Column(columnDefinition = "TEXT")
     String introduce;
@@ -51,16 +52,11 @@ public class Project {
     List<String> files;
     @OneToMany
     List<Comment> comments;
-
-
     @ManyToMany
     List<User> reactList = new ArrayList<>();
-
     @JsonIgnore
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     List<React> reacts = new ArrayList<>();
-
-
     @ManyToMany
     List<Founder> founders;
     String address;
