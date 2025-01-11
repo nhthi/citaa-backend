@@ -54,4 +54,9 @@ public class PublicController {
     public ResponseEntity<DataAnalyticsResponse> getAnalyticsData(@RequestParam(defaultValue = "0") int year, @RequestParam(defaultValue = "0") int month){
         return new ResponseEntity<>(analyticsDataService.filterByYearAndMonth(year,month),HttpStatus.OK);
     }
+
+    @GetMapping("/news/search")
+    public ResponseEntity<List<News>> searchNews(@RequestParam(defaultValue = "Not found") String query){
+        return new ResponseEntity<>(newsService.searchNews(query),HttpStatus.OK);
+    }
 }

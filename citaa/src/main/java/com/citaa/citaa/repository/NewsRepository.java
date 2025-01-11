@@ -19,4 +19,7 @@ public interface NewsRepository extends JpaRepository<News, Integer> {
 
     @Query("select n from News n where n.type = :type and n.id != :id order by n.createAt desc")
     public List<News> findLatestByType(int id, String type, Pageable pageable);
+
+    @Query("select n from News n where n.type like %:query%  or n.title like %:query% or n.content like %:query% ")
+    List<News> searchNews(String query);
 }

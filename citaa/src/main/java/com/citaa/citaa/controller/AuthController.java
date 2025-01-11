@@ -173,13 +173,13 @@ public class AuthController {
         }
         verify.setVerifyCode(code);
         verifyRepository.save(verify);
-        String subject = "Verify Your Email";
+        String subject = "Xác thực tài khoản";
         String htmlContent = "<!DOCTYPE html>"
                 + "<html lang='en'>"
                 + "<head>"
                 + "<meta charset='UTF-8'>"
                 + "<meta name='viewport' content='width=device-width, initial-scale=1.0'>"
-                + "<title>Email Verification</title>"
+                + "<title>Email xác thực</title>"
                 + "<style>"
                 + "body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }"
                 + ".email-container { max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }"
@@ -197,18 +197,18 @@ public class AuthController {
                 + "<div class='email-container'>"
                 + "<div class='header'>"
                 + "<img src='http://res.cloudinary.com/dssku7owl/image/upload/v1723724928/xs5rgk782juzntxm7zfy.png' alt='Company Logo'>"
-                + "<h1>Email Verification</h1>"
+                + "<h1>Email xác thực</h1>"
                 + "</div>"
                 + "<div class='content'>"
-                + "<p>Hello,</p>"
-                + "<p>Thank you for registering with us! To complete your registration, please verify your email address by using the verification code below:</p>"
+                + "<p>Chào bạn,</p>"
+                + "<p>Cảm ơn đã liên hệ với chúng tôi! Đưới đây là mã xác thực để lấy lại mật khẩu của bạn:</p>"
                 + "<div class='verification-code'>" + code + "</div>"
-                + "<p>If you did not sign up for this account, please ignore this email or contact our support team.</p>"
+                + "<p>Nếu bạn chưa đăng ký tài khoản này, vui lòng bỏ qua email này hoặc liên hệ với đội ngũ hỗ trợ của chúng tôi.</p>"
 //                + "<a href='http://localhost:3000/account/forgotpassword?open=true' class='cta-button'>Verify Here</a>"
                 + "</div>"
                 + "<div class='footer'>"
-                + "<p>If you have any questions, feel free to <a href='https://example.com/support'>contact us</a>.</p>"
-                + "<p>&copy; 2024 Company Name. All rights reserved.</p>"
+                + "<p>Nếu có câu hỏi khác, <a href='http://localhost:3000/contact'>liên hệ ngay với chúng tôi</a> để được hỗ trợ nhanh chóng.</p>"
+                + "<p>&copy; 2024 Citaa.</p>"
                 + "</div>"
                 + "</div>"
                 + "</body>"
@@ -216,6 +216,7 @@ public class AuthController {
         emailService.sendHtmlEmail(email, subject, htmlContent);
         MessageResponse messageResponse = new MessageResponse();
         messageResponse.setMessage("Mã OTP đã được gửi đến email của bạn");
+        messageResponse.setStatus(200);
         return new ResponseEntity<>(messageResponse, HttpStatus.OK);
     }
 
@@ -226,8 +227,12 @@ public class AuthController {
         if (verify != null) {
             if (verify.getVerifyCode().equals(req.getCode())) {
                 res.setMessage(UpdatePassword(req.getEmail(), req.getNewPassword()));
+                res.setStatus(200);
                 verifyRepository.delete(verify);
-            } else res.setMessage("Mã OTP không chính xác");
+            } else {
+                res.setMessage("Mã OTP không chính xác");
+                res.setStatus(400);
+            }
         }
         return new ResponseEntity<>(res, HttpStatus.OK);
     }

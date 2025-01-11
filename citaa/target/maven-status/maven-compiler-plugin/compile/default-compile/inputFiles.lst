@@ -28,6 +28,9 @@ D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\model\Analyti
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\model\Chat.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\model\Comment.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\model\Competition.java
+D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\model\ConnectionHistory.java
+D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\model\ConnectionInfo.java
+D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\model\ConnectionRequest.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\model\Evaluation.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\model\EvaluationCompetition.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\model\Expert.java
@@ -53,6 +56,9 @@ D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\repository\An
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\repository\ChatRepository.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\repository\CommentRepository.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\repository\CompetitionRepository.java
+D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\repository\ConnectionHistoryRepository.java
+D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\repository\ConnectionInfoRepository.java
+D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\repository\ConnectionRequestRepository.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\repository\EvaluationCompetitionRepository.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\repository\EvaluationRepository.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\repository\ExpertRepository.java
@@ -101,6 +107,7 @@ D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\service\Analy
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\service\ChatService.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\service\CommentService.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\service\CompetitionService.java
+D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\service\ConnectionService.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\service\CustomerUserDetailService.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\service\EmailService.java
 D:\citaa\backend\citaa-backend\citaa\src\main\java\com\citaa\citaa\service\EvaluationCompetitionService.java

@@ -110,4 +110,8 @@ public class NewsService {
         news.setUpdateAt(LocalDateTime.now());
         return newsRepository.save(news);
     }
+
+    public List<News> searchNews(String query){
+        return newsRepository.searchNews(query);
+    }
 }

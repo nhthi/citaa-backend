@@ -1,15 +1,14 @@
 package com.citaa.citaa.controller;
 
 import com.citaa.citaa.config.JwtProvider;
+import com.citaa.citaa.model.ConnectionInfo;
 import com.citaa.citaa.model.Project;
 import com.citaa.citaa.model.Startup;
 import com.citaa.citaa.model.User;
 import com.citaa.citaa.request.ProjectCreationRequest;
 import com.citaa.citaa.response.ApiResponse;
-import com.citaa.citaa.service.EvaluationService;
-import com.citaa.citaa.service.ProjectService;
-import com.citaa.citaa.service.StartupService;
-import com.citaa.citaa.service.UserService;
+import com.citaa.citaa.response.MessageResponse;
+import com.citaa.citaa.service.*;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,8 @@ public class ProjectController {
     StartupService startupService;
     @Autowired
     UserService userService;
-
+    @Autowired
+    ConnectionService connectionService;
 
     @PostMapping
     public ResponseEntity<Project> createProject(@RequestBody ProjectCreationRequest request, @RequestHeader("Authorization") String jwt) throws Exception {
@@ -118,4 +118,14 @@ public class ProjectController {
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
+    @PostMapping("/request")
+    public ResponseEntity<MessageResponse> createConnectionRequest(@RequestHeader("Authorization") String jwt, @RequestParam int projectId, @RequestBody ConnectionInfo connectionInfo) throws Exception {
+        return new ResponseEntity<>(connectionService.createConnectionRequest(jwt, projectId,connectionInfo),HttpStatus.OK);
+    }
+
+    @PutMapping("/respond")
+    public ResponseEntity<MessageResponse> respondToRequest(@RequestParam int requestId, @RequestParam(defaultValue = "PENDING") String status,@RequestParam String response) {
+        return new ResponseEntity<>(connectionService.respondToRequest(requestId, status,response),HttpStatus.OK);
+
+    }
 }

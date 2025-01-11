@@ -18,6 +18,4 @@ public class Investor extends User {
     String companyName;
     int experienceYears;
 
-    @OneToMany(mappedBy = "investor")
-    List<Investment> investments = new ArrayList<>();
 }
