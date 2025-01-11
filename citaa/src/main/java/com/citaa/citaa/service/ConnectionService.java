@@ -5,10 +5,15 @@ import com.citaa.citaa.repository.ConnectionHistoryRepository;
 import com.citaa.citaa.repository.ConnectionRequestRepository;
 import com.citaa.citaa.response.MessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ConnectionService {
@@ -61,5 +66,22 @@ public class ConnectionService {
     public List<ConnectionRequest> getConnectionRequestsByInvestor(String jwt) throws Exception {
         User user = userService.findByJwt(jwt);
         return connectionRequestRepository.findByUserId(user.getId());
+    }
+
+    public Page<ConnectionRequest> getConnectionRequestsByProjectId(int id, int pageSize, int pageNumber) throws Exception {
+
+        List<ConnectionRequest> connections = connectionRequestRepository.findByProjectId(id);
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        int startIndex = (int) pageable.getOffset();
+        int endIndex = Math.min(startIndex + pageable.getPageSize(), connections.size());
+
+        // Kiểm tra startIndex và endIndex hợp lệ
+        if (startIndex > endIndex || startIndex > connections.size()) {
+            return Page.empty(pageable);
+        }
+
+        List<ConnectionRequest> pageContent = connections.subList(startIndex, endIndex);
+        return new PageImpl<>(pageContent, pageable, connections.size());
     }
 }

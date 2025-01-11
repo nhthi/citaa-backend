@@ -12,5 +12,6 @@ public interface ConnectionRequestRepository extends JpaRepository<ConnectionReq
 
     @Query("select c from ConnectionRequest c where c.investor.id = :userId")
     List<ConnectionRequest> findByUserId(int userId);
-
+    @Query("select c from ConnectionRequest c where c.project.id = :projectId")
+    List<ConnectionRequest> findByProjectId(int projectId);
 }

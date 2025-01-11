@@ -1,10 +1,7 @@
 package com.citaa.citaa.controller;
 
 import com.citaa.citaa.config.JwtProvider;
-import com.citaa.citaa.model.ConnectionInfo;
-import com.citaa.citaa.model.Project;
-import com.citaa.citaa.model.Startup;
-import com.citaa.citaa.model.User;
+import com.citaa.citaa.model.*;
 import com.citaa.citaa.request.ProjectCreationRequest;
 import com.citaa.citaa.response.ApiResponse;
 import com.citaa.citaa.response.MessageResponse;
@@ -127,5 +124,10 @@ public class ProjectController {
     public ResponseEntity<MessageResponse> respondToRequest(@RequestParam int requestId, @RequestParam(defaultValue = "PENDING") String status,@RequestParam String response) {
         return new ResponseEntity<>(connectionService.respondToRequest(requestId, status,response),HttpStatus.OK);
 
+    }
+
+    @GetMapping("/request")
+    public ResponseEntity<Page<ConnectionRequest>> getConnectionByProjectId(@RequestParam int id,@RequestParam(defaultValue = "0") int pageSize,@RequestParam(defaultValue = "0") int pageNumber) throws Exception {
+        return new ResponseEntity<>(connectionService.getConnectionRequestsByProjectId(id,pageSize,pageNumber),HttpStatus.OK);
     }
 }
