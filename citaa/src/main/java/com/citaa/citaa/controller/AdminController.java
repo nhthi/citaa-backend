@@ -10,10 +10,7 @@ import com.citaa.citaa.request.CompetitionRequest;
 import com.citaa.citaa.request.ExpertProjectRequest;
 import com.citaa.citaa.request.ReplyFeedbackRequest;
 import com.citaa.citaa.request.UpdateStatusUserRequest;
-import com.citaa.citaa.response.AdminCompetitionResponse;
-import com.citaa.citaa.response.AdminOverview;
-import com.citaa.citaa.response.AdminProjectOverview;
-import com.citaa.citaa.response.ApiResponse;
+import com.citaa.citaa.response.*;
 import com.citaa.citaa.service.*;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -188,5 +185,10 @@ public class AdminController {
     @GetMapping("/competition/evaluation/{id}")
     public ResponseEntity<List<EvaluationCompetition>> getEvaluationCompetitionsByCompetition(@PathVariable int id) throws Exception {
         return new ResponseEntity<>(evaluationCompetitionService.findByCompetitionId(id),HttpStatus.OK);
+    }
+
+    @PutMapping("/valid-user/{userId}")
+    public ResponseEntity<MessageResponse> requestValidUser(@PathVariable int userId) throws Exception {
+        return new ResponseEntity<>(userService.validUser(userId),HttpStatus.OK);
     }
 }

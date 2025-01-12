@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -16,7 +17,7 @@ import java.util.List;
 public class UpdateUserRequest {
     String fullName;
     String address;
-    Date dob;
+    LocalDate dob;
     String email;
     Account account;
     boolean gender;

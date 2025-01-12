@@ -20,7 +20,7 @@ public class Expert extends User {
     String college;
     String education;
     @ElementCollection
-    List<String> certifications;
+    List<String> certifications = new ArrayList<>();
     int experienceYears;
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(

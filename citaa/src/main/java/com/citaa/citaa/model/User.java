@@ -7,7 +7,9 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,8 +24,10 @@ public class User {
     int id;
     String fullName;
     String address;
-    Date dob;
+    LocalDate dob;
     String valid = "UNVALID";
+    LocalDateTime validAt;
+    LocalDateTime requestAt;
     String email;
     @OneToOne(cascade = CascadeType.ALL)
     Account account;
@@ -32,7 +36,7 @@ public class User {
     String coverPhoto;
     String bio;
     @ElementCollection
-    List<String> fields;
+    List<String> fields = new ArrayList<>();
     String phone;
 
     @JsonIgnore

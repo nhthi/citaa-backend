@@ -6,6 +6,7 @@ import com.citaa.citaa.model.React;
 import com.citaa.citaa.model.User;
 import com.citaa.citaa.request.UpdateUserRequest;
 import com.citaa.citaa.response.EvaluationManagementResponse;
+import com.citaa.citaa.response.MessageResponse;
 import com.citaa.citaa.response.ProfileResponse;
 import com.citaa.citaa.service.ConnectionService;
 import com.citaa.citaa.service.UserService;
@@ -86,4 +87,10 @@ public class UserController {
     public ResponseEntity<List<ConnectionRequest>> getConnectRequestByInvestor(@RequestHeader("Authorization") String jwt) throws Exception {
         return new ResponseEntity<>(connectionService.getConnectionRequestsByInvestor(jwt),HttpStatus.OK);
     }
+
+    @PutMapping("/request-valid")
+    public ResponseEntity<MessageResponse> requestValidUser(@RequestHeader("Authorization") String jwt) throws Exception {
+        return new ResponseEntity<>(userService.sendRequestValidUser(jwt),HttpStatus.OK);
+    }
+
 }

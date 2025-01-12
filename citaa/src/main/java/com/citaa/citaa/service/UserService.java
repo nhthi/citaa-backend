@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -455,4 +456,25 @@ public class UserService {
         return res;
     }
 
+    public MessageResponse sendRequestValidUser(String jwt) throws Exception {
+        User user = findByJwt(jwt);
+        user.setRequestAt(LocalDateTime.now());
+        user.setValid("PENDING");
+        userRepository.save(user);
+        MessageResponse res = new MessageResponse();
+        res.setStatus(200);
+        res.setMessage("Đã gửi yêu cầu duyệt tài khoản.");
+        return res;
+    }
+
+    public MessageResponse validUser(int userId) throws Exception {
+        User user = findById(userId);
+        user.setValidAt(LocalDateTime.now());
+        user.setValid("VALID");
+        userRepository.save(user);
+        MessageResponse res = new MessageResponse();
+        res.setStatus(200);
+        res.setMessage("Đã duyệt tài khoản.");
+        return res;
+    }
 }

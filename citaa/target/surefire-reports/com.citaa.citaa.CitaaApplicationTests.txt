@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.citaa.citaa.CitaaApplicationTests
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 52.86 s -- in com.citaa.citaa.CitaaApplicationTests
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 49.26 s -- in com.citaa.citaa.CitaaApplicationTests
