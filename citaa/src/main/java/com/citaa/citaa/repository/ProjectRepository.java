@@ -37,7 +37,7 @@ public interface ProjectRepository extends JpaRepository<Project, Integer> {
     @Query("SELECT COUNT(DISTINCT e.id) FROM Project e WHERE e.startup.id = :startupId")
     Long countDistinctProjectByStartupId(int startupId);
 
-    @Query("SELECT SUM(c.realTotalCapital) FROM Project c  WHERE c.startup.id = :startupId")
+    @Query("SELECT SUM(c.realTotalCapital) FROM Project c  WHERE c.startup.id = :startupId and c.status='VALID' ")
     Double sumTotalCapital(int startupId);
 
     @Query("SELECT COUNT(c) " +

@@ -63,14 +63,48 @@ public class ConnectionService {
         return res;
     }
 
-    public List<ConnectionRequest> getConnectionRequestsByInvestor(String jwt) throws Exception {
+    public Page<ConnectionRequest> getConnectionRequestsByInvestor(String jwt, String status, int year, int pageSize, int pageNumber,List<String> fields) throws Exception {
         User user = userService.findByJwt(jwt);
-        return connectionRequestRepository.findByUserId(user.getId());
+        List<ConnectionRequest> connections =  connectionRequestRepository.filterConnections(user.getId(),status,year);
+
+        if (fields != null && !fields.isEmpty()) {
+            connections = connections.stream()
+                    .filter(connection -> fields.stream().anyMatch(field -> field.equalsIgnoreCase(connection.getProject().getField())))
+                    .collect(Collectors.toList());
+        }
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        int startIndex = (int) pageable.getOffset();
+        int endIndex = Math.min(startIndex + pageable.getPageSize(), connections.size());
+
+        // Kiểm tra startIndex và endIndex hợp lệ
+        if (startIndex > endIndex || startIndex > connections.size()) {
+            return Page.empty(pageable);
+        }
+
+        List<ConnectionRequest> pageContent = connections.subList(startIndex, endIndex);
+        return new PageImpl<>(pageContent, pageable, connections.size());
     }
 
     public Page<ConnectionRequest> getConnectionRequestsByProjectId(int id, int pageSize, int pageNumber) throws Exception {
 
         List<ConnectionRequest> connections = connectionRequestRepository.findByProjectId(id);
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        int startIndex = (int) pageable.getOffset();
+        int endIndex = Math.min(startIndex + pageable.getPageSize(), connections.size());
+
+        // Kiểm tra startIndex và endIndex hợp lệ
+        if (startIndex > endIndex || startIndex > connections.size()) {
+            return Page.empty(pageable);
+        }
+
+        List<ConnectionRequest> pageContent = connections.subList(startIndex, endIndex);
+        return new PageImpl<>(pageContent, pageable, connections.size());
+    }
+
+    public Page<ConnectionRequest> getConnectionRequestsByStartup(int userId,String status, int pageSize, int pageNumber) throws Exception {
+        List<ConnectionRequest> connections = connectionRequestRepository.findByStartup(userId,status);
 
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         int startIndex = (int) pageable.getOffset();

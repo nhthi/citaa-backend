@@ -29,9 +29,7 @@ public class ConnectionRequest {
     @ManyToOne
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
-     private String status; // PENDING, ACCEPTED, REJECTED
-
+    private String status; // PENDING, ACCEPTED, REJECTED
     private LocalDateTime requestDate;
-
     private LocalDateTime responseDate;
 }

@@ -11,6 +11,7 @@ import com.citaa.citaa.response.ProfileResponse;
 import com.citaa.citaa.service.ConnectionService;
 import com.citaa.citaa.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -84,8 +85,20 @@ public class UserController {
     }
 
     @GetMapping("/request")
-    public ResponseEntity<List<ConnectionRequest>> getConnectRequestByInvestor(@RequestHeader("Authorization") String jwt) throws Exception {
-        return new ResponseEntity<>(connectionService.getConnectionRequestsByInvestor(jwt),HttpStatus.OK);
+    public ResponseEntity<Page<ConnectionRequest>> getConnectRequestByInvestor(@RequestHeader("Authorization") String jwt,
+                                                                               @RequestParam(defaultValue = "0") String status,
+                                                                               @RequestParam(defaultValue = "0") int year,
+                                                                               @RequestParam(required = false) List<String> fields,
+                                                                               @RequestParam(defaultValue = "1") int pageSize,@RequestParam(defaultValue = "0") int pageNumber) throws Exception {
+        return new ResponseEntity<>(connectionService.getConnectionRequestsByInvestor(jwt,status,year,pageSize,pageNumber,fields),HttpStatus.OK);
+    }
+
+
+    @GetMapping("/startup/request")
+    public ResponseEntity<Page<ConnectionRequest>> getConnectRequestByStartup(@RequestParam int userId,
+                                                                               @RequestParam(defaultValue = "0") String status,
+                                                                               @RequestParam(defaultValue = "1") int pageSize,@RequestParam(defaultValue = "0") int pageNumber) throws Exception {
+        return new ResponseEntity<>(connectionService.getConnectionRequestsByStartup(userId,status,pageSize,pageNumber),HttpStatus.OK);
     }
 
     @PutMapping("/request-valid")
