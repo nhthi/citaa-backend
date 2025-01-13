@@ -32,9 +32,15 @@ public class ProjectController {
     @PostMapping
     public ResponseEntity<Project> createProject(@RequestBody ProjectCreationRequest request, @RequestHeader("Authorization") String jwt) throws Exception {
         Startup startUp = startupService.getStartupByJwt(jwt);
-
         Project createProject = projectService.createProject(request, startUp);
         return new ResponseEntity<>(createProject, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Project> updateProject(@RequestBody ProjectCreationRequest request, @RequestHeader("Authorization") String jwt,@PathVariable int id) throws Exception {
+        Startup startUp = startupService.getStartupByJwt(jwt);
+        Project updateProject = projectService.updateProject(request,id);
+        return new ResponseEntity<>(updateProject, HttpStatus.OK);
     }
 
     @GetMapping

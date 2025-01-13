@@ -73,6 +73,69 @@ public class ProjectService {
                 .build());
     }
 
+    public Project updateProject(ProjectCreationRequest request, int projectId) throws Exception {
+        Project project = findProjectById(projectId);
+        if(request.getName() != null){
+            project.setName(request.getName());
+        }
+        if(request.getIntroduce() != null){
+            project.setIntroduce(request.getIntroduce());
+        }
+        if(request.getFormationProject() != null){
+            project.setFormationProject(request.getFormationProject());
+        }
+
+        if(request.getStartUpIdea()!=null){
+            project.setStartUpIdea(request.getStartUpIdea());
+        }
+        if(request.getField() !=null){
+            project.setField(request.getField());
+        }
+
+        if(request.getRealTotalCapital()>0){
+            project.setRealTotalCapital(request.getRealTotalCapital());
+        }
+        if(request.getFiles() != null){
+            project.setFiles(request.getFiles());
+        }
+        if(request.getFounders()!=null){
+            project.setFounders(request.getFounders());
+        }
+        if(request.getPhone()!=null){
+            project.setPhone(request.getPhone());
+        }
+        if(request.getEmail()!=null){
+            project.setEmail(request.getEmail());
+        }
+        if(request.getAddress()!=null){
+            project.setAddress(request.getAddress());
+        }
+        if(request.getLinkWeb()!=null){
+            project.setLinkWeb(request.getLinkWeb());
+        }
+        if(request.getBusinessModel()!=null){
+            project.setBusinessModel(request.getBusinessModel());
+        }
+        if(request.getMainTechnology()!=null){
+            project.setMainTechnology(request.getMainTechnology());
+        }
+        if(request.getPitchDeck()!=null){
+            project.setPitchDeck(request.getPitchDeck());
+        }
+        if(request.getBusinessRegistrationCertificate()!=null){
+            project.setBusinessRegistrationCertificate(request.getBusinessRegistrationCertificate());
+        }
+        if(request.getPatent()!=null){
+            project.setPatent(request.getPatent());
+        }
+        if(request.getGreenSustainableElement()!=null){
+            project.setGreenSustainableElement(request.getGreenSustainableElement());
+        }
+
+        project.setUpdateAt(LocalDateTime.now());
+        return projectRepository.save(project);
+
+    }
     public void setValid(int projectId){
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(()-> new RuntimeException("Project not found!"));
