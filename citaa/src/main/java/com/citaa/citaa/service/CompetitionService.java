@@ -36,11 +36,10 @@ public class CompetitionService {
     public Competition createCompetition(String jwt, CompetitionRequest req) throws Exception {
         User admin = userService.findByJwt(jwt);
 
-        // Tạo đối tượng Competition mới
         Competition newCompetition = Competition.builder()
                 .name(req.getName())
                 .introduce(req.getIntroduce())
-                .content(req.getDescription())
+                .content(req.getContent())
                 .files(req.getFiles())
                 .fields(req.getFields())
                 .judges(req.getJudges())
@@ -69,6 +68,40 @@ public class CompetitionService {
         return competitionRepository.save(newCompetition);
     }
 
+    public Competition updateCompetition(int id, CompetitionRequest req) throws Exception {
+
+        Competition compe = findCompetitionById(id);
+
+        compe.setName(req.getName());
+        compe.setIntroduce(req.getIntroduce());
+        compe.setContent(req.getContent());
+        compe.setFiles(req.getFiles());
+        compe.setFields(req.getFields());
+        compe.setJudges(req.getJudges());
+        compe.setUpdateAt(LocalDateTime.now());
+        compe.setStartAt(req.getStartAt());
+        compe.setEndAt(req.getEndAt());
+        compe.setFirst(req.getFirst());
+        compe.setSecond(req.getSecond());
+        compe.setThird(req.getThird());
+
+        List<TimelineEvent> currentEvents = compe.getTimelineEvents();
+
+        // Xóa các TimelineEvent cũ
+        timelineEventRepository.deleteAll(currentEvents);
+        currentEvents.clear();
+
+        for(int i=0;i< req.getNumberOfStages();i++){
+            TimelineEvent event = new TimelineEvent();
+            event.setEventName(req.getStages().get(i));
+            event.setDescription(req.getDescriptionStages().get(i));
+            event.setEventTime(req.getDateStages().get(i));
+            event.setCompetition(compe);
+            compe.getTimelineEvents().add(event);
+        }
+
+        return competitionRepository.save(compe);
+    }
     public Competition findCompetitionById(int id) throws Exception {
         Optional<Competition> competition = competitionRepository.findById(id);
         if(competition.isEmpty()){

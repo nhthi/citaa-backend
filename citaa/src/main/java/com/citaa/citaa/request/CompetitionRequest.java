@@ -17,7 +17,7 @@ import java.util.List;
 public class CompetitionRequest {
     String name;
     String introduce;
-    String description;
+    String content;
     List<String> fields = new ArrayList<>();
     List<String> files = new ArrayList<>();
     List<User> judges = new ArrayList<>();

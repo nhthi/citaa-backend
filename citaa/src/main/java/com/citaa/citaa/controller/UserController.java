@@ -106,4 +106,13 @@ public class UserController {
         return new ResponseEntity<>(userService.sendRequestValidUser(jwt),HttpStatus.OK);
     }
 
+    @GetMapping("/filter")
+    public ResponseEntity<Page<User>> filterUser(@RequestParam(defaultValue = "0") String province,
+                                                 @RequestParam(defaultValue = "0") String fieldFilter,
+                                                 @RequestParam(defaultValue = "0") String query,
+                                                 @RequestParam(defaultValue = "ROLE_STARTUP") String role,
+                                                                              @RequestParam(defaultValue = "1") int pageSize,@RequestParam(defaultValue = "0") int pageNumber) throws Exception {
+        return new ResponseEntity<>(userService.findByProvinceAndFieldAndQuery(province,role,fieldFilter,query,pageSize,pageNumber),HttpStatus.OK);
+    }
+
 }

@@ -119,6 +119,11 @@ public class AdminController {
         return new ResponseEntity<>(competitionService.createCompetition(jwt, competition), HttpStatus.CREATED);
     }
 
+    @PutMapping("/competition/{id}")
+    public ResponseEntity<Competition> updateCompetition(@RequestBody CompetitionRequest competition, @RequestHeader("Authorization") String jwt,@PathVariable int id) throws Exception {
+        return new ResponseEntity<>(competitionService.updateCompetition(id, competition), HttpStatus.OK);
+    }
+
     @GetMapping("/competition")
     public ResponseEntity<Page<Competition>> filterCompetition(@RequestParam List<String> fields,
                                                                @RequestParam(defaultValue = "0") int year,

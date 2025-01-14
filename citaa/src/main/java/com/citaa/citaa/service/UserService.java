@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -477,4 +478,35 @@ public class UserService {
         res.setMessage("Đã duyệt tài khoản.");
         return res;
     }
+
+    public Page<User> findByProvinceAndFieldAndQuery(String province, String role, String fieldFilter, String query, int pageSize, int pageNumber) {
+        List<User> users = userRepository.findByProvinceAndFieldAndQuery(province, role, query);
+
+        // Lọc theo fieldFilter nếu có
+        if (fieldFilter != null && !fieldFilter.isEmpty() && !fieldFilter.equalsIgnoreCase("0")) {
+            users = users.stream()
+                    .filter(user -> user.getFields().stream().anyMatch(field -> field.equalsIgnoreCase(fieldFilter)))
+                    .collect(Collectors.toList());
+        }
+
+        // Tạo đối tượng Pageable
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+
+        // Xử lý logic phân trang
+        int startIndex = (int) pageable.getOffset();
+        int endIndex = Math.min(startIndex + pageSize, users.size());
+
+        // Kiểm tra nếu startIndex vượt quá kích thước danh sách
+        if (startIndex >= users.size()) {
+            return new PageImpl<>(Collections.emptyList(), pageable, users.size());
+        }
+
+        // Lấy danh sách con cho trang hiện tại
+        List<User> pageContent = users.subList(startIndex, endIndex);
+
+        // Trả về đối tượng Page
+        return new PageImpl<>(pageContent, pageable, users.size());
+    }
+
+
 }
