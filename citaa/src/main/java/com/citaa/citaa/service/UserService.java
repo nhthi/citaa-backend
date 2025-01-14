@@ -479,8 +479,8 @@ public class UserService {
         return res;
     }
 
-    public Page<User> findByProvinceAndFieldAndQuery(String province, String role, String fieldFilter, String query, int pageSize, int pageNumber) {
-        List<User> users = userRepository.findByProvinceAndFieldAndQuery(province, role, query);
+    public Page<User> findByProvinceAndFieldAndQuery(String province, String role, String fieldFilter, String query,String valid, int pageSize, int pageNumber) {
+        List<User> users = userRepository.findByProvinceAndFieldAndQuery(province, role, query,valid);
 
         // Lọc theo fieldFilter nếu có
         if (fieldFilter != null && !fieldFilter.isEmpty() && !fieldFilter.equalsIgnoreCase("0")) {

@@ -63,7 +63,7 @@ public class Competition {
     double first = 0;
     double second=0;
     double third = 0;
-
+    double mostVote = 0;
 
     // Phương thức được gọi trước khi lưu entity mới
     @PrePersist

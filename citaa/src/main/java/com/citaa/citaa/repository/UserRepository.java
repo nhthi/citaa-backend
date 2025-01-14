@@ -24,6 +24,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("SELECT u FROM User u " +
             "WHERE (u.account.role = :role) and" +
             " (:province = '0'  OR u.address LIKE %:province%)" +
-            "and (:query = '0' or u.fullName like %:query%)")
-    List<User> findByProvinceAndFieldAndQuery(@Param("province") String province , String role, String query);
+            "and (:query = '0' or u.fullName like %:query%)" +
+            "and (:valid ='0' or u.valid = :valid)")
+    List<User> findByProvinceAndFieldAndQuery(@Param("province") String province , String role, String query,String valid);
 }

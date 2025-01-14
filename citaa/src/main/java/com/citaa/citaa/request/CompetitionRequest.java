@@ -24,6 +24,7 @@ public class CompetitionRequest {
     double first = 0;
     double second = 0;
     double third = 0;
+    double mostVote = 0;
     LocalDate startAt;
     LocalDate endAt;
     int numberOfStages = 0;

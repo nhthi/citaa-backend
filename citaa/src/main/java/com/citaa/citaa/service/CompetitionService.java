@@ -35,7 +35,6 @@ public class CompetitionService {
 
     public Competition createCompetition(String jwt, CompetitionRequest req) throws Exception {
         User admin = userService.findByJwt(jwt);
-
         Competition newCompetition = Competition.builder()
                 .name(req.getName())
                 .introduce(req.getIntroduce())
@@ -52,6 +51,7 @@ public class CompetitionService {
                 .first(req.getFirst())
                 .second(req.getSecond())
                 .third(req.getThird())
+                .mostVote(req.getMostVote())
                 // Khởi tạo danh sách timelineEvents
                 .build();
 
@@ -84,7 +84,7 @@ public class CompetitionService {
         compe.setFirst(req.getFirst());
         compe.setSecond(req.getSecond());
         compe.setThird(req.getThird());
-
+        compe.setMostVote(req.getMostVote());
         List<TimelineEvent> currentEvents = compe.getTimelineEvents();
 
         // Xóa các TimelineEvent cũ
