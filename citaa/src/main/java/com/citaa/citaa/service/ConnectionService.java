@@ -52,11 +52,6 @@ public class ConnectionService {
         request.setResponse(response);
         connectionRequestRepository.save(request);
 
-        ConnectionHistory history = new ConnectionHistory();
-        history.setConnectionRequest(request);
-        history.setAction(status);
-        history.setActionDate(LocalDateTime.now());
-        connectionHistoryRepository.save(history);
         MessageResponse res = new MessageResponse();
         res.setStatus(200);
         res.setMessage("Phàn hồi yêu cầu kết nối thành công");

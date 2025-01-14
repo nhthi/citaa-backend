@@ -32,4 +32,5 @@ public class ConnectionRequest {
     private String status; // PENDING, ACCEPTED, REJECTED
     private LocalDateTime requestDate;
     private LocalDateTime responseDate;
+
 }

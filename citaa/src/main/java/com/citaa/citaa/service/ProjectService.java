@@ -32,6 +32,10 @@ public class ProjectService {
     CompetitionRepository competitionRepository;
     @Autowired
     ReactRepository reactRepository;
+    @Autowired
+    ExpertRepository expertRepository;
+    @Autowired
+    ConnectionRequestRepository connectionRequestRepository;
 
     public double calculateAveragePoints(int projectId){
         double avg = 0;
@@ -268,17 +272,29 @@ public class ProjectService {
     }
 
     public ApiResponse deleteProjectById(int id) throws Exception {
+
         ApiResponse res = new ApiResponse();
         Project project = getProjectById(id);
         List<Vote> votes = voteRepository.findVoteByProjectId(project.getId());
+
         for(Vote vote: votes){
             voteRepository.delete(vote);
         }
+
         List<Competition> competitions = competitionRepository.findAllByProjectsContaining(project);
         for (Competition competition : competitions) {
             competition.getProjects().remove(project);
             competitionRepository.save(competition);
         }
+
+        for (Expert expert : project.getExperts()) {
+            expert.getProjects().remove(project);
+            expertRepository.save(expert);
+        }
+
+        List<ConnectionRequest> cons = connectionRequestRepository.findByProjectId(project.getId());
+        connectionRequestRepository.deleteAll(cons);
+
         projectRepository.delete(project);
         res.setMessage("Xóa thành công");
         res.setStatus(200);
