@@ -23,6 +23,9 @@ public class AdminProjectOverview {
     long validProjects = 0;
     long unvalidProjects = 0;
 
+    long connectionProjects = 0;
+
     List<Project> topPointProjects = new ArrayList<>();
     List<Project> topReactProjects = new ArrayList<>();
+    List<Object[]> topConnectionProjects = new ArrayList<>();
 }

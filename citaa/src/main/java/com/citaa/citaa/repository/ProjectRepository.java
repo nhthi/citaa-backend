@@ -18,11 +18,13 @@ public interface ProjectRepository extends JpaRepository<Project, Integer> {
     @Query("select p from Project p where (:minCapital=0  or p.realTotalCapital >= :minCapital)" +
             "and  (:status = '0' or p.status= :status) " +
             "and (:year = 0 or YEAR(p.createAt) = :year)" +
-            "and (:countExpert = -1 or (:countExpert = 3 and p.countExpert = 3) or (:countExpert = 2 and p.countExpert < 3))")
+            "and (:countExpert = -1 or (:countExpert = 3 and p.countExpert = 3) or (:countExpert = 2 and p.countExpert < 3))"
+            )
     public List<Project> filterProjects(@Param("minCapital") double minCapital,
                                         @Param("status") String status,
                                         @Param("year") int year,
-                                        @Param("countExpert") int countExpert);
+                                        @Param("countExpert") int countExpert
+    );
 
     @Query("select p from Project p where p.avg > 0 ")
     public List<Project> getTopProjectPotential();
@@ -63,4 +65,6 @@ public interface ProjectRepository extends JpaRepository<Project, Integer> {
 
     @Query( "SELECT p FROM Project p where (:year = 0 or YEAR(p.createAt) = :year) AND (:month = 0 or MONTH(p.createAt) = :month) ORDER BY SIZE(p.reactList) DESC ")
     List<Project> findTop3ByReact(Pageable pageable, int year, int month);
+
+
 }

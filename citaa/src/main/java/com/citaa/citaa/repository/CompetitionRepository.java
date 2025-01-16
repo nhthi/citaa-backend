@@ -63,4 +63,15 @@ public interface CompetitionRepository extends JpaRepository<Competition, Intege
             "(:status = 'upcoming' AND c.startAt > CURRENT_DATE))")
     List<Competition> filterByJudge(User judge, String status);
 
+
+    @Query("SELECT c FROM Competition c JOIN c.startupAppliedTimes sa WHERE key(sa) = :startupId and" +
+            "(:year = 0 or year(c.startAt)=:year) and (:field='0' or :field MEMBER OF c.fields )" +
+            "and (:status = 'all' OR (:status = 'ongoing' AND c.startAt <= CURRENT_DATE AND c.endAt >= CURRENT_DATE) OR (:status = 'ended' AND c.endAt < CURRENT_DATE) OR " +
+            "(:status = 'upcoming' AND c.startAt > CURRENT_DATE))")
+    List<Competition> findCompetitionsByStartupId(@Param("startupId") int startupId,int year,String field,String status);
+
+    @Query("SELECT c, (c.first + c.second + c.third + c.mostVote) AS totalReward " +
+            "FROM Competition c " +
+            "ORDER BY (c.first + c.second + c.third + c.mostVote) DESC")
+    List<Object[]> findCompetitionsByHighestReward();
 }

@@ -41,6 +41,10 @@ public class AdminController {
     private EvaluationService evaluationService;
     @Autowired
     private EvaluationCompetitionService evaluationCompetitionService;
+    @Autowired
+    ConnectionService connectionService;
+
+
 
     @PostMapping("/add-to-expert/{projectId}")
     public ResponseEntity<Project> addProjectToExpert(@PathVariable int projectId, @RequestBody ExpertProjectRequest req) throws Exception {
@@ -166,6 +170,11 @@ public class AdminController {
         return new ResponseEntity<>(evaluationService.getTop3ExpertMostEvaluation(year, month), HttpStatus.OK);
     }
 
+    @GetMapping("/investor/top-3")
+    public ResponseEntity<List<Object[]>> getTop3Investor(@RequestHeader("Authorization") String jwt, @RequestParam(defaultValue = "0") int year, @RequestParam(defaultValue = "0") int month) throws Exception {
+        return new ResponseEntity<>(connectionService.getTop3InvestorMostConnection(year, month), HttpStatus.OK);
+    }
+
     @PutMapping("/user/status")
     public ResponseEntity<User> updateStatusUser(@RequestHeader("Authorization") String jwt, @RequestBody UpdateStatusUserRequest req) throws Exception {
         System.out.println(req.getStatus());
@@ -178,8 +187,8 @@ public class AdminController {
     }
 
     @GetMapping("/overview-project")
-    public ResponseEntity<AdminProjectOverview> getAdminProjectOverview(@RequestHeader("Authorization") String jwt, @RequestParam(defaultValue = "0") int year, @RequestParam(defaultValue = "0") int month) throws Exception {
-        return new ResponseEntity<>(userService.getAdminProjectOverview(jwt, year, month), HttpStatus.OK);
+    public ResponseEntity<AdminProjectOverview> getAdminProjectOverview( @RequestParam(defaultValue = "0") int year, @RequestParam(defaultValue = "0") int month) throws Exception {
+        return new ResponseEntity<>(userService.getAdminProjectOverview( year, month), HttpStatus.OK);
     }
 
     @GetMapping("/competition/evaluation/judge/{id}")

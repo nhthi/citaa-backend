@@ -65,6 +65,11 @@ public class Competition {
     double third = 0;
     double mostVote = 0;
 
+    boolean isRanked = false;
+
+    @OneToMany(mappedBy = "competition", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<CompetitionRanking> rankings = new ArrayList<>();
+
     // Phương thức được gọi trước khi lưu entity mới
     @PrePersist
     protected void onCreate() {

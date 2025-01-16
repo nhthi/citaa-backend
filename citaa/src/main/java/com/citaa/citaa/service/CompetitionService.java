@@ -1,17 +1,21 @@
 package com.citaa.citaa.service;
 
 import com.citaa.citaa.model.*;
+import com.citaa.citaa.repository.CompetitionRankingRepository;
 import com.citaa.citaa.repository.CompetitionRepository;
 import com.citaa.citaa.repository.TimelineEventRepository;
 import com.citaa.citaa.repository.VoteRepository;
 import com.citaa.citaa.request.CompetitionRequest;
+import com.citaa.citaa.request.CreateRankingRequest;
 import com.citaa.citaa.response.AdminCompetitionResponse;
 import com.citaa.citaa.response.ApiResponse;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -32,6 +36,9 @@ public class CompetitionService {
     ProjectService projectService;
     @Autowired
     private VoteRepository voteRepository;
+    @Autowired
+    CompetitionRankingRepository competitionRankingRepository;
+
 
     public Competition createCompetition(String jwt, CompetitionRequest req) throws Exception {
         User admin = userService.findByJwt(jwt);
@@ -55,7 +62,7 @@ public class CompetitionService {
                 // Khởi tạo danh sách timelineEvents
                 .build();
 
-        for(int i=0;i< req.getNumberOfStages();i++){
+        for (int i = 0; i < req.getNumberOfStages(); i++) {
             TimelineEvent event = new TimelineEvent();
             event.setEventName(req.getStages().get(i));
             event.setDescription(req.getDescriptionStages().get(i));
@@ -91,7 +98,7 @@ public class CompetitionService {
         timelineEventRepository.deleteAll(currentEvents);
         currentEvents.clear();
 
-        for(int i=0;i< req.getNumberOfStages();i++){
+        for (int i = 0; i < req.getNumberOfStages(); i++) {
             TimelineEvent event = new TimelineEvent();
             event.setEventName(req.getStages().get(i));
             event.setDescription(req.getDescriptionStages().get(i));
@@ -102,10 +109,11 @@ public class CompetitionService {
 
         return competitionRepository.save(compe);
     }
+
     public Competition findCompetitionById(int id) throws Exception {
         Optional<Competition> competition = competitionRepository.findById(id);
-        if(competition.isEmpty()){
-            throw new Exception("Competition not found with id : "+id);
+        if (competition.isEmpty()) {
+            throw new Exception("Competition not found with id : " + id);
         }
         return competition.get();
     }
@@ -142,7 +150,7 @@ public class CompetitionService {
             return res;
         }
 
-        if(project.getStartup().getId() != candidate.getId()){
+        if (project.getStartup().getId() != candidate.getId()) {
             res.setStatus(400);
             res.setMessage("Đây không phải dự án của bạn");
             return res;
@@ -161,7 +169,7 @@ public class CompetitionService {
             return res;
         }
         // Ghi nhận thời gian đăng ký của Candidate
-        competition.getStartupAppliedTimes().put( candidate.getId(), LocalDateTime.now());
+        competition.getStartupAppliedTimes().put(candidate.getId(), LocalDateTime.now());
 
         // Thêm Project vào danh sách Projects của Competition
         competition.getProjects().add(project);
@@ -190,8 +198,8 @@ public class CompetitionService {
 
         // Kiểm tra nếu người dùng đã bình chọn cho dự án này trong cuộc thi này
         List<Vote> votes = voteRepository.findVoteByCompetitionIdandProjectId(competitionId, projectId);
-        for(Vote vote: votes){
-            if(vote.getUserId() == voter.getId()){
+        for (Vote vote : votes) {
+            if (vote.getUserId() == voter.getId()) {
                 voteRepository.delete(vote);
                 res.setStatus(200);
                 res.setMessage("Đã hủy bình chọn!");
@@ -199,8 +207,8 @@ public class CompetitionService {
             }
         }
         List<Vote> voteCompetition = voteRepository.findVoteByCompetitionId(competitionId);
-        for(Vote vote: voteCompetition){
-            if(vote.getUserId() == voter.getId()){
+        for (Vote vote : voteCompetition) {
+            if (vote.getUserId() == voter.getId()) {
                 voteRepository.delete(vote);
             }
         }
@@ -223,8 +231,8 @@ public class CompetitionService {
         return voteRepository.findVoteByCompetitionId(competitionId);
     }
 
-    public Page<Competition> filterCompetition( int pageNumber, int pageSize,String year, String field, String status ) throws Exception {
-        List<Competition> competitions = competitionRepository.filterCompetition(year,field,status);
+    public Page<Competition> filterCompetition(int pageNumber, int pageSize, String year, String field, String status) throws Exception {
+        List<Competition> competitions = competitionRepository.filterCompetition(year, field, status);
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         int startIndex = (int) pageable.getOffset();
         int endIndex = Math.min(startIndex + pageable.getPageSize(), competitions.size());
@@ -233,11 +241,11 @@ public class CompetitionService {
         return filteredCompetition;
     }
 
-    public long countCompetition(){
+    public long countCompetition() {
         return competitionRepository.count();
     }
 
-    public Page<Competition> filterAllCompetition( int pageNumber, int pageSize,int year, List<String> fields ) throws Exception {
+    public Page<Competition> filterAllCompetition(int pageNumber, int pageSize, int year, List<String> fields) throws Exception {
         List<Competition> competitions = competitionRepository.filterAllCompetition(year);
 
         if (fields != null && !fields.isEmpty()) {
@@ -262,7 +270,7 @@ public class CompetitionService {
         ApiResponse res = new ApiResponse();
         Competition competition = findCompetitionById(id);
         List<Vote> votes = voteRepository.findVoteByCompetitionId(competition.getId());
-        for(Vote vote: votes){
+        for (Vote vote : votes) {
             voteRepository.delete(vote);
         }
         competitionRepository.delete(competition);
@@ -281,8 +289,8 @@ public class CompetitionService {
         res.setEndedCompetition(endedCompetition);
         res.setUpcomingCompetition(upcomingCompetition);
 
-        int agricultureCompetition = competitionRepository.findByField("Agriculture",year,month).size();
-        int aquacultureCompetition = competitionRepository.findByField("Aquaculture",year,month).size();
+        int agricultureCompetition = competitionRepository.findByField("Agriculture", year, month).size();
+        int aquacultureCompetition = competitionRepository.findByField("Aquaculture", year, month).size();
 
         res.setAgricultureCompetition(agricultureCompetition);
         res.setAquacultureCompetition(aquacultureCompetition);
@@ -293,10 +301,11 @@ public class CompetitionService {
 
         Pageable pageable = PageRequest.of(0, 3); // Trang đầu tiên với 3 kết quả
 
-        List<Competition> topJoin = competitionRepository.findTop3ByProjectsCount(pageable,year,month);
-        List<Competition> topReward = new ArrayList<>();
-        List<Object[]> topVote = voteRepository.findTopCompetitionsByVoteCount(pageable,year,month);
-
+        List<Competition> topJoin = competitionRepository.findTop3ByProjectsCount(pageable, year, month);
+        List<Object[]> topReward = competitionRepository.findCompetitionsByHighestReward();
+        List<Object[]> topVote = voteRepository.findTopCompetitionsByVoteCount(pageable, year, month);
+        topReward = topReward.size() > 3 ? topReward.subList(0, 3) : topReward;
+        topVote = topVote.size() > 3 ? topVote.subList(0, 3) : topVote;
         res.setTopJoin(topJoin);
         res.setTopReward(topReward);
         res.setTopVote(topVote);
@@ -304,8 +313,40 @@ public class CompetitionService {
         return res;
     }
 
-    public List<Competition> getCompetitionByJudge(String jwt,String status) throws Exception {
+    public List<Competition> getCompetitionByJudge(String jwt, String status) throws Exception {
         User user = userService.findByJwt(jwt);
-        return competitionRepository.filterByJudge(user,status);
+        return competitionRepository.filterByJudge(user, status);
+    }
+
+
+    public Page<Competition> findCompetitionByStartup(String jwt, int pageSize, int pageNumber, int year, String field, String status) throws Exception {
+        User user = userService.findByJwt(jwt);
+        List<Competition> coms = competitionRepository.findCompetitionsByStartupId(user.getId(), year, field, status);
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        int startIndex = (int) pageable.getOffset();
+        int endIndex = Math.min(startIndex + pageable.getPageSize(), coms.size());
+        List<Competition> pageContent = coms.subList(startIndex, endIndex);
+        Page<Competition> filteredCompetition = new PageImpl<>(pageContent, pageable, coms.size());
+        return filteredCompetition;
+    }
+
+    public Competition createRanking(int competitionId, List<CreateRankingRequest> reqs) throws Exception {
+        Competition competition = findCompetitionById(competitionId);
+        competition.getRankings().clear();
+        for (CreateRankingRequest req : reqs) {
+            Project pro = projectService.findProjectById(req.getProjectId());
+            CompetitionRanking ranking = CompetitionRanking.builder()
+                    .competition(competition)
+                    .project(pro)
+                    .rank(req.getRank())
+                    .score(req.getScore())
+                    .vote(req.getVote())
+                    .isVotest(req.isVotest())
+                    .build();
+            competition.getRankings().add(ranking);
+        }
+        competition.setRanked(true);
+        return competitionRepository.save(competition);
     }
 }

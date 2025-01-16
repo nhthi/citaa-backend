@@ -179,6 +179,16 @@ public class ProjectService {
         return project.get();
     }
 
+    public Project findProjectByIdAndValid(int id,String status) throws Exception {
+        Project project = findProjectById(id);
+        if(status.equalsIgnoreCase("VALID")){
+            if(project.getStatus().equalsIgnoreCase("VALID"))
+                return project;
+            else return null;
+        }
+        return project;
+    }
+
     public Project likeProject(int projectId, String jwt) throws Exception {
         Project project = findProjectById(projectId);
         User user = userService.findByJwt(jwt);
@@ -214,14 +224,22 @@ public class ProjectService {
         return projectRepository.save(project);
     }
 
-    public Page<Project> filterProject(List<String> fields, double minCapital, String status, int pageNumber, int pageSize,int year,int countExpert) {
+    public Page<Project> filterProject(List<String> fields, double minCapital, String status, int pageNumber, int pageSize,int year,int countExpert,String potential) {
         List<Project> projects = projectRepository.filterProjects(minCapital, status,year,countExpert);
+
+        if(potential.equalsIgnoreCase("isPotential")){
+            projects = projects.stream()
+                    .filter(Project::isPotential)
+                    .collect(Collectors.toList());
+        }
 
         if (fields != null && !fields.isEmpty()) {
             projects = projects.stream()
                     .filter(project -> fields.stream().anyMatch(field -> field.equalsIgnoreCase(project.getField())))
                     .collect(Collectors.toList());
         }
+
+
 
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         int startIndex = (int) pageable.getOffset();
@@ -236,8 +254,21 @@ public class ProjectService {
         return new PageImpl<>(pageContent, pageable, projects.size());
     }
 
-    public Page<Project> getProjectByExpertId(int projectId, int pageNumber, int pageSize) throws Exception {
+    public Page<Project> getProjectByExpertId(List<String> fields, double minCapital,int projectId, int pageNumber, int pageSize) throws Exception {
         List<Project> projects = userService.getProjectByExpertId(projectId);
+
+
+        projects = projects.stream()
+                .filter(project -> project.getRealTotalCapital() >= minCapital).collect(Collectors.toList());
+
+        if (fields != null && !fields.isEmpty()) {
+            projects = projects.stream()
+                    .filter(project -> fields.stream().anyMatch(field -> field.equalsIgnoreCase(project.getField())))
+                    .collect(Collectors.toList());
+        }
+
+
+
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
 
         int startIndex = (int) pageable.getOffset();
@@ -291,6 +322,9 @@ public class ProjectService {
             expert.getProjects().remove(project);
             expertRepository.save(expert);
         }
+
+        List<Evaluation> evaluations = evaluationRepository.findByProjectId(id);
+        evaluationRepository.deleteAll(evaluations);
 
         List<ConnectionRequest> cons = connectionRequestRepository.findByProjectId(project.getId());
         connectionRequestRepository.deleteAll(cons);

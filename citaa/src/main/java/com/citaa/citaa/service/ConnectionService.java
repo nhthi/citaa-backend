@@ -1,7 +1,6 @@
 package com.citaa.citaa.service;
 
 import com.citaa.citaa.model.*;
-import com.citaa.citaa.repository.ConnectionHistoryRepository;
 import com.citaa.citaa.repository.ConnectionRequestRepository;
 import com.citaa.citaa.response.MessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +19,6 @@ public class ConnectionService {
 
     @Autowired
     private ConnectionRequestRepository connectionRequestRepository;
-    @Autowired
-    private ConnectionHistoryRepository connectionHistoryRepository;
     @Autowired
     UserService userService;
     @Autowired
@@ -113,4 +110,11 @@ public class ConnectionService {
         List<ConnectionRequest> pageContent = connections.subList(startIndex, endIndex);
         return new PageImpl<>(pageContent, pageable, connections.size());
     }
+    public List<Object[]> getTop3InvestorMostConnection(int year, int month) {
+        List<Object[]> results = connectionRequestRepository.findTopInvestorWithConnections(year,month);
+        return results.stream()
+                .limit(3)
+                .collect(Collectors.toList());
+    }
+
 }

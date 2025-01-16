@@ -50,13 +50,14 @@ public class ProjectController {
     }
     @GetMapping("/filter")
     public ResponseEntity<Page<Project>> findProjectByCategoryHandler(
-            @RequestParam(required = false) List<String> fields, @RequestParam(required = false) double minCapital,
+            @RequestParam(required = false) List<String> fields, @RequestParam(defaultValue = "0") double minCapital,
              @RequestParam(required = false) String status, @RequestParam(required = false) int pageNumber, @RequestParam(required = false) int pageSize,
             @RequestParam(defaultValue = "0") int year,
-            @RequestParam(defaultValue = "-1") int countExpert
+            @RequestParam(defaultValue = "-1") int countExpert,
+            @RequestParam(defaultValue = "0")String potential
     ) {
         Page<Project> res = projectService.filterProject(
-                fields,minCapital,status, pageNumber, pageSize,year,countExpert
+                fields,minCapital,status, pageNumber, pageSize,year,countExpert,potential
         );
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
@@ -69,8 +70,12 @@ public class ProjectController {
     }
 
     @GetMapping("/expert/{id}")
-    public ResponseEntity<Page<Project>> getExpertProjectsById( @PathVariable("id") int id,@RequestParam(required = false) int pageNumber, @RequestParam(required = false) int pageSize) throws Exception {
-        Page<Project> projects = projectService.getProjectByExpertId(id, pageNumber, pageSize);
+    public ResponseEntity<Page<Project>> getExpertProjectsById(
+            @RequestParam(required = false) List<String> fields,
+            @RequestParam(required = false) double minCapital,
+            @PathVariable("id") int id,@RequestParam(required = false) int pageNumber,
+            @RequestParam(required = false) int pageSize) throws Exception {
+        Page<Project> projects = projectService.getProjectByExpertId(fields,minCapital,id, pageNumber, pageSize);
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
@@ -89,9 +94,12 @@ public class ProjectController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Project> getProjectsById(@RequestHeader("Authorization") String jwt, @PathVariable("id") int id) throws Exception {
+    public ResponseEntity<Project> getProjectsById(@RequestHeader("Authorization") String jwt,
+                                                   @PathVariable("id") int id,
+                                                   @RequestParam(defaultValue = "0") String status
+    ) throws Exception {
         User user = userService.findByJwt(jwt);
-        Project project = projectService.getProjectById(id);
+        Project project = projectService.findProjectByIdAndValid(id,status);
         return new ResponseEntity<>(project, HttpStatus.OK);
     }
 

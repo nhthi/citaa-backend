@@ -50,6 +50,10 @@ public class UserService {
     CommentRepository commentRepository;
     @Autowired
     FeedbackRepository feedbackRepository;
+    @Autowired
+    ConnectionRequestRepository connectionRequestRepository;
+
+
 
     public List<User> getUsers() {
         return userRepository.findAll();
@@ -272,8 +276,11 @@ public class UserService {
     }
 
     public List<User> getTop5Investor() {
-        return investorRepository.findTop5ByOrderByExperienceYearsDesc().stream()
-                .map(investor -> (User) investor)
+
+        return connectionRequestRepository.findTop5InvestorsWithAcceptedConnections()
+                .stream()
+                .limit(5) // Lấy 5 kết quả đầu tiên
+                .map(result -> (User) result[0])
                 .collect(Collectors.toList());
     }
 
@@ -425,9 +432,7 @@ public class UserService {
         return response;
     }
 
-    public AdminProjectOverview getAdminProjectOverview(String jwt, int year, int month) throws Exception {
-        findByJwt(jwt);
-
+    public AdminProjectOverview getAdminProjectOverview( int year, int month) throws Exception {
 
         AdminProjectOverview res = new AdminProjectOverview();
 
@@ -437,13 +442,15 @@ public class UserService {
         long aquacultureProject = projectRepository.countProjectByYearAndMonthAndField(year, month, "Aquaculture");
         long technologyProject = projectRepository.countProjectByYearAndMonthAndField(year, month, "Technology");
         long otherProject = projectRepository.countProjectByYearAndMonth(year, month) - agricultureProject - aquacultureProject - technologyProject;
-
         long validProjects = projectRepository.countProjectByYearAndMonthAndStatus(year, month, "VALID");
         long unvalidProjects = projectRepository.countProjectByYearAndMonthAndStatus(year, month, "UNVALID");
-        ;
+
+        long connectionProjects = connectionRequestRepository.countProjectsWithAcceptedConnections(year, month);
 
         List<Project> topPointProjects = projectRepository.findTop3ByAvg(pageable, year, month);
         List<Project> topReactProjects = projectRepository.findTop3ByReact(pageable, year, month);
+        List<Object[]> topConnection = connectionRequestRepository.findTopProjectsWithConnections(pageable,year,month);
+
 
         res.setAgricultureProject(agricultureProject);
         res.setAquacultureProject(aquacultureProject);
@@ -451,8 +458,10 @@ public class UserService {
         res.setOtherProject(otherProject);
         res.setValidProjects(validProjects);
         res.setUnvalidProjects(unvalidProjects);
+        res.setConnectionProjects(connectionProjects);
         res.setTopPointProjects(topPointProjects);
         res.setTopReactProjects(topReactProjects);
+        res.setTopConnectionProjects(topConnection);
 
         return res;
     }

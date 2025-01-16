@@ -4,6 +4,7 @@ import com.citaa.citaa.model.Competition;
 import com.citaa.citaa.model.EvaluationCompetition;
 import com.citaa.citaa.model.Vote;
 import com.citaa.citaa.request.ApplyCompetitionRequest;
+import com.citaa.citaa.request.CreateRankingRequest;
 import com.citaa.citaa.request.EvaluationCompetitionRequest;
 import com.citaa.citaa.response.ApiResponse;
 import com.citaa.citaa.service.CompetitionService;
@@ -67,6 +68,16 @@ public class CompetitionController {
         return new ResponseEntity<>(competitionService.getCompetitionByJudge(jwt,status),HttpStatus.OK);
     }
 
+    @GetMapping("/api/competition/startup")
+    public ResponseEntity<Page<Competition>> getCompetitionByStartup(@RequestHeader("Authorization") String jwt,
+                                                                     @RequestParam(defaultValue = "1") int pageSize,
+                                                                     @RequestParam(defaultValue = "0") int pageNumber,
+                                                                     @RequestParam(defaultValue = "0") int year,
+                                                                     @RequestParam(defaultValue = "0") String field,
+                                                                     @RequestParam(defaultValue = "0") String status) throws Exception {
+        return new ResponseEntity<>(competitionService.findCompetitionByStartup(jwt,pageSize,pageNumber,year,field,status),HttpStatus.OK);
+    }
+
     @PostMapping("/api/competition/scoring")
     public ResponseEntity<EvaluationCompetition> createEvaluationCompetition(@RequestBody EvaluationCompetitionRequest request, @RequestHeader("Authorization") String jwt) throws Exception {
         return new ResponseEntity<>(evaluationCompetitionService.createEvaluationCompetition(request,jwt),HttpStatus.CREATED);
@@ -77,4 +88,8 @@ public class CompetitionController {
         return new ResponseEntity<>(evaluationCompetitionService.findByJudgeAndCompetitionId(id,jwt),HttpStatus.OK);
     }
 
+    @PostMapping("/api/competition/ranking/{id}")
+    public ResponseEntity<Competition> createRanking(@PathVariable int id,@RequestBody List<CreateRankingRequest> requests, @RequestHeader("Authorization") String jwt) throws Exception {
+        return new ResponseEntity<>(competitionService.createRanking(id , requests),HttpStatus.CREATED);
+    }
 }

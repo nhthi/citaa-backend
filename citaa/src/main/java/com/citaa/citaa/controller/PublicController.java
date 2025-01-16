@@ -56,7 +56,9 @@ public class PublicController {
     }
 
     @GetMapping("/news/search")
-    public ResponseEntity<List<News>> searchNews(@RequestParam(defaultValue = "Not found") String query){
-        return new ResponseEntity<>(newsService.searchNews(query),HttpStatus.OK);
+    public ResponseEntity<Page<News>> searchNews(@RequestParam(defaultValue = "Not found") String query,
+                                                 @RequestParam(defaultValue = "1")int pageSize,
+                                                 @RequestParam(defaultValue = "0")int pageNumber) throws Exception{
+        return new ResponseEntity<>(newsService.searchNews(query,pageSize,pageNumber),HttpStatus.OK);
     }
 }

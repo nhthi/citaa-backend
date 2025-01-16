@@ -42,8 +42,7 @@ public class Project {
     double avg = 0;
     @ManyToOne
     Startup startup;
-    @OneToMany(mappedBy = "project")
-    List<Investment> investments = new ArrayList<>();
+
     @OneToMany
     List<Evaluation> evaluation;
     @ElementCollection

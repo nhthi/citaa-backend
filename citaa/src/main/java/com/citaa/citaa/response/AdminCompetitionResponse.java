@@ -22,7 +22,7 @@ public class AdminCompetitionResponse {
     int otherCompetition = 0;
 
     List<Competition> topJoin = new ArrayList<>();
-    List<Competition> topReward = new ArrayList<>();
+    List<Object[]> topReward = new ArrayList<>();
     List<Object[]> topVote = new ArrayList<>();
 
 }

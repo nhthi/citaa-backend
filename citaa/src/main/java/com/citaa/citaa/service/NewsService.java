@@ -111,7 +111,15 @@ public class NewsService {
         return newsRepository.save(news);
     }
 
-    public List<News> searchNews(String query){
-        return newsRepository.searchNews(query);
+    public Page<News> searchNews(String query,int pageSize,int pageNumber){
+        List<News> newss = newsRepository.searchNews(query);
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        int startIndex = (int) pageable.getOffset();
+        int endIndex = Math.min(startIndex + pageable.getPageSize(), newss.size());
+
+        List<News> pageContent = newss.subList(startIndex, endIndex);
+        Page<News> filteredNews = new PageImpl<>(pageContent, pageable, newss.size());
+        return filteredNews;
     }
 }
