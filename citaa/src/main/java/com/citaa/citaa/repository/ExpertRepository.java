@@ -16,7 +16,7 @@ public interface ExpertRepository extends JpaRepository<Expert, Integer> {
 
     @Query("SELECT COUNT(c) " +
             "FROM Expert c " +
-            "WHERE (:year = 0 or YEAR(c.account.createAt) = :year) AND (:month = 0 or MONTH(c.account.createAt) = :month)")
+            "WHERE c.account.role='ROLE_EXPERT' and  (:year = 0 or YEAR(c.account.createAt) = :year) AND (:month = 0 or MONTH(c.account.createAt) = :month)")
     long countExpertByYearAndMonth(@Param("year") int year, @Param("month") int month);
 
 }

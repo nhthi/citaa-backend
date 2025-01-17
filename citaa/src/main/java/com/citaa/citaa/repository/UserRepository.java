@@ -20,7 +20,9 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("Select a from User a where a.account.role = 'ROLE_ADMIN'")
     public List<User> findAllAdmin();
 
-    ;
+    @Query("Select a from User a where a.account.role = 'ROLE_EXPERT'")
+    public List<User> findAllExpert();
+
     @Query("SELECT u FROM User u " +
             "WHERE (u.account.role = :role) and" +
             " (:province = '0'  OR u.address LIKE %:province%)" +

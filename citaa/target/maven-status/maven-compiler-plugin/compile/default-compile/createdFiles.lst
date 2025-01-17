@@ -52,7 +52,6 @@ com\citaa\citaa\model\Feedback.class
 com\citaa\citaa\request\UpdateStatusUserRequest.class
 com\citaa\citaa\request\EvaluationCompetitionRequest.class
 com\citaa\citaa\request\LoginRequest$LoginRequestBuilder.class
-com\citaa\citaa\model\Reward$RewardBuilder.class
 com\citaa\citaa\model\ConnectionRequest$ConnectionRequestBuilder.class
 com\citaa\citaa\controller\NotificationController.class
 com\citaa\citaa\model\TimelineEvent$TimelineEventBuilder.class
@@ -136,7 +135,6 @@ com\citaa\citaa\request\FeedbackCreationRequest$FeedbackCreationRequestBuilder.c
 com\citaa\citaa\request\UpdateUserRequest$UpdateUserRequestBuilder.class
 com\citaa\citaa\config\JwtProvider.class
 com\citaa\citaa\controller\FounderController.class
-com\citaa\citaa\model\Reward.class
 com\citaa\citaa\repository\NewsRepository.class
 com\citaa\citaa\model\EvaluationCompetition$EvaluationCompetitionBuilder.class
 com\citaa\citaa\model\TimelineEvent.class

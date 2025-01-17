@@ -58,7 +58,7 @@ public class AdminController {
     }
 
     @GetMapping("/all-expert")
-    public ResponseEntity<Page<Expert>> getAllExpert(@RequestParam("pageSize") int pageSize,
+    public ResponseEntity<Page<User>> getAllExpert(@RequestParam("pageSize") int pageSize,
                                                      @RequestParam("pageNumber") int pageNumber) throws Exception {
         return new ResponseEntity<>(userService.getAllExpert(pageSize, pageNumber), HttpStatus.OK);
     }

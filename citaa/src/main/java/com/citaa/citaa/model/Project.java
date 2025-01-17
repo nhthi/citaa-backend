@@ -65,6 +65,8 @@ public class Project {
     String businessRegistrationCertificate;
     // bang sáng chế
     String patent;
+    @Lob
+    @Column(columnDefinition = "TEXT")
     String greenSustainableElement;
 
     int countExpert=0;

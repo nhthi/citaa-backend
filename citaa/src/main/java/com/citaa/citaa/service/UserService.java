@@ -220,13 +220,13 @@ public class UserService {
         return filteredStartup;
     }
 
-    public Page<Expert> getAllExpert(int pageSize, int pageNumber) {
-        List<Expert> experts = expertRepository.findAll();
+    public Page<User> getAllExpert(int pageSize, int pageNumber) {
+        List<User> experts = userRepository.findAllExpert();
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         int startIndex = (int) pageable.getOffset();
         int endIndex = Math.min(startIndex + pageable.getPageSize(), experts.size());
-        List<Expert> pageContent = experts.subList(startIndex, endIndex);
-        Page<Expert> filteredExpert = new PageImpl<>(pageContent, pageable, experts.size());
+        List<User> pageContent = experts.subList(startIndex, endIndex);
+        Page<User> filteredExpert = new PageImpl<>(pageContent, pageable, experts.size());
         return filteredExpert;
     }
 

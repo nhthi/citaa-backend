@@ -72,7 +72,7 @@ public class ProjectController {
     @GetMapping("/expert/{id}")
     public ResponseEntity<Page<Project>> getExpertProjectsById(
             @RequestParam(required = false) List<String> fields,
-            @RequestParam(required = false) double minCapital,
+            @RequestParam(required = false,defaultValue = "0") double minCapital,
             @PathVariable("id") int id,@RequestParam(required = false) int pageNumber,
             @RequestParam(required = false) int pageSize) throws Exception {
         Page<Project> projects = projectService.getProjectByExpertId(fields,minCapital,id, pageNumber, pageSize);
