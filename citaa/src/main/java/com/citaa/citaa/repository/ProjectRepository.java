@@ -12,6 +12,10 @@ import java.util.List;
 @Repository
 public interface ProjectRepository extends JpaRepository<Project, Integer> {
 
+    @Query("select p from Project p where p.startup.id =:startupId and (:status ='0' or p.status =:status)")
+    public List<Project> findByStartupIdAndStatus(@Param("startupId") int startupId,
+                                         String status);
+
     @Query("select p from Project p where p.startup.id =:startupId")
     public List<Project> findByStartupId(@Param("startupId") int startupId);
 

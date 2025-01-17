@@ -63,9 +63,13 @@ public class ProjectController {
     }
 
     @GetMapping("/startup/{id}")
-    public ResponseEntity<List<Project>> getStartupProjectsById(@RequestHeader("Authorization") String jwt, @PathVariable("id") int id) throws Exception {
+    public ResponseEntity<Page<Project>> getStartupProjectsById(@RequestHeader("Authorization") String jwt, @PathVariable("id") int id,
+                                                                @RequestParam(required = false) List<String> fields,
+                                                                @RequestParam(required = false,defaultValue = "0") int pageNumber,
+                                                                @RequestParam(required = false,defaultValue = "0") int pageSize,
+                                                                @RequestParam(defaultValue = "0")String status) throws Exception {
         User user = userService.findByJwt(jwt);
-        List<Project> projects = projectService.getProjectsByStartupId(id);
+        Page<Project> projects = projectService.getProjectsByStartupId(id,fields,status,pageNumber,pageSize);
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 

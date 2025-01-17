@@ -56,12 +56,12 @@ public interface CompetitionRepository extends JpaRepository<Competition, Intege
             "WHERE (:year = 0 or YEAR(c.createAt) = :year) AND (:month = 0 or MONTH(c.createAt) = :month)")
     long countCompetitionByYearAndMonth(@Param("year") int year, @Param("month") int month);
 
-    @Query("SELECT c FROM Competition c JOIN c.judges j WHERE j = :judge and" +
-            "( :status = 'all' or" +
+    @Query("SELECT c FROM Competition c JOIN c.judges j WHERE j.id = :id and" +
+            "( :status = '0' or" +
             "(:status = 'ongoing' AND c.startAt <= CURRENT_DATE AND c.endAt >= CURRENT_DATE) OR " +
             "(:status = 'ended' AND c.endAt < CURRENT_DATE) OR " +
             "(:status = 'upcoming' AND c.startAt > CURRENT_DATE))")
-    List<Competition> filterByJudge(User judge, String status);
+    List<Competition> filterByJudge(int id, String status);
 
 
     @Query("SELECT c FROM Competition c JOIN c.startupAppliedTimes sa WHERE key(sa) = :startupId and" +

@@ -315,7 +315,7 @@ public class CompetitionService {
 
     public List<Competition> getCompetitionByJudge(String jwt, String status) throws Exception {
         User user = userService.findByJwt(jwt);
-        return competitionRepository.filterByJudge(user, status);
+        return competitionRepository.filterByJudge(user.getId(), status);
     }
 
 

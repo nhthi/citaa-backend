@@ -64,7 +64,7 @@ public class CompetitionController {
     }
 
     @GetMapping("/api/competition/judge")
-    public ResponseEntity<List<Competition>> getCompetitionByJudge(@RequestHeader("Authorization") String jwt,@RequestParam String status) throws Exception {
+    public ResponseEntity<List<Competition>> getCompetitionByJudge(@RequestHeader("Authorization") String jwt,@RequestParam(defaultValue = "0") String status) throws Exception {
         return new ResponseEntity<>(competitionService.getCompetitionByJudge(jwt,status),HttpStatus.OK);
     }
 

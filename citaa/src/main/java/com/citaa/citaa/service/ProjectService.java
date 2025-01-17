@@ -159,8 +159,27 @@ public class ProjectService {
         return projectRepository.findByStartupId(startup.getId());
     }
 
-    public List<Project> getProjectsByStartupId(int id) throws Exception {
-        return projectRepository.findByStartupId(id);
+    public Page<Project> getProjectsByStartupId(int id,List<String> fields,String status,int pageNumber,int pageSize) throws Exception {
+        List<Project> projects =  projectRepository.findByStartupIdAndStatus(id,status);
+        if (fields != null && !fields.isEmpty()) {
+            projects = projects.stream()
+                    .filter(project -> fields.stream().anyMatch(field -> field.equalsIgnoreCase(project.getField())))
+                    .collect(Collectors.toList());
+        }
+
+
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        int startIndex = (int) pageable.getOffset();
+        int endIndex = Math.min(startIndex + pageable.getPageSize(), projects.size());
+
+        // Kiểm tra startIndex và endIndex hợp lệ
+        if (startIndex > endIndex || startIndex > projects.size()) {
+            return Page.empty(pageable);
+        }
+
+        List<Project> pageContent = projects.subList(startIndex, endIndex);
+        return new PageImpl<>(pageContent, pageable, projects.size());
     }
 
     public Project getProjectById(int id) throws Exception {
