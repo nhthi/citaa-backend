@@ -20,7 +20,7 @@ public class UpdateUserRequest {
     LocalDate dob;
     String email;
     Account account;
-    boolean gender;
+    Boolean gender;
     String avatar;
     String coverPhoto;
     String bio;

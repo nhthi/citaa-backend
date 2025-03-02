@@ -110,8 +110,8 @@ public class UserService {
         if (req.getEmail() != null) {
             updateUser.setEmail(req.getEmail());
         }
-        if (req.isGender() != updateUser.isGender()) {
-            updateUser.setGender(req.isGender());
+        if (req.getGender() != null) {
+            updateUser.setGender(req.getGender());
         }
         if (req.getDob() != null) {
             updateUser.setDob(req.getDob());

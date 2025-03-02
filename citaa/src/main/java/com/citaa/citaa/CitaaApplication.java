@@ -16,5 +16,4 @@ public class CitaaApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(CitaaApplication.class, args);
 	}
-
 }
