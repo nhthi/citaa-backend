@@ -45,12 +45,12 @@ public class ApplicationInitConfig {
                         .fullName("ROOT")
                         .phone("011111111")
                         .gender(true)
-                        .email("adminlaptopstore@gmail.com")
-                        .address("Hà Nội")
+                        .email("citaa.ctu@gmail.com")
+                        .address("Cần Thơ")
                         .avatar("https://cdn.pixabay.com/photo/2024/04/08/11/42/doggy-8683291_640.jpg")
                         .account(account)
                         .build());
-                log.warn("Account admin has been created with password: admin");
+                log.warn("Account admin has been created with password: root");
             }
         };
     }
