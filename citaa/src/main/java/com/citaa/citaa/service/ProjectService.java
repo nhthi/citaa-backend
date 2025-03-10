@@ -74,6 +74,7 @@ public class ProjectService {
                         .businessRegistrationCertificate(request.getBusinessRegistrationCertificate())
                         .patent(request.getPatent())
                         .greenSustainableElement(request.getGreenSustainableElement())
+                        .status("UNVALID")
                 .build());
     }
 
